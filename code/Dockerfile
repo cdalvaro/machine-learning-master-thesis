@@ -18,4 +18,4 @@ LABEL \
   com.cdalvaro.docker-salt-master.license="MIT"
 
 ENTRYPOINT [ "python", "./app.py" ]
-CMD [ "-all" ]
+CMD [ "--cluster", "ALL", "--verbose" ]
