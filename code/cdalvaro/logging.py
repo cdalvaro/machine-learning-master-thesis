@@ -1,4 +1,5 @@
 import logging
+import sys
 
 
 class Logger():
@@ -13,9 +14,15 @@ class Logger():
         Logger._logger = logging.getLogger('Gaia Downloader')
 
         # Console handler
-        ch = logging.StreamHandler()
-        ch.setFormatter(CustomFormatter())
-        Logger._logger.addHandler(ch)
+        stderr_ch = logging.StreamHandler(stream=sys.stderr)
+        stderr_ch.setFormatter(CustomFormatter())
+        stderr_ch.addFilter(lambda record: record.levelno >= logging.WARNING)
+        Logger._logger.addHandler(stderr_ch)
+
+        stdout_ch = logging.StreamHandler(stream=sys.stdout)
+        stdout_ch.setFormatter(CustomFormatter())
+        stdout_ch.addFilter(lambda record: record.levelno < logging.WARNING)
+        Logger._logger.addHandler(stdout_ch)
 
         return Logger._logger
 
@@ -32,7 +39,7 @@ class ColorCodes:
 
 
 def _custom_format(color: str):
-    return f"{color}%(levelname)s{ColorCodes.reset}: %(message)s"
+    return f"%(asctime)s {color}%(levelname)s{ColorCodes.reset}: %(message)s"
 
 
 class CustomFormatter(logging.Formatter):
