@@ -8,7 +8,8 @@ class Region:
                  coords: SkyCoord,
                  diam: Quantity = None,
                  height: Quantity = None,
-                 width: Quantity = None):
+                 width: Quantity = None,
+                 serial: int = None):
         """
         This is the base class for describing a region.
 
@@ -21,6 +22,7 @@ class Region:
             diam (Quantity, optional): The diameter of the region. Defaults to None.
             height (Quantity, optional): The height of the region. Defaults to None.
             width (Quantity, optional): The width of the region. Defaults to None.
+            serial (int): The serial id of the region in the cdalvaro database. Defaults to None.
 
         Raises:
             ValueError: If either diam neither height or width are specified.
@@ -42,6 +44,7 @@ class Region:
 
         self.name = name
         self.coords = coords
+        self.serial = serial
 
     def __str__(self) -> str:
         return self.name
