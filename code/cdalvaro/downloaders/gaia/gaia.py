@@ -35,8 +35,10 @@ class Gaia:
         for region in regions:
             source_ids = self.db.get_stars(regions={region}, columns=['source_id'])
             source_ids = set(map(lambda x: next(iter(x)), source_ids))
+
             stars = self._download_stars(region=region, extra_size=extra_size, exclude=source_ids)
-            self._save_stars(region=region, stars=stars)
+            if len(stars) > 0:
+                self._save_stars(region=region, stars=stars)
 
         Gaia._logger.info(f"🏁 Finished downloading stars ...")
 
@@ -53,10 +55,10 @@ class Gaia:
             Gaia._logger.info(f"⏱ Downloading {region} stars from Gaia {GaiaRelease} ...")
             job = gaia.Gaia.launch_job_async(query, verbose=Gaia._logger.level == logging.DEBUG)
             result = job.get_results()
-        except:
-            Gaia._logger.error(f"Error executing job")
+        except Exception as error:
+            Gaia._logger.error(f"Error executing job. Cause: {error}")
 
-        Gaia._logger.info(f"Downloaded {len(result)} stars for {region}!")
+        Gaia._logger.info(f"Downloaded {len(result)} stars for {region}")
 
         return result
 
