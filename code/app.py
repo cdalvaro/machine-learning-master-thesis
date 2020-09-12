@@ -45,7 +45,10 @@ else:
             logger.error(f"Cluster '{cluster_name}' is not avaiable at the OpenClust catalogue")
             exit(1)
 
-gaia = Gaia(db=DB.instance())
+db_host = os.getenv('DB_HOST', 'localhost')
+db_port = os.getenv('DB_PORT', 5432)
+
+gaia = Gaia(db=DB.instance(host=db_host, port=db_port))
 gaia.download(regions=clusters, extra_size=1.5)
 
 logger.info("🚀 Gaia downloader has finished downloading data")

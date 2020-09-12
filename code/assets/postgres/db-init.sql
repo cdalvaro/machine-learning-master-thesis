@@ -1,8 +1,8 @@
 -- Gaia schema
-CREATE SCHEMA cdalvaro;
+CREATE SCHEMA gaiadr2;
 
 -- Regions catalogue
-CREATE TABLE IF NOT EXISTS cdalvaro.regions (
+CREATE TABLE IF NOT EXISTS public.regions (
   id serial PRIMARY KEY,
   name text UNIQUE NOT NULL,
   ra double precision DEFAULT NULL,
@@ -14,34 +14,31 @@ CREATE TABLE IF NOT EXISTS cdalvaro.regions (
   UNIQUE (ra, dec)
 );
 
-COMMENT ON COLUMN cdalvaro.regions.id
-    IS 'Identificador del registro en la tabla';
+COMMENT ON COLUMN public.regions.id
+  IS 'Entry ID';
 
 
-CREATE FUNCTION create_partition_table()
+CREATE FUNCTION public.create_partition_table()
 RETURNS TRIGGER
 LANGUAGE 'plpgsql'
 COST 100
 VOLATILE SECURITY DEFINER
 AS $BODY$
   BEGIN
-    EXECUTE 'CREATE TABLE IF NOT EXISTS gaiadr2.gaia_source_rg' || new.id
-      || ' PARTITION OF gaiadr2.gaia_source FOR VALUES IN (' || new.id || ');';
+    EXECUTE 'CREATE TABLE IF NOT EXISTS gaiadr2.region_' || new.id
+      || ' PARTITION OF public.gaiadr2_source FOR VALUES IN (' || new.id || ');';
     RETURN new;
   END;
 $BODY$;
 
 CREATE TRIGGER create_partition_table_tri
-  AFTER INSERT ON cdalvaro.regions
+  AFTER INSERT ON public.regions
   FOR EACH ROW
-  EXECUTE FUNCTION create_partition_table();
-
--- Gaia schema
-CREATE SCHEMA gaiadr2;
+  EXECUTE FUNCTION public.create_partition_table();
 
 -- https://gea.esac.esa.int/archive/documentation/GDR2/Gaia_archive/chap_datamodel/sec_dm_main_tables/ssec_dm_gaia_source.html
-CREATE TABLE IF NOT EXISTS gaiadr2.gaia_source (
-  region_id integer REFERENCES cdalvaro.regions(id) NOT NULL,
+CREATE TABLE IF NOT EXISTS public.gaiadr2_source (
+  region_id integer REFERENCES public.regions(id) NOT NULL,
   source_id bigint NOT NULL,
   solution_id bigint NOT NULL,
   designation text NOT NULL,
@@ -140,4 +137,4 @@ CREATE TABLE IF NOT EXISTS gaiadr2.gaia_source (
 )
 PARTITION BY LIST(region_id);
 
-CREATE INDEX source_id_idx ON gaiadr2.gaia_source (source_id);
+CREATE INDEX source_id_idx ON public.gaiadr2_source (source_id);

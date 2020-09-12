@@ -44,7 +44,7 @@ class DB:
         self.conn.close()
 
     @staticmethod
-    def instance(host: str = os.getenv('DB_HOST', 'localhost'), port: int = os.getenv('DB_PORT', 5432)):
+    def instance(host: str, port: int):
         key = f"{host}:{port}"
         if key not in DB._instance:
             DB._instance[key] = DB(host=host, port=port)
@@ -59,8 +59,8 @@ class DB:
             columns = ['*']
 
         query = f"""
-            SELECT {', '.join(columns)} FROM gaiadr2.gaia_source
-            WHERE region_id = ANY(SELECT id FROM cdalvaro.regions WHERE name = ANY(%s))
+            SELECT {', '.join(columns)} FROM public.gaiadr2_source
+            WHERE region_id = ANY(SELECT id FROM public.regions WHERE name = ANY(%s))
             ORDER BY region_id, source_id ASC
             """
 
@@ -76,7 +76,7 @@ class DB:
         DB._logger.debug(f"Saving clusters: {', '. join(clusters_name)} into db ...")
 
         query = """
-            INSERT INTO cdalvaro.regions (name, ra, dec, diam, properties)
+            INSERT INTO public.regions (name, ra, dec, diam, properties)
             VALUES %s ON CONFLICT (name) DO
             UPDATE SET properties = EXCLUDED.properties
             RETURNING id
@@ -104,13 +104,10 @@ class DB:
         DB._logger.debug(f"Saving stars for region {region} into db ...")
 
         required_columns = ['region_id', 'source_id', 'solution_id', 'designation']
-        for required_column in required_columns:
-            if required_column in columns:
-                columns.remove(required_column)
-        columns = required_columns + columns
+        columns = required_columns + list(filter(lambda x: x not in required_columns, columns))
 
         query = f"""
-            INSERT INTO gaiadr2.gaia_source ({','.join(columns)})
+            INSERT INTO public.gaiadr2_source ({','.join(columns)})
             VALUES %s ON CONFLICT (region_id, source_id) DO NOTHING
             """
 
@@ -118,20 +115,26 @@ class DB:
 
         data = []
         for star in stars:
-            star_data = [region.serial]
-            for column in columns:
-                value = star[column]
-                if isinstance(value, np.ma.core.MaskedConstant):
-                    try:
-                        value = int(f"{value}")
-                    except ValueError:
-                        value = None
-                if isinstance(value, bytes):
-                    value = value.decode("utf-8")
-                star_data.append(value)
-            data.append(star_data)
+            try:
+                star_data = [region.serial]
+                for column in columns:
+                    value = star[column]
+                    if isinstance(value, np.ma.core.MaskedConstant):
+                        try:
+                            value = int(f"{value}")
+                        except ValueError:
+                            value = None
+                    if isinstance(value, bytes):
+                        value = value.decode("utf-8")
+                    star_data.append(value)
+                data.append(star_data)
+            except Exception as error:
+                self._logger.error(f"Error processing star {star['source_id']}. Cause: {error}")
+
+        if len(data) == 0:
+            return
 
         cursor = self.conn.cursor(cursor_factory=LoggingCursor)
-        execute_values(cursor, query, data, page_size=1000)
+        execute_values(cursor, query, data, page_size=10000)
         self.conn.commit()
         cursor.close()
