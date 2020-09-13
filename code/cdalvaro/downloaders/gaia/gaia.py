@@ -1,4 +1,3 @@
-from astropy.coordinates import SkyCoord
 import astropy.units as u
 from astroquery import gaia
 import json
@@ -8,7 +7,6 @@ import psycopg2
 from typing import List, Set, TypeVar
 
 from ..gaia.columns import GaiaColumns
-from ...catalogues import OpenClust
 from ...data_base import DB
 from ...logging import Logger
 from ...models.open_cluster import OpenCluster
