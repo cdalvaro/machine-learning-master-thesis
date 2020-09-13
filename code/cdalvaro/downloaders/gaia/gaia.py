@@ -29,7 +29,7 @@ class Gaia:
     def __init__(self, db: DB):
         self.db = db
 
-    def download(self, regions: Regions, extra_size: float = 1.1):
+    def download(self, regions: Regions, extra_size: float = 1.0):
         for region in regions:
             source_ids = self.db.get_stars(regions={region}, columns=['source_id'])
             source_ids = set(map(lambda x: next(iter(x)), source_ids))
