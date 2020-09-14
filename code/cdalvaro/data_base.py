@@ -2,6 +2,7 @@ import astropy.units as u
 import json
 import numpy as np
 import os
+from pandas import DataFrame, read_sql_query
 import psycopg2
 from psycopg2.extensions import register_adapter, AsIs
 from psycopg2.extras import execute_values
@@ -92,6 +93,62 @@ class DB:
         cursor.close()
 
         return set(map(lambda x: next(iter(x)), result))
+
+    def get_stars(self,
+                  region: Region = None,
+                  columns: List[str] = None,
+                  limit: int = None,
+                  use_region_id: bool = True) -> Union[DataFrame, None]:
+        DB._logger.debug(f"Getting stars for region {region}")
+
+        if columns is not None:
+            required_columns = ['region_id', 'source_id']
+            columns = required_columns + list(filter(lambda x: x not in required_columns, columns))
+        else:
+            columns = ['*']
+
+        query = f"""
+            SELECT {', '.join(columns)} FROM public.gaiadr2_source
+            WHERE
+            """
+
+        params = dict()
+        if use_region_id:
+            params['name'] = region.name
+            query += """
+                region_id = (SELECT id FROM public.regions WHERE name = %(name)s)
+                """
+        else:
+            if hasattr(region, 'diam'):
+                params.update({
+                    'ra': region.coords.ra.degree,
+                    'dec': region.coords.dec.degree,
+                    'radius': region.diam.value / 2.0
+                })
+
+                query += """
+                    CIRCLE '((%(ra)s, %(dec)s), %(radius)s)' @> POINT (ra, dec)
+                    """
+            else:
+                # https://www.postgresql.org/docs/current/functions-geometry.html
+                # TODO: Implement search by box region
+                raise NotImplementedError
+
+        query += """
+            ORDER BY region_id, source_id ASC
+            """
+
+        if limit is not None:
+            params['limit'] = limit
+            query += """
+                LIMIT %(limit)s
+                """
+
+        try:
+            return read_sql_query(query, self.conn, index_col=['region_id', 'source_id'], params=params)
+        except Exception as error:
+            DB._logger.error(f"Error retrieving data for region: {region}. Cause: {error}")
+            return None
 
     def save_open_clusters(self, clusters: List[OpenCluster]):
         clusters_name = list(map(lambda x: x.name, clusters))
