@@ -31,10 +31,8 @@ class Gaia:
 
     def download(self, regions: Regions, extra_size: float = 1.0):
         for region in regions:
-            source_ids = self.db.get_stars(regions={region}, columns=['source_id'])
-            source_ids = set(map(lambda x: next(iter(x)), source_ids))
-
-            stars = self._download_stars(region=region, extra_size=extra_size, exclude=source_ids)
+            source_id = self.db.get_stars_source_id(regions={region})
+            stars = self._download_stars(region=region, extra_size=extra_size, exclude=source_id)
             if len(stars) > 0:
                 self._save_stars(region=region, stars=stars)
 

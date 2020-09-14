@@ -51,15 +51,12 @@ class DB:
 
         return DB._instance[key]
 
-    def get_stars(self, regions: Regions, columns: List[str] = None) -> List:
+    def get_stars_source_id(self, regions: Regions) -> List[str]:
         regions_name = list(map(lambda x: x.name, regions))
-        DB._logger.debug(f"Getting stars for regions: {','.join(regions_name)} from db ...")
-
-        if not columns or len(columns) == 0:
-            columns = ['*']
+        DB._logger.debug(f"Getting stars source_id for regions: {', '.join(regions_name)} from db ...")
 
         query = f"""
-            SELECT {', '.join(columns)} FROM public.gaiadr2_source
+            SELECT source_id FROM public.gaiadr2_source
             WHERE region_id = ANY(SELECT id FROM public.regions WHERE name = ANY(%s))
             ORDER BY region_id, source_id ASC
             """
@@ -69,7 +66,7 @@ class DB:
         result = cursor.fetchall()
         cursor.close()
 
-        return result
+        return set(map(lambda x: next(iter(x)), result))
 
     def save_open_clusters(self, clusters: List[OpenCluster]):
         clusters_name = list(map(lambda x: x.name, clusters))
