@@ -22,12 +22,12 @@ class DB:
     _logger: Logger = Logger.instance()
     _instance = dict()
 
-    psycopg2.extensions.register_adapter(np.bool_, psycopg2._psycopg.AsIs)
-    psycopg2.extensions.register_adapter(np.int16, psycopg2._psycopg.AsIs)
-    psycopg2.extensions.register_adapter(np.int32, psycopg2._psycopg.AsIs)
-    psycopg2.extensions.register_adapter(np.int64, psycopg2._psycopg.AsIs)
-    psycopg2.extensions.register_adapter(np.float32, psycopg2._psycopg.AsIs)
-    psycopg2.extensions.register_adapter(np.float64, psycopg2._psycopg.AsIs)
+    register_adapter(np.bool_, AsIs)
+    register_adapter(np.int16, AsIs)
+    register_adapter(np.int32, AsIs)
+    register_adapter(np.int64, AsIs)
+    register_adapter(np.float32, AsIs)
+    register_adapter(np.float64, AsIs)
 
     def __init__(self, host: str, port: int):
         db_settings = {
@@ -179,7 +179,7 @@ class DB:
         for cluster, serial in zip(clusters, serials):
             cluster.serial = next(iter(serial))
 
-    def save_stars(self, region: Region, stars: List, columns: List):
+    def save_stars(self, region: Region, stars: List, columns: List[str]):
         DB._logger.debug(f"Saving stars for region {region} into db ...")
 
         required_columns = ['region_id', 'source_id', 'solution_id', 'designation']
