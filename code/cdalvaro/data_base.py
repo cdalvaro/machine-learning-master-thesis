@@ -6,7 +6,7 @@ import psycopg2
 from psycopg2.extensions import register_adapter, AsIs
 from psycopg2.extras import execute_values
 from psycopg2.extras import LoggingConnection, LoggingCursor
-from typing import List, Set, TypeVar
+from typing import Dict, List, Set, TypeVar, Union
 
 from .logging import Logger
 from .models.open_cluster import OpenCluster
@@ -50,6 +50,31 @@ class DB:
             DB._instance[key] = DB(host=host, port=port)
 
         return DB._instance[key]
+
+    def get_regions_id(self, regions: Regions, update_regions: bool = True) -> Dict[str, int]:
+        regions_name = list(map(lambda x: x.name, regions))
+        DB._logger.debug(f"Getting regions id for regions: {', '.join(regions_name)} from dab ...")
+
+        query = f"""
+            SELECT name, id FROM public.regions
+            WHERE name = ANY(%s)
+            ORDER BY name ASC
+            """
+
+        cursor = self.conn.cursor(cursor_factory=LoggingCursor)
+        cursor.execute(query, (regions_name, ))
+        result = cursor.fetchall()
+        cursor.close()
+
+        regions_id = dict()
+        for (name, serial) in result:
+            regions_id[name] = serial
+            if update_regions and name in regions:
+                elements = filter(lambda x: x.name == name, regions)
+                element = next(iter(elements))
+                element.serial = serial
+
+        return regions_id
 
     def get_stars_source_id(self, regions: Regions) -> List[str]:
         regions_name = list(map(lambda x: x.name, regions))
