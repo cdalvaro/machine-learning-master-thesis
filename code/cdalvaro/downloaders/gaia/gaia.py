@@ -58,17 +58,17 @@ class Gaia:
 
         return result
 
-    def _compose_cone_query(self, region: Region, extra_size: float, exclude: Set[SourceID]) -> str:
+    def _compose_cone_query(self, region: Region, extra_size: float = 1.0, exclude: Set[SourceID] = {}) -> str:
         ra = region.coords.ra.degree
         dec = region.coords.dec.degree
-        diam = region.diam.to_value(u.degree) * extra_size
+        radius = region.diam.to_value(u.degree) * extra_size / 2.0
 
         query = f"""
             SELECT {', '.join(Gaia._columns)}
             FROM {gaia.Gaia.MAIN_GAIA_TABLE}
             WHERE 1 = CONTAINS(
                 POINT('ICRS', ra, dec),
-                CIRCLE('ICRS', {ra}, {dec}, {diam / 2.0})
+                CIRCLE('ICRS', {ra}, {dec}, {radius})
             )
             """
 
