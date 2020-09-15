@@ -96,6 +96,7 @@ class DB:
 
     def get_stars(self,
                   region: Region = None,
+                  extra_size: float = 1.0,
                   columns: List[str] = None,
                   limit: int = None,
                   use_region_id: bool = True) -> Union[DataFrame, None]:
@@ -119,18 +120,18 @@ class DB:
                 region_id = (SELECT id FROM public.regions WHERE name = %(name)s)
                 """
         else:
+            # https://www.postgresql.org/docs/current/functions-geometry.html
             if hasattr(region, 'diam'):
                 params.update({
                     'ra': region.coords.ra.degree,
                     'dec': region.coords.dec.degree,
-                    'radius': region.diam.value / 2.0
+                    'radius': region.diam.to_value(u.degree) * extra_size / 2.0
                 })
 
                 query += """
-                    CIRCLE '((%(ra)s, %(dec)s), %(radius)s)' @> POINT (ra, dec)
+                    CIRCLE(POINT(%(ra)s, %(dec)s), %(radius)s) @> POINT(ra, dec)
                     """
             else:
-                # https://www.postgresql.org/docs/current/functions-geometry.html
                 # TODO: Implement search by box region
                 raise NotImplementedError
 
