@@ -14,31 +14,42 @@ CREATE TABLE IF NOT EXISTS public.regions (
   UNIQUE (ra, dec)
 );
 
-COMMENT ON COLUMN public.regions.id
-  IS 'Entry ID';
+COMMENT ON COLUMN public.regions.id IS 'Entry ID';
 
+COMMENT ON COLUMN public.regions.name IS 'Region name';
 
-CREATE FUNCTION public.create_partition_table()
-RETURNS TRIGGER
-LANGUAGE 'plpgsql'
-COST 100
-VOLATILE SECURITY DEFINER
-AS $BODY$
-  BEGIN
-    EXECUTE 'CREATE TABLE IF NOT EXISTS gaiadr2.region_' || new.id
-      || ' PARTITION OF public.gaiadr2_source FOR VALUES IN (' || new.id || ');';
-    RETURN new;
-  END;
+COMMENT ON COLUMN public.regions.ra IS 'Right Ascension J2000 (degrees)';
+
+COMMENT ON COLUMN public.regions.dec IS 'Declination J2000 (degrees)';
+
+COMMENT ON COLUMN public.regions.diam IS 'Angular apparent diameter (arcmin)';
+
+COMMENT ON COLUMN public.regions.width IS 'Angular apparent width (arcmin)';
+
+COMMENT ON COLUMN public.regions.height IS 'Angular apparent height (arcmin)';
+
+COMMENT ON COLUMN public.regions.properties IS 'Region properties';
+
+CREATE FUNCTION public.create_partition_table ()
+  RETURNS TRIGGER
+  LANGUAGE 'plpgsql'
+  COST 100 VOLATILE
+  SECURITY DEFINER
+  AS $BODY$
+BEGIN
+  EXECUTE 'CREATE TABLE IF NOT EXISTS gaiadr2.region_' || NEW.id || ' PARTITION OF public.gaiadr2_source FOR VALUES IN (' || NEW.id || ');';
+  RETURN new;
+END;
 $BODY$;
 
 CREATE TRIGGER create_partition_table_tri
   AFTER INSERT ON public.regions
   FOR EACH ROW
-  EXECUTE FUNCTION public.create_partition_table();
+  EXECUTE FUNCTION public.create_partition_table ();
 
 -- https://gea.esac.esa.int/archive/documentation/GDR2/Gaia_archive/chap_datamodel/sec_dm_main_tables/ssec_dm_gaia_source.html
 CREATE TABLE IF NOT EXISTS public.gaiadr2_source (
-  region_id integer REFERENCES public.regions(id) NOT NULL,
+  region_id integer REFERENCES public.regions (id) NOT NULL,
   source_id bigint NOT NULL,
   solution_id bigint NOT NULL,
   designation text NOT NULL,
@@ -74,17 +85,17 @@ CREATE TABLE IF NOT EXISTS public.gaiadr2_source (
   astrometric_excess_noise double precision,
   astrometric_excess_noise_sig double precision,
   astrometric_params_solved integer,
-  astrometric_primary_flag BOOLEAN,
+  astrometric_primary_flag boolean,
   astrometric_weight_al float,
   astrometric_pseudo_colour double precision,
   astrometric_pseudo_colour_error double precision,
   mean_varpi_factor_al float,
-  astrometric_matched_observations SMALLINT,
-  visibility_periods_used SMALLINT,
+  astrometric_matched_observations smallint,
+  visibility_periods_used smallint,
   astrometric_sigma5d_max float,
   frame_rotator_object_type integer,
-  matched_observations SMALLINT,
-  duplicated_source BOOLEAN,
+  matched_observations smallint,
+  duplicated_source boolean,
   phot_g_n_obs integer,
   phot_g_mean_flux double precision,
   phot_g_mean_flux_error double precision,
@@ -135,6 +146,6 @@ CREATE TABLE IF NOT EXISTS public.gaiadr2_source (
   lum_percentile_upper float,
   PRIMARY KEY (region_id, source_id)
 )
-PARTITION BY LIST(region_id);
+PARTITION BY LIST (region_id);
 
 CREATE INDEX source_id_idx ON public.gaiadr2_source (source_id);
