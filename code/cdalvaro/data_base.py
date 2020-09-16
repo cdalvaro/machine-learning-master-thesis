@@ -151,9 +151,9 @@ class DB:
             DB._logger.error(f"Error retrieving data for region: {region}. Cause: {error}")
             return None
 
-    def save_open_clusters(self, clusters: List[OpenCluster]):
-        clusters_name = list(map(lambda x: x.name, clusters))
-        DB._logger.debug(f"Saving clusters: {', '. join(clusters_name)} into db ...")
+    def save_regions(self, regions: List[OpenCluster]):
+        regions_name = list(map(lambda x: x.name, regions))
+        DB._logger.debug(f"Saving regions: {', '. join(regions_name)} into db ...")
 
         query = """
             INSERT INTO public.regions (name, ra, dec, diam, properties)
@@ -163,12 +163,15 @@ class DB:
             """
 
         data = []
-        for cluster in clusters:
-            name = cluster.name
-            ra = cluster.coords.ra.degree
-            dec = cluster.coords.dec.degree
-            diam = cluster.diam.value
-            properties = {'g1_class': cluster.g1_class}
+        for region in regions:
+            name = region.name
+            ra = region.coords.ra.degree
+            dec = region.coords.dec.degree
+            diam = region.diam.value
+            if isinstance(region, OpenCluster):
+                properties = {'g1_class': region.g1_class}
+            else:
+                properties = dict()
 
             data.append((name, ra, dec, diam, json.dumps(properties)))
 
@@ -177,8 +180,8 @@ class DB:
         self.conn.commit()
         cursor.close()
 
-        for cluster, serial in zip(clusters, serials):
-            cluster.serial = next(iter(serial))
+        for region, serial in zip(regions, serials):
+            region.serial = next(iter(serial))
 
     def save_stars(self, region: Region, stars: List, columns: List[str]):
         DB._logger.debug(f"Saving stars for region {region} into db ...")

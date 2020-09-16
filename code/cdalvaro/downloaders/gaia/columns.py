@@ -2,6 +2,12 @@ from typing import List
 
 
 def GaiaColumns() -> List[str]:
+    """
+    A method that returns the set of columns of Gaia DR2 database.
+
+    Returns:
+        List[str]: The columns name of Gaia DR2
+    """
     return [
         'solution_id', 'designation', 'source_id', 'random_index', 'ref_epoch', 'ra', 'ra_error', 'dec', 'dec_error',
         'parallax', 'parallax_error', 'parallax_over_error', 'pmra', 'pmra_error', 'pmdec', 'pmdec_error',
