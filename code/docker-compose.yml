@@ -3,7 +3,9 @@ version: "3.4"
 services:
   downloader:
     image: cdalvaro/gaia-downloader:latest
-    build: ./
+    build:
+      context: ./
+      dockerfile: downloader.Dockerfile
     container_name: gaia_downloader
     command: --cluster ALL --verbose
     restart: on-failure

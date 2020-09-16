@@ -49,6 +49,6 @@ db_host = os.getenv('DB_HOST', 'localhost')
 db_port = os.getenv('DB_PORT', 5432)
 
 gaia = Gaia(db=DB.instance(host=db_host, port=db_port))
-gaia.download(regions=clusters, extra_size=1.5)
+gaia.download_and_save(regions=clusters, extra_size=1.5)
 
-logger.info("🚀 Gaia downloader has finished downloading data")
+logger.info("🚀 Gaia downloader has finished retrieving and saving data")

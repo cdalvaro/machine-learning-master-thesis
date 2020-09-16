@@ -53,7 +53,7 @@ class Gaia:
 
         number_of_regions = len(regions)
         for counter, region in zip(range(1, number_of_regions + 1), regions):
-            Gaia._logger.info(f"({counter}/{number_of_regions}) Downloading {region} stars from Gaia DR2 ...")
+            Gaia._logger.info(f"({counter} / {number_of_regions}) Downloading {region} stars from Gaia DR2 ...")
             source_id = self.db.get_stars_source_id(regions={region})
             stars = self._download_stars(region=region, extra_size=extra_size, exclude=source_id)
             if len(stars) > 0:

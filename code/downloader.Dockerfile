@@ -5,7 +5,8 @@ WORKDIR /usr/src/gaia
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY cdalvaro cdalvaro
+COPY scripts/downloader.py .
 
 LABEL \
   maintainer="carlos@cdalvaro.io" \
@@ -17,5 +18,5 @@ LABEL \
   org.label-schema.docker.schema-version="1.0" \
   com.cdalvaro.docker-salt-master.license="MIT"
 
-ENTRYPOINT [ "python", "./app.py" ]
+ENTRYPOINT [ "python", "downloader.py" ]
 CMD [ "--cluster", "ALL", "--verbose" ]
