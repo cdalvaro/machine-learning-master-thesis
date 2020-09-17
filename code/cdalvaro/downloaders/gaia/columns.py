@@ -1,7 +1,7 @@
 from typing import List
 
 
-def GaiaColumns() -> List[str]:
+def gaia_columns() -> List[str]:
     """
     A method that returns the set of columns of Gaia DR2 database.
 

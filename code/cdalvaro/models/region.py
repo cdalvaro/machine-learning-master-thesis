@@ -3,26 +3,25 @@ from astropy.units import Quantity
 
 
 class Region:
-        """
-        This is the base class for describing a region.
+    """
+    This is the base class for describing a region.
 
-        You must specify the diameter (diam) or
-        the height and width of the region but not both at the same time.
+    You must specify the diameter (diam) or
+    the height and width of the region but not both at the same time.
 
-        Args:
-            name (str): The name of the region.
-            coords (SkyCoord): The coordinates of the region.
-            diam (Quantity, optional): The diameter of the region. Defaults to None.
-            height (Quantity, optional): The height of the region. Defaults to None.
-            width (Quantity, optional): The width of the region. Defaults to None.
-            serial (int): The serial id of the region in the cdalvaro database. Defaults to None.
+    Args:
+        name (str): The name of the region.
+        coords (SkyCoord): The coordinates of the region.
+        diam (Quantity, optional): The diameter of the region. Defaults to None.
+        height (Quantity, optional): The height of the region. Defaults to None.
+        width (Quantity, optional): The width of the region. Defaults to None.
+        serial (int): The serial id of the region in the cdalvaro database. Defaults to None.
 
-        Raises:
-            ValueError: If either diam neither height or width are specified.
-            ValueError: If diam and height or width are specified at the same time.
-            ValueError: If height and width are not specified at the same time.
-        """
-
+    Raises:
+        ValueError: If either diam neither height or width are specified.
+        ValueError: If diam and height or width are specified at the same time.
+        ValueError: If height and width are not specified at the same time.
+    """
     def __init__(self,
                  name: str,
                  coords: SkyCoord,

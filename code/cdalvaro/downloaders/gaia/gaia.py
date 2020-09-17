@@ -7,7 +7,7 @@ import os
 import psycopg2
 from typing import List, Set, TypeVar
 
-from ..gaia.columns import GaiaColumns
+from ..gaia.columns import gaia_columns
 from ...data_base import DB
 from ...logging import Logger
 from ...models.open_cluster import OpenCluster
@@ -30,7 +30,7 @@ class Gaia:
     """
 
     _logger = Logger.instance()
-    _columns = GaiaColumns()
+    _columns = gaia_columns()
 
     def __init__(self, db: DB):
         self.db = db

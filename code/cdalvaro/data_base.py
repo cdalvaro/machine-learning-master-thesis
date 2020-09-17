@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+import astropy
 import astropy.units as u
 import json
 import numpy as np
@@ -18,6 +21,13 @@ SourceID = TypeVar('SolutionID', bound=int)
 
 
 class DB:
+    """
+    cdalvaro data base class to manage actions over the database.
+
+    Args:
+        host (str): The database hostname.
+        port (int): The port where the database is listening.
+    """
 
     _logger: Logger = Logger.instance()
     _instance = dict()
@@ -45,7 +55,17 @@ class DB:
         self.conn.close()
 
     @staticmethod
-    def instance(host: str, port: int):
+    def instance(host: str, port: int) -> DB:
+        """
+        Returns a database manager instance pointed to host:port
+
+        Args:
+            host (str): The database hostname.
+            port (int): The port where the database is listening.
+
+        Returns:
+            DB: A cdalvaro DB instance pointing to host:port
+        """
         key = f"{host}:{port}"
         if key not in DB._instance:
             DB._instance[key] = DB(host=host, port=port)
@@ -53,6 +73,17 @@ class DB:
         return DB._instance[key]
 
     def get_regions_id(self, regions: Regions, update_regions: bool = True) -> Dict[str, int]:
+        """
+        Returns a dictionary where the keys are the regions name,
+        and values are the ids of the corresponding region.
+
+        Args:
+            regions (Regions): A set with regions whose ids are going to be recovered.
+            update_regions (bool, optional): If True, regions set is updated with their corresponding id. Defaults to True.
+
+        Returns:
+            Dict[str, int]: A dictionary relating region names with their corresponding ids.
+        """
         regions_name = list(map(lambda x: x.name, regions))
         DB._logger.debug(f"Getting regions id for regions: {', '.join(regions_name)} from dab ...")
 
@@ -71,15 +102,25 @@ class DB:
         for (name, serial) in result:
             regions_id[name] = serial
             if update_regions and name in regions:
-                elements = filter(lambda x: x.name == name, regions)
-                element = next(iter(elements))
+                element, *_ = filter(lambda x: x.name == name, regions)
+                #element = next(iter(elements))
                 element.serial = serial
 
         return regions_id
 
     def get_stars_source_id(self, regions: Regions) -> List[str]:
+        """
+        Get a list of source_id's of the stars available in the database
+        contained inside the given regions.
+
+        Args:
+            regions (Regions): The regions that contains the stars of interest.
+
+        Returns:
+            List[str]: A list with the source_id of every star inside the given regions.
+        """
         regions_name = list(map(lambda x: x.name, regions))
-        DB._logger.debug(f"Getting stars source_id for regions: {', '.join(regions_name)} from db ...")
+        DB._logger.debug(f"Getting the stars's source_id for regions: {', '.join(regions_name)} from db ...")
 
         query = f"""
             SELECT source_id FROM public.gaiadr2_source
@@ -96,10 +137,23 @@ class DB:
 
     def get_stars(self,
                   region: Region = None,
-                  extra_size: float = 1.0,
                   columns: List[str] = None,
                   limit: int = None,
-                  use_region_id: bool = True) -> Union[DataFrame, None]:
+                  use_region_id: bool = True,
+                  extra_size: float = 1.0) -> DataFrame:
+        """
+        Returns a Pandas DataFrame containing the stars of the given region.
+
+        Args:
+            region (Region): The region which contains the stars.
+            columns (List[str], optional): A list with the data fields to be recovered. Defaults all columns.
+            limit (int, optional): The maximum number of stars to be recovered. Defaults no limit.
+            use_region_id (bool, optional): Use the region_id to get stars. If False select starts by position fields. Defaults to True.
+            extra_size (float, optional): A positive number to extend the region which contains the stars to be recovered. Defaults to 1.0.
+
+        Returns:
+            DataFrame: A Pandas DataFrame with the recovered stars
+        """
         DB._logger.debug(f"Getting stars for region {region}")
 
         if columns is not None:
@@ -149,9 +203,18 @@ class DB:
             return read_sql_query(query, self.conn, index_col=['region_id', 'source_id'], params=params)
         except Exception as error:
             DB._logger.error(f"Error retrieving data for region: {region}. Cause: {error}")
-            return None
+            if '*' in columns:
+                from .downloaders.gaia.columns import gaia_columns
+                columns = gaia_columns()
+            return DataFrame([], index=['region_id', 'source_id'], columns=columns)
 
-    def save_regions(self, regions: List[OpenCluster]):
+    def save_regions(self, regions: Regions):
+        """
+        Save the given regions into the database.
+
+        Args:
+            regions (Regions): The regions to be saved into the database.
+        """
         regions_name = list(map(lambda x: x.name, regions))
         DB._logger.debug(f"Saving regions: {', '. join(regions_name)} into db ...")
 
@@ -183,7 +246,15 @@ class DB:
         for region, serial in zip(regions, serials):
             region.serial = next(iter(serial))
 
-    def save_stars(self, region: Region, stars: List, columns: List[str]):
+    def save_stars(self, region: Region, stars: astropy.table, columns: List[str]):
+        """
+        Save the stars associated to the given region into the database.
+
+        Args:
+            region (Region): The region containing the stars.
+            starts (astropy.table): The table with the stars to be saved into the database.
+            columns (List[str]): A list with the columns to be saved into the database.
+        """
         DB._logger.debug(f"Saving stars for region {region} into db ...")
 
         required_columns = ['region_id', 'source_id', 'solution_id', 'designation']

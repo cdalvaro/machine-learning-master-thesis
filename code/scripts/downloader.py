@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
 import argparse
-from cdalvaro.data_base import DB
+from cdalvaro import DB, Logger
 from cdalvaro.catalogues import OpenClust
-from cdalvaro.downloaders.gaia import Gaia
-from cdalvaro.logging import Logger
+from cdalvaro.downloaders import Gaia
 import logging
 import os
 
