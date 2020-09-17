@@ -3,22 +3,15 @@ from astropy.units import Quantity
 
 
 class Region:
-    def __init__(self,
-                 name: str,
-                 coords: SkyCoord,
-                 diam: Quantity = None,
-                 height: Quantity = None,
-                 width: Quantity = None,
-                 serial: int = None):
         """
         This is the base class for describing a region.
 
-        You must specify the diameter (diam) or the height and width
-        of the region but not both at the same time.
+        You must specify the diameter (diam) or
+        the height and width of the region but not both at the same time.
 
         Args:
-            name (str): The name of the region
-            coords (SkyCoord): The coordinates of the region
+            name (str): The name of the region.
+            coords (SkyCoord): The coordinates of the region.
             diam (Quantity, optional): The diameter of the region. Defaults to None.
             height (Quantity, optional): The height of the region. Defaults to None.
             width (Quantity, optional): The width of the region. Defaults to None.
@@ -29,6 +22,14 @@ class Region:
             ValueError: If diam and height or width are specified at the same time.
             ValueError: If height and width are not specified at the same time.
         """
+
+    def __init__(self,
+                 name: str,
+                 coords: SkyCoord,
+                 diam: Quantity = None,
+                 height: Quantity = None,
+                 width: Quantity = None,
+                 serial: int = None):
 
         if diam is None and (height is None or width is None):
             raise ValueError("You must specify 'diam' argument or 'height' and 'width' arguments")
