@@ -11,6 +11,11 @@ Catalogue = TypeVar('Catalogue', bound=Set[OpenCluster])
 
 
 class OpenClust(BaseCatalogue):
+    """
+    Class that contains the OpenClust catalogue.
+
+    More info at: https://heasarc.gsfc.nasa.gov/W3Browse/star-catalog/openclust.html
+    """
 
     _catalogue_file = os.path.join(os.path.dirname(__file__), "clusters.dat")
     _catalogue = dict()
@@ -19,12 +24,10 @@ class OpenClust(BaseCatalogue):
     @staticmethod
     def load_catalogue() -> Catalogue:
         """
-        Load OpenClust catalogue.
-
-        https://heasarc.gsfc.nasa.gov/W3Browse/star-catalog/openclust.html
+        Load the OpenClust catalogue.
 
         Returns:
-            Catalogue: The whole OpenClust catalogue
+            Catalogue: The whole OpenClust catalogue.
         """
         if len(OpenClust._catalogue.keys()) > 0:
             return OpenClust._catalogue
