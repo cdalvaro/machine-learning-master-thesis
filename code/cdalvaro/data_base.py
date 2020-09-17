@@ -186,8 +186,16 @@ class DB:
                     CIRCLE(POINT(%(ra)s, %(dec)s), %(radius)s) @> POINT(ra, dec)
                     """
             else:
-                # TODO: Implement search by box region
-                raise NotImplementedError
+                params.update({
+                    'ra1': region.coords.ra.degree - region.width.to_value(u.degree) / 2.0,
+                    'dec1': region.coords.dec.degree - region.height.to_value(u.degree) / 2.0,
+                    'ra2': region.coords.ra.degree + region.width.to_value(u.degree) / 2.0,
+                    'dec2': region.coords.dec.degree + region.height.to_value(u.degree) / 2.0
+                })
+
+                query += """
+                    BOX(POINT(%(ra1)s, %(dec1)s), POINT(%(ra2)s, %(dec2)s)) @> POINT(ra, dec)
+                    """
 
         query += """
             ORDER BY region_id, source_id ASC
