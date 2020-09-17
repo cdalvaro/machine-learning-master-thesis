@@ -7,11 +7,19 @@ Catalogue = TypeVar('Catalogue', bound=Dict[str, Region])
 
 
 class BaseCatalogue:
+    """
+    Base class to define catalogues.
+
+    This is a pure virtual class which does not implement any method
+    but declares methods that every child class must implement.
+
+    Raises:
+        NotImplementedError: Every method of this class raises this exception.
+    """
     @staticmethod
     @abstractmethod
     def load_catalogue() -> Catalogue:
         """
-        Static method for loading the selected catalogue
+        Static method for loading the catalogue.
         """
-        # TODO: Add parameter to fill incomplete fields
         raise NotImplementedError
