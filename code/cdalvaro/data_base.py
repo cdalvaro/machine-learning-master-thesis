@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import astropy
+from astropy.coordinates import SkyCoord
 import astropy.units as u
 import json
 import numpy as np
 import os
-from pandas import DataFrame, read_sql_query
+import pandas
 import psycopg2
 from psycopg2.extensions import register_adapter, AsIs
 from psycopg2.extras import execute_values
@@ -102,9 +103,8 @@ class DB:
         for (name, serial) in result:
             regions_id[name] = serial
             if update_regions and name in regions:
-                element, *_ = filter(lambda x: x.name == name, regions)
-                #element = next(iter(elements))
-                element.serial = serial
+                region, *_ = filter(lambda x: x.name == name, regions)
+                region.serial = serial
 
         return regions_id
 
@@ -120,7 +120,7 @@ class DB:
             List[str]: A list with the source_id of every star inside the given regions.
         """
         regions_name = list(map(lambda x: x.name, regions))
-        DB._logger.debug(f"Getting the stars's source_id for regions: {', '.join(regions_name)} from db ...")
+        DB._logger.debug(f"Getting the stars's source_id for regions: {', '.join(regions_name)} from DB ...")
 
         query = f"""
             SELECT source_id FROM public.gaiadr2_source
@@ -135,12 +135,46 @@ class DB:
 
         return set(map(lambda x: next(iter(x)), result))
 
+    def get_region(self, name: str) -> Union[Region, None]:
+        """
+        Get the region corresponding to the given name.
+
+        Args:
+            name (str): The name of the region to be retrieved.
+
+        Returns:
+            Region: The region recovered.
+        """
+        DB._logger.debug(f"Getting region {name} from the DB ...")
+
+        query = f"SELECT id, ra, dec, diam, width, height FROM public.regions WHERE name = %s"
+
+        cursor = self.conn.cursor(cursor_factory=LoggingCursor)
+        cursor.execute(query, (name, ))
+        (serial, ra, dec, diam, width, height) = cursor.fetchone()
+        cursor.close()
+
+        if serial is None:
+            return None
+
+        coords = SkyCoord(f"{ra} {dec}", unit=(u.degree, u.degree), frame="icrs")
+
+        if diam is not None:
+            diam = u.Quantity(diam, u.arcmin)
+            region = Region(name=name, coords=coords, diam=diam, serial=serial)
+        else:
+            width = u.Quantity(width, u.arcmin)
+            height = u.Quantity(height, u.arcmin)
+            region = Region(name=name, coords=coords, width=width, height=height, serial=serial)
+
+        return region
+
     def get_stars(self,
                   region: Region = None,
                   columns: List[str] = None,
                   limit: int = None,
                   use_region_id: bool = True,
-                  extra_size: float = 1.0) -> DataFrame:
+                  extra_size: float = 1.0) -> pandas.DataFrame:
         """
         Returns a Pandas DataFrame containing the stars of the given region.
 
@@ -208,13 +242,13 @@ class DB:
                 """
 
         try:
-            return read_sql_query(query, self.conn, index_col=['region_id', 'source_id'], params=params)
+            return pandas.read_sql_query(query, self.conn, index_col=['region_id', 'source_id'], params=params)
         except Exception as error:
             DB._logger.error(f"Error retrieving data for region: {region}. Cause: {error}")
             if '*' in columns:
                 from .downloaders.gaia.columns import gaia_columns
                 columns = gaia_columns()
-            return DataFrame([], index=['region_id', 'source_id'], columns=columns)
+            return pandas.DataFrame([], index=['region_id', 'source_id'], columns=columns)
 
     def save_regions(self, regions: Regions):
         """
