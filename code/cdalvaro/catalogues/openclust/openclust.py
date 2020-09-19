@@ -39,6 +39,28 @@ class OpenClust(BaseCatalogue):
         return catalogue
 
     @staticmethod
+    def get_clusters(names: Set[str], as_dataframe: bool = False) -> Union[Catalogue, pandas.DataFrame]:
+        """
+        Get clusters from the catalogue that matches the given names.
+
+        Args:
+            names (Set[str]): The name of the clusters to be recovered.
+
+        Returns:
+            Catalogue: A catalogue with the found clusters.
+        """
+        selection = dict()
+        whole_catalogue = OpenClust._load_catalogue()
+        for name in names:
+            if name in whole_catalogue.keys():
+                selection[name] = whole_catalogue[name]
+
+        if as_dataframe:
+            return OpenClust._catalogue_to_dataframe(selection)
+
+        return selection
+
+    @staticmethod
     def _load_catalogue() -> Catalogue:
         """
         Load the OpenClust catalogue.
