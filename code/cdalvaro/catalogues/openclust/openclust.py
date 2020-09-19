@@ -1,7 +1,8 @@
 import astropy.units as u
 from astropy.coordinates import SkyCoord
 import os
-from typing import Set, TypeVar
+import pandas
+from typing import Set, TypeVar, Union
 
 from ..base_catalogue import BaseCatalogue
 from ...logging import Logger
@@ -22,7 +23,23 @@ class OpenClust(BaseCatalogue):
     _logger = Logger.instance()
 
     @staticmethod
-    def load_catalogue() -> Catalogue:
+    def catalogue(as_dataframe: bool = False) -> Union[Catalogue, pandas.DataFrame]:
+        """
+        This method returns the whole OPENCLUST catalogue
+
+        Args:
+            as_dataframe (bool, optional): Flag to recover the catalogue as a DataFrame. Defaults to False.
+
+        Returns:
+            Union[Catalogue, pandas.DataFrame]: The OPENCLUST catalogue.
+        """
+        catalogue = OpenClust._load_catalogue()
+        if as_dataframe:
+            return OpenClust._catalogue_to_dataframe(catalogue)
+        return catalogue
+
+    @staticmethod
+    def _load_catalogue() -> Catalogue:
         """
         Load the OpenClust catalogue.
 
@@ -32,7 +49,7 @@ class OpenClust(BaseCatalogue):
         if len(OpenClust._catalogue.keys()) > 0:
             return OpenClust._catalogue
 
-        OpenClust._logger.info("Loading OpenClust catalogue ...")
+        OpenClust._logger.debug("Loading OpenClust catalogue ...")
 
         with open(OpenClust._catalogue_file, 'r') as f:
             for line in f.readlines():
@@ -42,7 +59,7 @@ class OpenClust(BaseCatalogue):
                 except ValueError as ex:
                     OpenClust._logger.warn(ex)
 
-        OpenClust._logger.info("OpenClust catalogue loaded!")
+        OpenClust._logger.debug("OpenClust catalogue loaded!")
 
         return OpenClust._catalogue
 
@@ -75,14 +92,14 @@ class OpenClust(BaseCatalogue):
             raise ValueError(f"Cluster {name} does not have a valid right ascension: '{ra}'")
 
         # Declination
-        de_deg = entry[27:30]
-        de_arcmin = entry[31:33]
-        de_arcsec = entry[34:36]
-        de = f"{de_deg}:{de_arcmin}:{de_arcsec}"
-        if len(de) != 9:
-            raise ValueError(f"Cluster {name} does not have a valid declination: '{de}'")
+        dec_deg = entry[27:30]
+        dec_arcmin = entry[31:33]
+        dec_arcsec = entry[34:36]
+        dec = f"{dec_deg}:{dec_arcmin}:{dec_arcsec}"
+        if len(dec) != 9:
+            raise ValueError(f"Cluster {name} does not have a valid declination: '{dec}'")
 
-        coords = SkyCoord(f"{ra} {de}", unit=(u.hourangle, u.deg), frame="icrs")
+        coords = SkyCoord(f"{ra} {dec}", unit=(u.hourangle, u.degree), frame="icrs")
 
         # G1 class
         g1_class = entry[37:39].strip()
@@ -98,3 +115,19 @@ class OpenClust(BaseCatalogue):
         OpenClust._logger.debug(f"Loaded cluster: {name}")
 
         return OpenCluster(name=name, coords=coords, diam=diam, g1_class=g1_class)
+
+    @staticmethod
+    def _catalogue_to_dataframe(catalogue: Catalogue) -> pandas.DataFrame:
+        """
+        Method to convert a Catalogue into a Pandas DataFrame.
+
+        Args:
+            catalogue (Catalogue): The catalogue to be converted.
+
+        Returns:
+            pandas.DataFrame: The catalogue as a DataFrame.
+        """
+        data = dict()
+        for cluster in catalogue.values():
+            data[cluster.name] = dict(cluster)
+        return pandas.DataFrame.from_dict(data, orient='index')

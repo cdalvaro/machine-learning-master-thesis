@@ -32,7 +32,7 @@ logger = Logger.instance()
 logger.setLevel(log_level)
 
 # Select clusters
-catalogue = OpenClust.load_catalogue()
+catalogue = OpenClust.catalogue()
 if len(args.cluster) == 1 and 'ALL' in args.cluster:
     clusters = set(catalogue.values())
 else:
