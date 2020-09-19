@@ -2,7 +2,7 @@ FROM python:3.8
 
 WORKDIR /usr/src/gaia
 
-COPY requirements.txt ./
+COPY assets/downloader/requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY cdalvaro cdalvaro
