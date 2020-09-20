@@ -7,7 +7,7 @@ import os
 import psycopg2
 from typing import List, Set, TypeVar
 
-from ..gaia.columns import gaia_columns
+from ..gaia.metadata import GaiaMetadata
 from ...data_base import DB
 from ...logging import Logger
 from ...models.open_cluster import OpenCluster
@@ -30,7 +30,6 @@ class Gaia:
     """
 
     _logger = Logger.instance()
-    _columns = gaia_columns()
 
     def __init__(self, db: DB):
         self.db = db
@@ -104,7 +103,7 @@ class Gaia:
         dec = region.coords.dec.degree
 
         query = f"""
-            SELECT {', '.join(Gaia._columns)}
+            SELECT {', '.join(GaiaMetadata.columns())}
             FROM {gaia.Gaia.MAIN_GAIA_TABLE}
             WHERE 1 =
             """
@@ -153,6 +152,6 @@ class Gaia:
 
         try:
             self.db.save_regions([region])
-            self.db.save_stars(region=region, stars=stars, columns=Gaia._columns)
+            self.db.save_stars(region=region, stars=stars, columns=GaiaMetadata.columns())
         except Exception as error:
             Gaia._logger.error(f"Error saving data for region {region}. Cause: {error}")

@@ -190,9 +190,9 @@ class DB:
         """
         DB._logger.debug(f"Getting stars for region {region}")
 
+        index_columns = ['region_id', 'source_id']
         if columns is not None:
-            required_columns = ['region_id', 'source_id']
-            columns = required_columns + list(filter(lambda x: x not in required_columns, columns))
+            columns = index_columns + list(filter(lambda x: x not in index_columns, columns))
         else:
             columns = ['*']
 
@@ -242,13 +242,16 @@ class DB:
                 """
 
         try:
-            return pandas.read_sql_query(query, self.conn, index_col=['region_id', 'source_id'], params=params)
+            return pandas.read_sql_query(query, self.conn, index_col=index_columns, params=params)
         except Exception as error:
             DB._logger.error(f"Error retrieving data for region: {region}. Cause: {error}")
             if '*' in columns:
-                from .downloaders.gaia.columns import gaia_columns
-                columns = gaia_columns()
-            return pandas.DataFrame([], index=['region_id', 'source_id'], columns=columns)
+                from .downloaders.gaia.metadata import GaiaMetadata
+                columns = index_columns + list(filter(lambda x: x not in index_columns, GaiaMetadata.columns()))
+
+            df = pandas.DataFrame({}, columns=columns)
+            df.set_index(index_columns)
+            return df
 
     def save_regions(self, regions: Regions):
         """
