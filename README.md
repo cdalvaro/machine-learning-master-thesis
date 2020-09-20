@@ -33,6 +33,8 @@ the [OPENCLUST][openclust] <span id="a2">[[2]](#f2)</span> catalogue has been us
 the sky regions to those areas corresponding to the clusters inside the catalogue
 giving an extra marging to take into account stars outside clusters.
 
+<img src="images/openclust_distribution.svg" title="OpenClust Catalogue Distribution" heigh="256px">
+
 ## Code
 
 All code used in this project is available inside [`code/`](code) directory.
