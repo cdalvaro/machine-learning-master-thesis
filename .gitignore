@@ -1,3 +1,6 @@
+### Custom
+thesis/thesis.pdf
+
 ### Python
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -414,4 +417,3 @@ TSWLatexianTemp*
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
-
