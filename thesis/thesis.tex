@@ -1,0 +1,83 @@
+\documentclass[11pt, a4paper, english]{book}
+\usepackage{unir}
+
+\setlength{\headheight}{15pt}
+
+%---------------------------
+% Título del trabajo y autor
+%---------------------------
+\title{Open Clusters Detection in Gaia DR2 Using ML Algorithms}
+\author{Carlos David Álvaro Yunta}
+\date{13 de Septiembre de 2020}
+\director{César Augusto Guzmán Álvarez}
+\nombreciudad{Madrid, Spain}
+
+%---------------------------
+%marges
+%---------------------------
+%\usepackage[margin=1.9cm]{geometry}
+%---------------------------
+%---------------------------
+%---------------------------
+%---------------------------
+\begin{document}
+%\renewcommand{\listfigurename}{Índice de Ilustraciones}
+%\renewcommand{\listtablename}{Índice de Tablas}
+%\renewcommand{\contentsname}{Índice de Contenidos}
+%\renewcommand{\figurename}{Figura}
+%\renewcommand{\tablename}{Tabla}
+
+\maketitle
+
+\frontmatter
+\tableofcontents
+\listoffigures
+\listoftables
+
+\chapter{Abstract}
+{\bf Nota:} En este apartado se introducirá un breve resumen en español del trabajo realizado (extensión máxima: 150 palabras). Este resumen debe incluir el objetivo o propósito de la investigación, la metodología, los resultados y las conclusiones.
+
+
+{\bf Key words.} open clusters detection --- machine learning --- gaia dr2 --- data analysis
+
+\chapter{Resumen}
+{\bf Nota:} En este apartado se introducirá un breve resumen en español del trabajo realizado (extensión máxima: 150 palabras). Este resumen debe incluir el objetivo o propósito de la investigación, la metodología, los resultados y las conclusiones.
+
+
+{\bf Palabras Clave:} detección de cúmulos abiertos --- inteligencia artificial --- gaia dr2 --- análisis de datos
+
+\mainmatter
+\chapter{Introduction}
+
+Hunting for Open Clusters\cite{castro2020hunting}
+
+\chapter{Context and State of the Art}
+
+\chapter{Identificación de Requisitos}
+
+\chapter{Aims}
+
+\chapter{Desarrollo del trabajo}
+
+\chapter{Conclusiones y Trabajo Futuro}
+
+\chapter*{Acknowledgement}
+\addcontentsline{toc}{chapter}{Acknowledgement}
+
+This work has made use of data from the European Space Agency (ESA) mission
+{\it Gaia} (\url{https://www.cosmos.esa.int/gaia}), processed by the {\it Gaia}
+Data Processing and Analysis Consortium (DPAC,
+\url{https://www.cosmos.esa.int/web/gaia/dpac/consortium}). Funding for the DPAC
+has been provided by national institutions, in particular the institutions
+participating in the {\it Gaia} Multilateral Agreement.
+
+\bibliography{references}
+\bibliographystyle{plain}
+\addcontentsline{toc}{chapter}{Bibliography}
+
+\appendix
+\chapter{Appendix}
+Atención, deberá generar un pdf con la plantilla de artículo y añadirla como anexo utilizando includepdf.
+
+%\includepdf[pages=-]{anexo.pdf} # TODO: Descomentar cuando el artículo esté hecho
+\end{document}
