@@ -45,6 +45,7 @@ class OpenClust(BaseCatalogue):
 
         Args:
             names (Set[str]): The name of the clusters to be recovered.
+            as_dataframe (bool, optional): Flag to recover clusters as a DataFrame. Defaults to False.
 
         Returns:
             Catalogue: A catalogue with the found clusters.
