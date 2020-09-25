@@ -2,13 +2,13 @@ import astropy.units as u
 from astropy.coordinates import SkyCoord
 import os
 import pandas
-from typing import Set, TypeVar, Union
+from typing import Dict, Set, TypeVar, Union
 
 from ..base_catalogue import BaseCatalogue
 from ...logging import Logger
 from ...models import OpenCluster
 
-Catalogue = TypeVar('Catalogue', bound=Set[OpenCluster])
+Catalogue = TypeVar('Catalogue', bound=Dict[str, OpenCluster])
 
 
 class OpenClust(BaseCatalogue):
