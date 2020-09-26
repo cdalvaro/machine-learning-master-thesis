@@ -7,7 +7,7 @@ services:
       context: ./
       dockerfile: downloader.Dockerfile
     container_name: gaia_downloader
-    command: --cluster ALL --verbose
+    command: --cluster ALL --exclude "Platais 8" --verbose
     restart: on-failure
     environment:
       DB_HOST: db
