@@ -1,3 +1,5 @@
+![Build downloader Docker image](https://github.com/cdalvaro/machine-learning-master-thesis/workflows/Build%20downloader%20Docker%20image/badge.svg)
+
 # Open Clusters Detection in Gaia DR2 Using ML Algorithms
 
 <div align=center>
