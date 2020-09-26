@@ -1,4 +1,5 @@
 import astropy
+from astropy.table import QTable
 import astropy.units as u
 from astroquery import gaia
 import json
@@ -60,7 +61,7 @@ class Gaia:
 
         Gaia._logger.info(f"🏁 Finished downloading stars ...")
 
-    def _download_stars(self, region: Region, extra_size: float, exclude: Set[SourceID] = {}) -> Union[astropy.table, None]:
+    def _download_stars(self, region: Region, extra_size: float, exclude: Set[SourceID] = {}) -> Union[QTable, None]:
         """
         Download data from Gaia DR2 for the given region with an optional extra size
         to extend the given region.
@@ -71,7 +72,7 @@ class Gaia:
             exclude (Set[SourceID]): Source ids to be excluded from the download.
 
         Returns:
-            astropy.table: An astropy table with the downloaded data.
+            Union[QTable, None]: An astropy table with the downloaded data, or None if an error occurs.
         """
         try:
             query = self._compose_query(region=region, extra_size=extra_size, exclude=exclude)
@@ -145,13 +146,13 @@ class Gaia:
 
         return query
 
-    def _save_stars(self, region: Region, stars: astropy.table):
+    def _save_stars(self, region: Region, stars: QTable):
         """
         Method for saving data into cdalvaro database.
 
         Args:
             region (Region): The region associated with to the data.
-            stars (astropy.table): An astropy table with the data to be saved.
+            stars (QTable): An astropy table with the data to be saved.
         """
         Gaia._logger.debug(f"Saving stars into db ...")
 
