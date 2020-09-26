@@ -5,7 +5,7 @@ import json
 import logging
 import os
 import psycopg2
-from typing import List, Set, TypeVar
+from typing import List, Set, TypeVar, Union
 
 from ..gaia.metadata import GaiaMetadata
 from ...data_base import DB
@@ -55,12 +55,12 @@ class Gaia:
             Gaia._logger.info(f"({counter} / {number_of_regions}) Downloading {region} stars from Gaia DR2 ...")
             source_id = self.db.get_stars_source_id(regions={region})
             stars = self._download_stars(region=region, extra_size=extra_size, exclude=source_id)
-            if len(stars) > 0:
+            if stars is not None and len(stars) > 0:
                 self._save_stars(region=region, stars=stars)
 
         Gaia._logger.info(f"🏁 Finished downloading stars ...")
 
-    def _download_stars(self, region: Region, extra_size: float, exclude: Set[SourceID] = {}) -> astropy.table:
+    def _download_stars(self, region: Region, extra_size: float, exclude: Set[SourceID] = {}) -> Union[astropy.table, None]:
         """
         Download data from Gaia DR2 for the given region with an optional extra size
         to extend the given region.
@@ -77,10 +77,15 @@ class Gaia:
             query = self._compose_query(region=region, extra_size=extra_size, exclude=exclude)
             job = gaia.Gaia.launch_job_async(query, verbose=Gaia._logger.level == logging.DEBUG)
             result = job.get_results()
-            Gaia._logger.info(f"Downloaded {len(result)} stars for {region}")
+            if len(result) > 0:
+                Gaia._logger.info(f"Downloaded {len(result)} stars for {region}")
+            elif len(exclude) > 0:
+                Gaia._logger.info(f"No new data has been downloaded from Gaia DR2 for region {region}")
+            else:
+                Gaia._logger.warn(f"No data has been found in the Gaia DR2 database for region {region}")
         except Exception as error:
-            result = []
             Gaia._logger.error(f"Error executing job for region {region}. Cause: {error}")
+            return None
 
         return result
 
