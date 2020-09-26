@@ -130,7 +130,7 @@ class OpenClust(BaseCatalogue):
             g1_class = None
 
         # Diameter
-        diam = entry[40:47].strip()
+        diam = entry[41:47].strip()
         if len(diam) == 0:
             raise ValueError(f"Cluster '{name}' does not have diameter info")
         diam = u.Quantity(diam, u.arcmin)
