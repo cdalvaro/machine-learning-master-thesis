@@ -135,9 +135,12 @@ class OpenClust(BaseCatalogue):
             raise ValueError(f"Cluster '{name}' does not have diameter info")
         diam = u.Quantity(diam, u.arcmin)
 
+        # Trumpler
+        trumpler = entry[144:152].strip()
+
         OpenClust._logger.debug(f"Loaded cluster: {name}")
 
-        return OpenCluster(name=name, coords=coords, diam=diam, g1_class=g1_class)
+        return OpenCluster(name=name, coords=coords, diam=diam, trumpler=trumpler, g1_class=g1_class)
 
     @staticmethod
     def _catalogue_to_dataframe(catalogue: Catalogue) -> pandas.DataFrame:
