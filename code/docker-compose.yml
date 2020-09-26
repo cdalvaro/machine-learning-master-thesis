@@ -2,7 +2,7 @@ version: "3.4"
 
 services:
   downloader:
-    image: cdalvaro/gaia-downloader:latest
+    image: ghcr.io/cdalvaro/gaia-downloader:latest
     build:
       context: ./
       dockerfile: downloader.Dockerfile
