@@ -17,12 +17,20 @@ parser.add_argument('--cluster',
         Cluster name from http://cdsarc.u-strasbg.fr/ftp/cats/B/ocl/clusters.dat list.
         Type ALL to download all of them.
         """)
+parser.add_argument('--exclude',
+                    '-e',
+                    nargs='*',
+                    type=str,
+                    default={},
+                    help="""
+        Clusters to be ignored from the download. Default to empty.
+        """)
 parser.add_argument('--extra_size',
                     type=float,
                     default=1.5,
                     help="""
         Extra size to extend regions to be downloaded.
-        Default to 1.5
+        Default to 1.5.
         """)
 parser.add_argument('--verbose', '-v', action='count', default=0)
 
@@ -50,6 +58,9 @@ else:
         else:
             logger.error(f"Cluster '{cluster_name}' is not avaiable at the OpenClust catalogue")
             exit(1)
+
+if len(args.exclude) > 0:
+    clusters = set(filter(lambda x: x not in args.exclude, clusters))
 
 db_host = os.getenv('DB_HOST', 'localhost')
 db_port = os.getenv('DB_PORT', 5432)
