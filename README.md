@@ -1,4 +1,4 @@
-![Build downloader Docker image](https://github.com/cdalvaro/machine-learning-master-thesis/workflows/Build%20downloader%20Docker%20image/badge.svg)
+[![gaia-downloader image][gaia_downloader_badge]][gaia_downlaoder_image]
 
 # Open Clusters Detection in Gaia DR2 Using ML Algorithms
 
@@ -76,3 +76,6 @@ gaia_downloader | 2020-09-12 18:53:09 INFO: Downloaded 433996 stars for Melotte 
 [gaia_dr2]: https://www.cosmos.esa.int/web/gaia/data-release-2
 [docker]: https://www.docker.com
 [postgresql]: https://www.postgresql.org
+
+[gaia_downloader_badge]: https://github.com/cdalvaro/machine-learning-master-thesis/workflows/gaia-downloader%20image/badge.svg
+[gaia_downlaoder_image]: https://github.com/users/cdalvaro/packages/container/package/gaia-downloader

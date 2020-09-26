@@ -1,4 +1,4 @@
-name: Build downloader Docker image
+name: gaia-downloader image
 
 on:
   pull_request:
