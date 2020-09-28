@@ -32,8 +32,11 @@ class Gaia:
 
     _logger = Logger.instance()
 
-    def __init__(self, db: DB):
+    def __init__(self, db: DB, username: str = None, password: str = None):
         self.db = db
+        self.username = username
+        self.password = password
+        self._logged = False
 
     def download_and_save(self, regions: Regions, extra_size: float = 1.0):
         """
@@ -50,6 +53,7 @@ class Gaia:
             Gaia._logger.warn(f"extra_size parameter must be positive. Absolute value will be taken: {(extra_size)}")
 
         Gaia._logger.info("⏱ Starting download ...")
+        self._login()
 
         number_of_regions = len(regions)
         for counter, region in zip(range(1, number_of_regions + 1), regions):
@@ -64,6 +68,7 @@ class Gaia:
                     f"An error occurred while downloading stars for region {region} from Gaia DR2 database. Cause: {error}"
                 )
 
+        self._logout()
         Gaia._logger.info(f"🏁 Finished downloading stars ...")
 
     def _download_stars(self, region: Region, extra_size: float, exclude: Set[SourceID] = {}) -> Union[QTable, None]:
@@ -166,3 +171,29 @@ class Gaia:
             self.db.save_stars(region=region, stars=stars, columns=GaiaMetadata.columns())
         except Exception as error:
             Gaia._logger.error(f"Error saving data for region {region}. Cause: {error}")
+
+    def _login(self):
+        """
+        Login to Gaia DR2 database
+        """
+        if self.username is None or self.password is None:
+            self._logged = False
+            return
+
+        try:
+            Gaia._logger.info("Logging in to Gaia DR2 database...")
+            gaia.Gaia.login(user=self.username, password=self.password)
+            self._logged = True
+        except Exception as error:
+            Gaia._logger.error(f"Unable to login to Gaia DR2 database. Cause: {error}")
+            self._logged = False
+
+    def _logout(self):
+        """
+        Logout from Gaia DR2 database
+        """
+        if self._logged:
+            try:
+                gaia.Gaia.logout()
+            except Exception as error:
+                Gaia._logger.error(f"An error occurred while logging out from Gaia DR2. Cause: {error}")
