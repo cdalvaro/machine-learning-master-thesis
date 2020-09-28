@@ -53,11 +53,16 @@ class Gaia:
 
         number_of_regions = len(regions)
         for counter, region in zip(range(1, number_of_regions + 1), regions):
-            Gaia._logger.info(f"({counter} / {number_of_regions}) Downloading {region} stars from Gaia DR2 ...")
-            source_id = self.db.get_stars_source_id(regions={region})
-            stars = self._download_stars(region=region, extra_size=extra_size, exclude=source_id)
-            if stars is not None and len(stars) > 0:
-                self._save_stars(region=region, stars=stars)
+            try:
+                Gaia._logger.info(f"({counter} / {number_of_regions}) Downloading {region} stars from Gaia DR2 ...")
+                source_id = self.db.get_stars_source_id(regions={region})
+                stars = self._download_stars(region=region, extra_size=extra_size, exclude=source_id)
+                if stars is not None and len(stars) > 0:
+                    self._save_stars(region=region, stars=stars)
+            except Exception as error:
+                Gaia._logger.error(
+                    f"An error occurred while downloading stars for region {region} from Gaia DR2 database. Cause: {error}"
+                )
 
         Gaia._logger.info(f"🏁 Finished downloading stars ...")
 

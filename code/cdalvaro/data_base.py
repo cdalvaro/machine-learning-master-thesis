@@ -129,10 +129,15 @@ class DB:
             ORDER BY region_id, source_id ASC
             """
 
-        cursor = self.conn.cursor(cursor_factory=LoggingCursor)
-        cursor.execute(query, (regions_name, ))
-        result = cursor.fetchall()
-        cursor.close()
+        try:
+            cursor = self.conn.cursor(cursor_factory=LoggingCursor)
+            cursor.execute(query, (regions_name, ))
+            result = cursor.fetchall()
+        except Exception as error:
+            DB._logger.error(f"An error ocurred while recovering stars source_id from DB. Cause: {error}")
+            raise error
+        finally:
+            cursor.close()
 
         return set(map(lambda x: next(iter(x)), result))
 
