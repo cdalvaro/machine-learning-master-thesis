@@ -1,3 +1,6 @@
+[![gaia-downloader image][gaia_downloader_badge]][gaia_downlaoder_image]
+[![latex-document][latex_document_badge]][latex_document_workflow]
+
 # Open Clusters Detection in Gaia DR2 Using ML Algorithms
 
 <div align=center>
@@ -74,3 +77,9 @@ gaia_downloader | 2020-09-12 18:53:09 INFO: Downloaded 433996 stars for Melotte 
 [gaia_dr2]: https://www.cosmos.esa.int/web/gaia/data-release-2
 [docker]: https://www.docker.com
 [postgresql]: https://www.postgresql.org
+
+[gaia_downloader_badge]: https://img.shields.io/github/workflow/status/cdalvaro/machine-learning-master-thesis/gaia-downloader%20image?label=gaia-downloader%20image&logo=GitHub
+[gaia_downlaoder_image]: https://github.com/users/cdalvaro/packages/container/package/gaia-downloader
+
+[latex_document_badge]: https://img.shields.io/github/workflow/status/cdalvaro/machine-learning-master-thesis/Build%20LaTeX%20document?label=LaTeX&logo=LaTeX
+[latex_document_workflow]: https://github.com/cdalvaro/machine-learning-master-thesis/actions?query=workflow%3A%22Build+LaTeX+document%22
