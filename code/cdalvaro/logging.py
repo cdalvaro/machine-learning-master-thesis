@@ -39,7 +39,7 @@ class ColorCodes:
 
 
 def _custom_format(color: str):
-    return f"[%(asctime)s] {color}%(levelname)s{ColorCodes.reset}: %(message)s"
+    return f"{color}%(levelname)s{ColorCodes.reset}: %(message)s"
 
 
 class CustomFormatter(logging.Formatter):

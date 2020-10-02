@@ -2,13 +2,13 @@ import astropy.units as u
 from astropy.coordinates import SkyCoord
 import os
 import pandas
-from typing import Set, TypeVar, Union
+from typing import Dict, Set, TypeVar, Union
 
 from ..base_catalogue import BaseCatalogue
 from ...logging import Logger
 from ...models import OpenCluster
 
-Catalogue = TypeVar('Catalogue', bound=Set[OpenCluster])
+Catalogue = TypeVar('Catalogue', bound=Dict[str, OpenCluster])
 
 
 class OpenClust(BaseCatalogue):
@@ -45,6 +45,7 @@ class OpenClust(BaseCatalogue):
 
         Args:
             names (Set[str]): The name of the clusters to be recovered.
+            as_dataframe (bool, optional): Flag to recover clusters as a DataFrame. Defaults to False.
 
         Returns:
             Catalogue: A catalogue with the found clusters.
@@ -129,14 +130,17 @@ class OpenClust(BaseCatalogue):
             g1_class = None
 
         # Diameter
-        diam = entry[40:47].strip()
+        diam = entry[41:47].strip()
         if len(diam) == 0:
             raise ValueError(f"Cluster '{name}' does not have diameter info")
         diam = u.Quantity(diam, u.arcmin)
 
+        # Trumpler
+        trumpler = entry[144:152].strip()
+
         OpenClust._logger.debug(f"Loaded cluster: {name}")
 
-        return OpenCluster(name=name, coords=coords, diam=diam, g1_class=g1_class)
+        return OpenCluster(name=name, coords=coords, diam=diam, trumpler=trumpler, g1_class=g1_class)
 
     @staticmethod
     def _catalogue_to_dataframe(catalogue: Catalogue) -> pandas.DataFrame:

@@ -13,6 +13,7 @@ from psycopg2.extras import execute_values
 from psycopg2.extras import LoggingConnection, LoggingCursor
 from typing import Dict, List, Set, TypeVar, Union
 
+from .catalogues.base_catalogue import Catalogue
 from .logging import Logger
 from .models.open_cluster import OpenCluster
 from .models.region import Region
@@ -128,46 +129,70 @@ class DB:
             ORDER BY region_id, source_id ASC
             """
 
-        cursor = self.conn.cursor(cursor_factory=LoggingCursor)
-        cursor.execute(query, (regions_name, ))
-        result = cursor.fetchall()
-        cursor.close()
+        try:
+            cursor = self.conn.cursor(cursor_factory=LoggingCursor)
+            cursor.execute(query, (regions_name, ))
+            result = cursor.fetchall()
+        except Exception as error:
+            DB._logger.error(f"An error ocurred while recovering stars source_id from DB. Cause: {error}")
+            raise error
+        finally:
+            cursor.close()
 
         return set(map(lambda x: next(iter(x)), result))
 
-    def get_region(self, name: str) -> Union[Region, None]:
+    def get_regions(self, names: Set[str] = {}, as_dataframe: bool = False) -> Union[Catalogue, pandas.DataFrame]:
         """
-        Get the region corresponding to the given name.
+        Get the regions matching the given names.
 
         Args:
-            name (str): The name of the region to be retrieved.
+            names (Set[str]): A set with the names with the regions to retrieve.
+            as_dataframe (bool, optional): Flag to recover regions as a DataFrame. Defaults to False.
 
         Returns:
-            Region: The region recovered.
+            Union[Catalogue, pandas.DataFrame]: A catalogue with found regions.
         """
-        DB._logger.debug(f"Getting region {name} from the DB ...")
+        columns = ('name', 'ra', 'dec', 'diam', 'width', 'height')
+        query = f"SELECT {', '. join(columns)} FROM public.regions"
 
-        query = f"SELECT id, ra, dec, diam, width, height FROM public.regions WHERE name = %s"
+        if len(names) > 0:
+            DB._logger.debug(f"Getting regions: {names} from DB ...")
+            query += " WHERE name = ANY(%s)"
+            params = (list(names), )
+        else:
+            DB._logger.debug(f"Getting all regions from DB ...")
+            params = ()
+
+        if as_dataframe:
+            index_col = 'name'
+            try:
+                return pandas.read_sql_query(query, self.conn, index_col=index_col, params=params)
+            except Exception as error:
+                DB._logger.error(f"Error retrieving regions data. Cause: {error}")
+                df = pandas.DataFrame({}, columns=columns)
+                df.set_index(index_col)
+                return df
 
         cursor = self.conn.cursor(cursor_factory=LoggingCursor)
-        cursor.execute(query, (name, ))
-        (serial, ra, dec, diam, width, height) = cursor.fetchone()
+        cursor.execute(query, params)
+
+        catalogue = dict()
+        for (name, ra, dec, diam, width, height) in cursor.fetchall():
+            if name is None:
+                continue
+
+            coords = SkyCoord(f"{ra} {dec}", unit=(u.degree, u.degree), frame="icrs")
+            properties = dict()
+            if diam is not None:
+                properties = {'diam': u.Quantity(diam, u.arcmin)}
+            else:
+                properties = {'width': u.Quantity(width, u.arcmin), 'height': u.Quantity(height, u.arcmin)}
+
+            catalogue[name] = Region(name=name, coords=coords, **properties)
+
         cursor.close()
 
-        if serial is None:
-            return None
-
-        coords = SkyCoord(f"{ra} {dec}", unit=(u.degree, u.degree), frame="icrs")
-
-        if diam is not None:
-            diam = u.Quantity(diam, u.arcmin)
-            region = Region(name=name, coords=coords, diam=diam, serial=serial)
-        else:
-            width = u.Quantity(width, u.arcmin)
-            height = u.Quantity(height, u.arcmin)
-            region = Region(name=name, coords=coords, width=width, height=height, serial=serial)
-
-        return region
+        return catalogue
 
     def get_stars(self,
                   region: Region = None,

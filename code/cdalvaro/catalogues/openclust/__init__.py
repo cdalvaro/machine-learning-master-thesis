@@ -1,1 +1,1 @@
-from .openclust import OpenClust
+from .openclust import Catalogue, OpenClust
