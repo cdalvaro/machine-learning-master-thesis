@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+    - 'thesis/**'
+    - 'images/**'
   release:
     types:
       - created
