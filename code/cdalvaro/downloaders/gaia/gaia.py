@@ -2,6 +2,7 @@ import astropy
 from astropy.table import QTable, Table
 import astropy.units as u
 from astroquery import gaia
+import hashlib
 import json
 import logging
 import numpy as np
@@ -70,7 +71,7 @@ class Gaia:
                 )
 
         self._logout()
-        Gaia._logger.info(f"🏁 Finished downloading stars ...")
+        Gaia._logger.info(f"🏁 Finished downloading stars")
 
     def _download_stars(self, region: Region, extra_size: float, exclude: Set[SourceID] = {}) -> Union[QTable, None]:
         """
@@ -131,14 +132,19 @@ class Gaia:
         if len(exclude) > 0:
             if self._logged:
                 try:
-                    temp_table = f"temp_table_{region.name.replace(' ', '')}"
+                    schema = f"user_{self.username}"
+                    digest = hashlib.md5(region.name.encode('utf-8')).hexdigest()
+                    temp_table = f"temp_table_{digest}"
+
+                    Gaia._logger.info(
+                        f"Creating temporary table with source_id of currently downloaded objects for region {region}")
                     table = Table([list(exclude)],
                                   names=['source_id'],
                                   dtype=[np.int64],
                                   meta={'meta': f"temporary table for region {region}"})
                     gaia.Gaia.upload_table(upload_resource=table, table_name=temp_table)
                     query += f"""
-                        LEFT JOIN user_{self.username}.{temp_table} B
+                        LEFT JOIN {schema}.{temp_table} B
                         ON A.source_id = B.source_id
                         WHERE B.source_id IS NULL
                         """
