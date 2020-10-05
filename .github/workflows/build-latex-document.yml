@@ -6,7 +6,7 @@ on:
       - main
     paths:
     - 'thesis/**'
-    - 'images/**'
+    - 'figures/**'
   release:
     types:
       - created
