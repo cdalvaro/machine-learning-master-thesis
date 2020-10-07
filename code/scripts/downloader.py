@@ -25,13 +25,27 @@ parser.add_argument('--exclude',
                     help="""
         Clusters to be ignored from the download. Default to empty.
         """)
-parser.add_argument('--extra_size',
+parser.add_argument('--extra-size',
+                    '-s',
+                    dest='extra_size',
                     type=float,
                     default=1.5,
                     help="""
         Extra size to extend regions to be downloaded.
         Default to 1.5.
         """)
+
+update_data_parser = parser.add_mutually_exclusive_group(required=False)
+update_data_parser.add_argument('--update-data',
+                                '-u',
+                                dest='update_data',
+                                action='store_true',
+                                help="""
+        Update existing clusters with new data. Default.
+        """)
+update_data_parser.add_argument('--no-update-data', dest='update_data', action='store_false')
+update_data_parser.set_defaults(update_data=True)
+
 parser.add_argument('--verbose', '-v', action='count', default=0)
 
 args = parser.parse_args()
@@ -66,6 +80,15 @@ db_host = os.getenv('DB_HOST', 'localhost')
 db_port = os.getenv('DB_PORT', 5432)
 db = DB.instance(host=db_host, port=db_port)
 
+if not args.update_data:
+    logger.info("Existing regions won't be updated")
+    existing_clusters = db.get_regions().keys()
+    clusters = set(filter(lambda x: x not in existing_clusters, clusters))
+
+if len(clusters) == 0:
+    logger.info("🍻 All regions are already downloaded")
+    exit(0)
+
 gaia_username = os.getenv('GAIA_USER', None)
 gaia_password = os.getenv('GAIA_PASS', None)
 
@@ -73,3 +96,4 @@ gaia = Gaia(db=db, username=gaia_username, password=gaia_password)
 gaia.download_and_save(regions=clusters, extra_size=args.extra_size)
 
 logger.info("🚀 Gaia downloader has finished retrieving and saving data")
+exit(0)
