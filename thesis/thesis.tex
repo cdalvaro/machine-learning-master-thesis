@@ -3,8 +3,11 @@
 \usepackage{unir}
 
 \usepackage{caption}
+\usepackage{eso-pic}
+\usepackage{float}
 \usepackage{graphicx}
 \usepackage{natbib}
+\usepackage{picture}
 \usepackage{subcaption}
 
 % Bibliography style
@@ -256,6 +259,14 @@ The original description of the VizieR service was published in 2000, \cite[A\&A
 
 \bibliography{references}
 \addcontentsline{toc}{chapter}{Bibliography}
+
+\AddToShipoutPicture*{
+  \AtPageLowerLeft{
+    \makebox(\paperwidth,0)[rb]{
+      \includegraphics[width=4cm,height=4cm,keepaspectratio]{../figures/github_qr.pdf}
+    }
+  }
+}
 
 \appendix
 \chapter{Appendix}
