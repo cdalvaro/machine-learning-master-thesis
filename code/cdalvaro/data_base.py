@@ -87,7 +87,7 @@ class DB:
             Dict[str, int]: A dictionary relating region names with their corresponding ids.
         """
         regions_name = list(map(lambda x: x.name, regions))
-        DB._logger.debug(f"Getting regions id for regions: {', '.join(regions_name)} from dab ...")
+        DB._logger.debug(f"Getting regions id for regions: {', '.join(regions_name)} from DB ...")
 
         query = f"""
             SELECT name, id FROM public.regions
@@ -95,10 +95,15 @@ class DB:
             ORDER BY name ASC
             """
 
-        cursor = self.conn.cursor(cursor_factory=LoggingCursor)
-        cursor.execute(query, (regions_name, ))
-        result = cursor.fetchall()
-        cursor.close()
+        try:
+            cursor = self.conn.cursor(cursor_factory=LoggingCursor)
+            cursor.execute(query, (regions_name, ))
+            result = cursor.fetchall()
+        except Exception as error:
+            DB._logger.error(f"An error ocurred recovering regions id from DB. Cause: {error}")
+            raise error
+        finally:
+            cursor.close()
 
         regions_id = dict()
         for (name, serial) in result:
@@ -134,7 +139,7 @@ class DB:
             cursor.execute(query, (regions_name, ))
             result = cursor.fetchall()
         except Exception as error:
-            DB._logger.error(f"An error ocurred while recovering stars source_id from DB. Cause: {error}")
+            DB._logger.error(f"An error ocurred recovering stars source_id from DB. Cause: {error}")
             raise error
         finally:
             cursor.close()
@@ -168,16 +173,21 @@ class DB:
             try:
                 return pandas.read_sql_query(query, self.conn, index_col=index_col, params=params)
             except Exception as error:
-                DB._logger.error(f"Error retrieving regions data. Cause: {error}")
-                df = pandas.DataFrame({}, columns=columns)
-                df.set_index(index_col)
-                return df
+                DB._logger.error(f"An error ocurred recovering regions dataframe from DB. Cause: {error}")
+                raise error
 
-        cursor = self.conn.cursor(cursor_factory=LoggingCursor)
-        cursor.execute(query, params)
+        try:
+            cursor = self.conn.cursor(cursor_factory=LoggingCursor)
+            cursor.execute(query, params)
+            result = cursor.fetchall()
+        except Exception as error:
+            DB._logger.error(f"An error ocurred recovering regions catalogue from DB. Cause: {error}")
+            raise error
+        finally:
+            cursor.close()
 
         catalogue = dict()
-        for (name, ra, dec, diam, width, height) in cursor.fetchall():
+        for (name, ra, dec, diam, width, height) in result:
             if name is None:
                 continue
 
@@ -189,8 +199,6 @@ class DB:
                 properties = {'width': u.Quantity(width, u.arcmin), 'height': u.Quantity(height, u.arcmin)}
 
             catalogue[name] = Region(name=name, coords=coords, **properties)
-
-        cursor.close()
 
         return catalogue
 
@@ -269,14 +277,8 @@ class DB:
         try:
             return pandas.read_sql_query(query, self.conn, index_col=index_columns, params=params)
         except Exception as error:
-            DB._logger.error(f"Error retrieving data for region: {region}. Cause: {error}")
-            if '*' in columns:
-                from .downloaders.gaia.metadata import GaiaMetadata
-                columns = index_columns + list(filter(lambda x: x not in index_columns, GaiaMetadata.columns()))
-
-            df = pandas.DataFrame({}, columns=columns)
-            df.set_index(index_columns)
-            return df
+            DB._logger.error(f"An error ocurred recovering data for region: {region} from DB. Cause: {error}")
+            raise error
 
     def save_regions(self, regions: Regions):
         """
@@ -308,10 +310,15 @@ class DB:
 
             data.append((name, ra, dec, diam, json.dumps(properties)))
 
-        cursor = self.conn.cursor(cursor_factory=LoggingCursor)
-        serials = execute_values(cursor, query, data, fetch=True)
-        self.conn.commit()
-        cursor.close()
+        try:
+            cursor = self.conn.cursor(cursor_factory=LoggingCursor)
+            serials = execute_values(cursor, query, data, fetch=True)
+            self.conn.commit()
+        except Exception as error:
+            DB._logger.error(f"An error ocurred saving regions data into DB. Cause: {error}")
+            raise error
+        finally:
+            cursor.close()
 
         for region, serial in zip(regions, serials):
             region.serial = next(iter(serial))
@@ -358,7 +365,12 @@ class DB:
         if len(data) == 0:
             return
 
-        cursor = self.conn.cursor(cursor_factory=LoggingCursor)
-        execute_values(cursor, query, data, page_size=10000)
-        self.conn.commit()
-        cursor.close()
+        try:
+            cursor = self.conn.cursor(cursor_factory=LoggingCursor)
+            execute_values(cursor, query, data, page_size=10000)
+            self.conn.commit()
+        except Exception as error:
+            DB._logger.error(f"An error ocurred saving stars data into DB. Cause: {error}")
+            raise error
+        finally:
+            cursor.close()
