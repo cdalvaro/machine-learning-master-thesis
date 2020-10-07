@@ -28,7 +28,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
-          name: Thesis.pdf
+          name: "${{ github.event.pull_request.title }}.pdf"
           path: thesis/thesis.pdf
 
       - name: Get release
@@ -46,5 +46,5 @@ jobs:
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
           asset_path: thesis/thesis.pdf
-          asset_name: Thesis.pdf
+          asset_name: "${{ github.event.release.name }}.pdf"
           asset_content_type: application/pdf
