@@ -316,6 +316,7 @@ class DB:
             self.conn.commit()
         except Exception as error:
             DB._logger.error(f"An error ocurred saving regions data into DB. Cause: {error}")
+            self.conn.rollback()
             raise error
         finally:
             cursor.close()
@@ -371,6 +372,7 @@ class DB:
             self.conn.commit()
         except Exception as error:
             DB._logger.error(f"An error ocurred saving stars data into DB. Cause: {error}")
+            self.conn.rollback()
             raise error
         finally:
             cursor.close()
