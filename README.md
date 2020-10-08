@@ -4,8 +4,8 @@
 # Open Clusters Characterization in Gaia DR2 Using ML Algorithms
 
 <div align=center>
-  <a href="https://www.unir.net"><img src="figures/unir-logo.png" alt="UNIR" title="UNIR" hspace="30" height="128px" /></a>
-  <a href="https://sci.esa.int/gaia"><img src="figures/esa-gaia-logo.png" alt="ESA Gaia" title="ESA Gaia" hspace="30" height="128px" /></a>
+  <a href="https://www.unir.net"><img src="https://github.com/cdalvaro/machine-learning-master-thesis/raw/main/figures/unir-logo.png" alt="UNIR" title="UNIR" hspace="30" height="128px" /></a>
+  <a href="https://sci.esa.int/gaia"><img src="https://github.com/cdalvaro/machine-learning-master-thesis/raw/main/figures/esa-gaia-logo.png" alt="ESA Gaia" title="ESA Gaia" hspace="30" height="128px" /></a>
 </div>
 
 Author: [_Álvaro Yunta, Carlos D._][author_profile]
@@ -38,7 +38,7 @@ the sky regions to those areas corresponding to the clusters inside the catalogu
 giving an extra marging to take into account stars outside clusters.
 
 <figure>
-  <img src="figures/openclust_catalogue.svg" title="OpenClust Catalogue Distribution" heigh="256px">
+  <img src="https://github.com/cdalvaro/machine-learning-master-thesis/raw/main/figures/openclust_catalogue.svg" title="OpenClust Catalogue Distribution" heigh="256px">
   <figcaption align=center>OpenClust Catalogue Distribution</figcaption>
 </figure>
 
