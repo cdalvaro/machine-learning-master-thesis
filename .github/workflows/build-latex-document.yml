@@ -1,0 +1,50 @@
+name: Build LaTeX document
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+    - 'thesis/**'
+    - 'figures/**'
+  release:
+    types:
+      - created
+
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: thesis.tex
+          working_directory: thesis
+
+      - name: Upload PDF
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: "${{ github.event.pull_request.title }}.pdf"
+          path: thesis/thesis.pdf
+
+      - name: Get release
+        if: ${{ github.event_name == 'release' }}
+        id: get_release
+        uses: bruceadams/get-release@v1.2.1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Publish PDF
+        if: ${{ github.event_name == 'release' }}
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: thesis/thesis.pdf
+          asset_name: "${{ github.event.release.name }}.pdf"
+          asset_content_type: application/pdf
