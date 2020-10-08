@@ -17,7 +17,6 @@ Supervisor: [_Guzmán Álvarez, César A._][supervisor_profile]
 - [Abstract](#abstract)
 - [Data](#data)
 - [Code](#code)
-  - [Downloader](#downloader)
 - [Acknowledgement](#acknowledgement)
 - [References](#references)
 
@@ -49,26 +48,7 @@ Prueba de texto
 All code used in this project is available inside [`code/`](code) directory.
 It is written in Python and contains downloaders, data managers, and the ML algorithms described in the thesis.
 
-### Downloader
-
-Data download can be started by running the following command:
-
-([Docker][docker] is required for this purpose)
-
-```sh
-cd code
-docker-compose up --detach
-```
-
-A [PostgreSQL][postgresql] will be initiated and a container will start to download Gaia data.
-
-```
-gaia_downloader | INFO: Loading OpenClust catalogue ...
-gaia_downloader | INFO: OpenClust catalogue loaded!
-gaia_downloader | INFO: ⏱ Downloading Melotte 25 stars from Gaia DR2 ...
-gaia_downloader | INFO: Query finished. [astroquery.utils.tap.core]
-gaia_downloader | INFO: Downloaded 433996 stars for Melotte 25
-```
+For more information see: [code/README.md](code/README.md)
 
 ## Acknowledgement
 
@@ -101,9 +81,7 @@ The original description of the VizieR service was published in 2000 (A&AS 143, 
 [supervisor_profile]: https://www.unir.net/profesores/cesar-augusto-guzman-alvarez/
 [gaia_mission]: https://www.cosmos.esa.int/web/gaia/the-mission
 [gaia_dr2]: https://www.cosmos.esa.int/web/gaia/data-release-2
-[docker]: https://www.docker.com
-[postgresql]: https://www.postgresql.org
-[gaia_downloader_badge]: https://img.shields.io/github/workflow/status/cdalvaro/machine-learning-master-thesis/gaia-downloader%20image?style=flat-square&label=gaia-downloader&logo=GitHub
+[gaia_downloader_badge]: https://img.shields.io/github/workflow/status/cdalvaro/machine-learning-master-thesis/gaia-downloader%20image?style=flat-square&label=gaia-downloader&logo=Docker
 [gaia_downlaoder_image]: https://github.com/users/cdalvaro/packages/container/package/gaia-downloader
 [latex_document_badge]: https://img.shields.io/github/workflow/status/cdalvaro/machine-learning-master-thesis/Build%20LaTeX%20document?style=flat-square&label=LaTeX&logo=LaTeX
 [latex_document_workflow]: https://github.com/cdalvaro/machine-learning-master-thesis/actions?query=workflow%3A%22Build+LaTeX+document%22
