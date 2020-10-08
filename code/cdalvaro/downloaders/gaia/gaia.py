@@ -90,6 +90,7 @@ class Gaia:
             query, temp_table = self._compose_query(region=region, extra_size=extra_size, exclude=exclude)
             job = gaia.Gaia.launch_job_async(query)
             result = job.get_results()
+            gaia.Gaia.remove_jobs(jobs_list=[job.jobid])
             if len(result) > 0:
                 Gaia._logger.info(f"Downloaded {len(result)} stars for {region}")
             elif len(exclude) > 0:
@@ -150,6 +151,7 @@ class Gaia:
                         """
                 except Exception as error:
                     Gaia._logger.error(f"Unable to create temporary table for region {region}. Cause: {error}")
+                    raise error
             else:
                 exclude = list(map(lambda x: str(x), exclude))
                 query += f"""
