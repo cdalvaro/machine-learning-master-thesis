@@ -34,10 +34,11 @@ class Gaia:
 
     _logger = Logger.instance()
 
-    def __init__(self, db: DB, username: str = None, password: str = None):
+    def __init__(self, db: DB, username: str = None, password: str = None, remove_jobs: bool = True):
         self.db = db
         self.username = username
         self.password = password
+        self.remove_jobs = remove_jobs
         self._logged = False
 
     def download_and_save(self, regions: Regions, extra_size: float = 1.0):
@@ -86,9 +87,12 @@ class Gaia:
         Returns:
             Union[QTable, None]: An astropy table with the downloaded data, or None if an error occurs.
         """
+        job = None
         try:
-            query, temp_table = self._compose_query(region=region, extra_size=extra_size, exclude=exclude)
-            job = gaia.Gaia.launch_job_async(query)
+            query, temp_table_name, temp_table = self._compose_query(region=region,
+                                                                     extra_size=extra_size,
+                                                                     exclude=exclude)
+            job = gaia.Gaia.launch_job_async(query, upload_resource=temp_table, upload_table_name=temp_table_name)
             result = job.get_results()
             if len(result) > 0:
                 Gaia._logger.info(f"Downloaded {len(result)} stars for {region}")
@@ -100,14 +104,12 @@ class Gaia:
             Gaia._logger.error(f"Error executing job for region {region}. Cause: {error}")
             return None
         finally:
-            if temp_table is not None:
-                gaia.Gaia.delete_user_table(temp_table, force_removal=True, verbose=Gaia._logger.level <= logging.DEBUG)
-
-            try:
-                gaia.Gaia.remove_jobs(jobs_list=[job.jobid], verbose=Gaia._logger.level <= logging.DEBUG)
-                Gaia._logger.debug(f"Job {job.jobid} successfully removed")
-            except Exception as error:
-                Gaia._logger.error(f"Error removing job: {job.jobid} from Gaia server. Cause: {error}")
+            if job is not None and self._logged and self.remove_jobs:
+                try:
+                    gaia.Gaia.remove_jobs(jobs_list=[job.jobid], verbose=Gaia._logger.level <= logging.DEBUG)
+                    Gaia._logger.debug(f"Job {job.jobid} successfully removed")
+                except Exception as error:
+                    Gaia._logger.error(f"Error removing job: {job.jobid} from Gaia server. Cause: {error}")
 
         return result
 
@@ -134,38 +136,25 @@ class Gaia:
             FROM {gaia.Gaia.MAIN_GAIA_TABLE} A
             """
 
-        temp_table = None
+        temp_table_name, temp_table = None, None
         if len(exclude) > 0:
-            if self._logged:
-                try:
-                    schema = f"user_{self.username}"
-                    digest = hashlib.md5(region.name.encode('utf-8')).hexdigest()
-                    temp_table = f"temp_table_{digest}"
-
-                    Gaia._logger.info(
-                        f"Creating temporary table with source_id of currently downloaded objects for region {region}")
-                    table = Table([list(exclude)],
+            region_md5 = hashlib.md5(region.name.encode('utf-8')).hexdigest()
+            temp_table_name = f"cdalvaro_{region_md5}"
+            temp_table = Table([list(exclude)],
                                   names=['source_id'],
                                   dtype=[np.int64],
                                   meta={'meta': f"temporary table for region {region}"})
-                    gaia.Gaia.upload_table(upload_resource=table,
-                                           table_name=temp_table,
-                                           verbose=Gaia._logger.level <= logging.DEBUG)
-                    query += f"""
-                        LEFT JOIN {schema}.{temp_table} B
+
+            query += f"""
+                LEFT JOIN tap_upload.{temp_table_name} B
                         ON A.source_id = B.source_id
                         WHERE B.source_id IS NULL
-                        """
-                except Exception as error:
-                    Gaia._logger.error(f"Unable to create temporary table for region {region}. Cause: {error}")
-                    raise error
-            else:
-                exclude = list(map(lambda x: str(x), exclude))
-                query += f"""
-                        WHERE source_id NOT IN ({",".join(exclude)})
-                    """
-
-        query += "AND" if len(exclude) > 0 else "WHERE"
+                AND
+                """
+        else:
+            query += """
+                WHERE
+                """
 
         if hasattr(region, 'diam'):
             radius = region.diam.to_value(u.degree) * extra_size / 2.0
@@ -191,7 +180,7 @@ class Gaia:
             ORDER BY A.source_id ASC
             """
 
-        return query, temp_table
+        return query, temp_table_name, temp_table
 
     def _save_stars(self, region: Region, stars: QTable):
         """
