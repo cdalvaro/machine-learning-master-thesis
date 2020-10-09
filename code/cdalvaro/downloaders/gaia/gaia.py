@@ -90,7 +90,6 @@ class Gaia:
             query, temp_table = self._compose_query(region=region, extra_size=extra_size, exclude=exclude)
             job = gaia.Gaia.launch_job_async(query)
             result = job.get_results()
-            gaia.Gaia.remove_jobs(jobs_list=[job.jobid])
             if len(result) > 0:
                 Gaia._logger.info(f"Downloaded {len(result)} stars for {region}")
             elif len(exclude) > 0:
@@ -102,7 +101,13 @@ class Gaia:
             return None
         finally:
             if temp_table is not None:
-                job = gaia.Gaia.delete_user_table(temp_table)
+                gaia.Gaia.delete_user_table(temp_table, force_removal=True, verbose=Gaia._logger.level <= logging.DEBUG)
+
+        try:
+            gaia.Gaia.remove_jobs(jobs_list=[job.jobid], verbose=Gaia._logger.level <= logging.DEBUG)
+            Gaia._logger.debug(f"Job {job.jobid} successfully removed")
+        except Exception as error:
+            Gaia._logger.error(f"Error removing job: {job.jobid} from Gaia server. Cause: {error}")
 
         return result
 
@@ -143,7 +148,9 @@ class Gaia:
                                   names=['source_id'],
                                   dtype=[np.int64],
                                   meta={'meta': f"temporary table for region {region}"})
-                    gaia.Gaia.upload_table(upload_resource=table, table_name=temp_table)
+                    gaia.Gaia.upload_table(upload_resource=table,
+                                           table_name=temp_table,
+                                           verbose=Gaia._logger.level <= logging.DEBUG)
                     query += f"""
                         LEFT JOIN {schema}.{temp_table} B
                         ON A.source_id = B.source_id
@@ -212,7 +219,7 @@ class Gaia:
 
         try:
             Gaia._logger.info("Logging in to Gaia DR2 database...")
-            gaia.Gaia.login(user=self.username, password=self.password)
+            gaia.Gaia.login(user=self.username, password=self.password, verbose=Gaia._logger.level <= logging.DEBUG)
             self._logged = True
         except Exception as error:
             Gaia._logger.error(f"Unable to login to Gaia DR2 database. Cause: {error}")
