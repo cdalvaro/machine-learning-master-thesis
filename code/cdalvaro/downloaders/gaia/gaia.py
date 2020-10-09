@@ -103,11 +103,11 @@ class Gaia:
             if temp_table is not None:
                 gaia.Gaia.delete_user_table(temp_table, force_removal=True, verbose=Gaia._logger.level <= logging.DEBUG)
 
-        try:
-            gaia.Gaia.remove_jobs(jobs_list=[job.jobid], verbose=Gaia._logger.level <= logging.DEBUG)
-            Gaia._logger.debug(f"Job {job.jobid} successfully removed")
-        except Exception as error:
-            Gaia._logger.error(f"Error removing job: {job.jobid} from Gaia server. Cause: {error}")
+            try:
+                gaia.Gaia.remove_jobs(jobs_list=[job.jobid], verbose=Gaia._logger.level <= logging.DEBUG)
+                Gaia._logger.debug(f"Job {job.jobid} successfully removed")
+            except Exception as error:
+                Gaia._logger.error(f"Error removing job: {job.jobid} from Gaia server. Cause: {error}")
 
         return result
 
