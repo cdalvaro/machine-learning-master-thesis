@@ -7,7 +7,6 @@ import json
 import logging
 import numpy as np
 import os
-import psycopg2
 from typing import List, Set, TypeVar, Union
 
 from ..gaia.metadata import GaiaMetadata
@@ -33,6 +32,7 @@ class Gaia:
     """
 
     _logger = Logger.instance()
+    partition_size = 500000
 
     def __init__(self, db: DB, username: str = None, password: str = None, remove_jobs: bool = True):
         self.db = db
@@ -63,7 +63,7 @@ class Gaia:
             try:
                 Gaia._logger.info(f"({counter} / {number_of_regions}) Downloading {region} stars from Gaia DR2 ...")
                 source_id = self.db.get_stars_source_id(regions={region})
-                stars = self._download_stars(region=region, extra_size=extra_size, exclude=source_id)
+                stars = self._download_stars_partitoned(region=region, extra_size=extra_size, exclude=source_id)
                 if stars is not None and len(stars) > 0:
                     self._save_stars(region=region, stars=stars)
             except Exception as error:
@@ -74,7 +74,40 @@ class Gaia:
         self._logout()
         Gaia._logger.info(f"🏁 Finished downloading stars")
 
-    def _download_stars(self, region: Region, extra_size: float, exclude: Set[SourceID] = {}) -> Union[QTable, None]:
+    def _download_stars_partitoned(self,
+                                   region: Region,
+                                   extra_size: float,
+                                   exclude: Set[SourceID] = {}) -> Union[Table, None]:
+        data = None
+        downloaded_ids = exclude.copy()
+        while True:
+            result = self._download_stars(region,
+                                          extra_size=extra_size,
+                                          exclude=downloaded_ids,
+                                          limit=Gaia.partition_size)
+            if result is not None and len(result) > 0:
+                Gaia._logger.debug(f"Downloaded {len(result)} stars from Gaia DR2 for region '{region}'")
+                data = result if data is None else astropy.table.vstack([data, result])
+                downloaded_ids |= set(result['source_id'])
+                if len(result) < Gaia.partition_size:
+                    break
+            else:
+                if data is None:
+                    if len(exclude) > 0:
+                        Gaia._logger.info(f"No new data has been downloaded from Gaia DR2 for region '{region}'")
+                    else:
+                        Gaia._logger.warn(f"No data has been found in the Gaia DR2 database for region '{region}'")
+                else:
+                    Gaia._logger.info(f"Downloaded {len(data)} new stars for region '{region}'")
+                break
+
+        return data
+
+    def _download_stars(self,
+                        region: Region,
+                        extra_size: float,
+                        exclude: Set[SourceID] = {},
+                        limit: int = None) -> Union[Table, None]:
         """
         Download data from Gaia DR2 for the given region with an optional extra size
         to extend the given region.
@@ -83,23 +116,22 @@ class Gaia:
             region (Region): The region that contains the stars to be downloaded.
             extra_size (float): A positive number with the extra size to extend the region.
             exclude (Set[SourceID]): Source ids to be excluded from the download.
+            limit (int, optional): Limit result to the top n entries. Defaults to None.
 
         Returns:
-            Union[QTable, None]: An astropy table with the downloaded data, or None if an error occurs.
+            Union[Table, None]: An astropy table with the downloaded data, or None if an error occurs.
         """
         job = None
         try:
             query, temp_table_name, temp_table = self._compose_query(region=region,
                                                                      extra_size=extra_size,
-                                                                     exclude=exclude)
-            job = gaia.Gaia.launch_job_async(query, upload_resource=temp_table, upload_table_name=temp_table_name)
+                                                                     exclude=exclude,
+                                                                     limit=limit)
+            job = gaia.Gaia.launch_job_async(query,
+                                             upload_resource=temp_table,
+                                             upload_table_name=temp_table_name,
+                                             verbose=Gaia._logger.level <= logging.DEBUG)
             result = job.get_results()
-            if len(result) > 0:
-                Gaia._logger.info(f"Downloaded {len(result)} stars for {region}")
-            elif len(exclude) > 0:
-                Gaia._logger.info(f"No new data has been downloaded from Gaia DR2 for region {region}")
-            else:
-                Gaia._logger.warn(f"No data has been found in the Gaia DR2 database for region {region}")
         except Exception as error:
             Gaia._logger.error(f"Error executing job for region {region}. Cause: {error}")
             return None
@@ -113,7 +145,7 @@ class Gaia:
 
         return result
 
-    def _compose_query(self, region: Region, extra_size: float, exclude: Set[SourceID]) -> str:
+    def _compose_query(self, region: Region, extra_size: float, exclude: Set[SourceID], limit: int = None) -> str:
         """
         Compose the query to download data from Gaia DR2 for the given region.
 
@@ -124,6 +156,7 @@ class Gaia:
             region (Region): The region that contains the stars to be downloaded.
             extra_size (float): A positive number to extend the given region diameter.
             exclude (Set[SourceID]): Source ids to be excluded from the download.
+            limit (int, optional): Limit query to the top n entries. Defaults to None.
 
         Returns:
             str: A string with the download query.
@@ -131,8 +164,10 @@ class Gaia:
         ra = region.coords.ra.degree
         dec = region.coords.dec.degree
 
-        query = f"""
-            SELECT {', '.join(map(lambda x: f"A.{x}", GaiaMetadata.columns()))}
+        query = "SELECT" if limit is None else f"SELECT TOP {limit}"
+
+        query += f"""
+            {', '.join(map(lambda x: f"A.{x}", GaiaMetadata.columns()))}
             FROM {gaia.Gaia.MAIN_GAIA_TABLE} A
             """
 
@@ -141,9 +176,9 @@ class Gaia:
             region_md5 = hashlib.md5(region.name.encode('utf-8')).hexdigest()
             temp_table_name = f"cdalvaro_{region_md5}"
             temp_table = Table([list(exclude)],
-                                  names=['source_id'],
-                                  dtype=[np.int64],
-                                  meta={'meta': f"temporary table for region {region}"})
+                               names=['source_id'],
+                               dtype=[np.int64],
+                               meta={'meta': f"temporary table for region {region}"})
 
             query += f"""
                 LEFT JOIN tap_upload.{temp_table_name} B
@@ -182,19 +217,20 @@ class Gaia:
 
         return query, temp_table_name, temp_table
 
-    def _save_stars(self, region: Region, stars: QTable):
+    def _save_stars(self, region: Region, stars: Table):
         """
         Method for saving data into cdalvaro database.
 
         Args:
             region (Region): The region associated with to the data.
-            stars (QTable): An astropy table with the data to be saved.
+            stars (Table): An astropy table with the data to be saved.
         """
         Gaia._logger.debug(f"Saving stars into db ...")
 
         try:
+            stars = stars.to_pandas()
             self.db.save_regions([region])
-            self.db.save_stars(region=region, stars=stars, columns=GaiaMetadata.columns())
+            self.db.save_stars(region=region, stars=stars, columns=stars.columns)
         except Exception as error:
             Gaia._logger.error(f"Error saving data for region {region}. Cause: {error}")
 
