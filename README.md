@@ -41,8 +41,6 @@ giving an extra marging to take into account stars outside clusters.
   <figcaption align=center>OpenClust Catalogue Distribution</figcaption>
 </figure>
 
-Prueba de texto
-
 ## Code
 
 All code used in this project is available inside [`code/`](code) directory.
