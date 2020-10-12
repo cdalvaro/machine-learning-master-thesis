@@ -1,16 +1,14 @@
 from __future__ import annotations
 
-import astropy
 from astropy.coordinates import SkyCoord
 import astropy.units as u
 import json
 import numpy as np
 import os
-import pandas
-import psycopg2
-from psycopg2.extensions import register_adapter, AsIs
-from psycopg2.extras import execute_values
-from psycopg2.extras import LoggingConnection, LoggingCursor
+import pandas as pd
+from sqlalchemy import create_engine, MetaData, select, any_
+from sqlalchemy.dialects import postgresql
+from sqlalchemy.dialects.postgresql import insert
 from typing import Dict, List, Set, TypeVar, Union
 
 from .catalogues.base_catalogue import Catalogue
@@ -34,13 +32,6 @@ class DB:
     _logger: Logger = Logger.instance()
     _instance = dict()
 
-    register_adapter(np.bool_, AsIs)
-    register_adapter(np.int16, AsIs)
-    register_adapter(np.int32, AsIs)
-    register_adapter(np.int64, AsIs)
-    register_adapter(np.float32, AsIs)
-    register_adapter(np.float64, AsIs)
-
     def __init__(self, host: str, port: int):
         db_settings = {
             'dbname': os.getenv('POSTGRES_DB', 'gaia'),
@@ -50,11 +41,12 @@ class DB:
             'port': port
         }
 
-        self.conn = psycopg2.connect(connection_factory=LoggingConnection, **db_settings)
-        self.conn.initialize(DB._logger)
+        conn_str = "{}://{}:{}@{}:{}/{}".format("postgresql+psycopg2", db_settings["user"], db_settings["password"],
+                                                db_settings["host"], db_settings["port"], db_settings["dbname"])
 
-    def __del__(self):
-        self.conn.close()
+        self.engine = create_engine(conn_str, pool_recycle=3600, execution_options={'autocommit': True})
+        self.metadata = MetaData(self.engine)
+        self.metadata.reflect()
 
     @staticmethod
     def instance(host: str, port: int) -> DB:
@@ -89,21 +81,16 @@ class DB:
         regions_name = list(map(lambda x: x.name, regions))
         DB._logger.debug(f"Getting regions id for regions: {', '.join(regions_name)} from DB ...")
 
-        query = f"""
-            SELECT name, id FROM public.regions
-            WHERE name = ANY(%s)
-            ORDER BY name ASC
-            """
-
         try:
-            cursor = self.conn.cursor(cursor_factory=LoggingCursor)
-            cursor.execute(query, (regions_name, ))
-            result = cursor.fetchall()
+            regions_t = self.metadata.tables['regions']
+            select_stmt = select([regions_t.c.name, regions_t.c.id
+                                  ]).where(regions_t.c.name == any_(regions_name)).order_by(regions_t.c.name)
+
+            with self.engine.connect() as connection:
+                result = connection.execute(select_stmt).fetchall()
         except Exception as error:
             DB._logger.error(f"An error ocurred recovering regions id from DB. Cause: {error}")
             raise error
-        finally:
-            cursor.close()
 
         regions_id = dict()
         for (name, serial) in result:
@@ -128,25 +115,24 @@ class DB:
         regions_name = list(map(lambda x: x.name, regions))
         DB._logger.debug(f"Getting the stars's source_id for regions: {', '.join(regions_name)} from DB ...")
 
-        query = f"""
-            SELECT source_id FROM public.gaiadr2_source
-            WHERE region_id = ANY(SELECT id FROM public.regions WHERE name = ANY(%s))
-            ORDER BY region_id, source_id ASC
-            """
-
         try:
-            cursor = self.conn.cursor(cursor_factory=LoggingCursor)
-            cursor.execute(query, (regions_name, ))
-            result = cursor.fetchall()
+            regions_t = self.metadata.tables['regions']
+            gaiadr2_t = self.metadata.tables['gaiadr2_source']
+
+            join_obj = gaiadr2_t.join(regions_t, gaiadr2_t.c.region_id == regions_t.c.id)
+            select_stmt = select([gaiadr2_t.c.source_id
+                                  ]).select_from(join_obj).where(regions_t.c.name == any_(regions_name)).order_by(
+                                      gaiadr2_t.c.region_id, gaiadr2_t.c.source_id)
+
+            with self.engine.connect() as connection:
+                result = connection.execute(select_stmt).fetchall()
         except Exception as error:
             DB._logger.error(f"An error ocurred recovering stars source_id from DB. Cause: {error}")
             raise error
-        finally:
-            cursor.close()
 
         return set(map(lambda x: next(iter(x)), result))
 
-    def get_regions(self, names: Set[str] = {}, as_dataframe: bool = False) -> Union[Catalogue, pandas.DataFrame]:
+    def get_regions(self, names: Set[str] = {}, as_dataframe: bool = False) -> Union[Catalogue, pd.DataFrame]:
         """
         Get the regions matching the given names.
 
@@ -155,36 +141,33 @@ class DB:
             as_dataframe (bool, optional): Flag to recover regions as a DataFrame. Defaults to False.
 
         Returns:
-            Union[Catalogue, pandas.DataFrame]: A catalogue with found regions.
+            Union[Catalogue, pd.DataFrame]: A catalogue with found regions.
         """
         columns = ('name', 'ra', 'dec', 'diam', 'width', 'height')
         query = f"SELECT {', '. join(columns)} FROM public.regions"
 
+        params = dict()
         if len(names) > 0:
             DB._logger.debug(f"Getting regions: {names} from DB ...")
-            query += " WHERE name = ANY(%s)"
-            params = (list(names), )
+            query += " WHERE name = ANY(%(regions_name)s)"
+            params['regions_name'] = list(names)
         else:
             DB._logger.debug(f"Getting all regions from DB ...")
-            params = ()
 
         if as_dataframe:
             index_col = 'name'
             try:
-                return pandas.read_sql_query(query, self.conn, index_col=index_col, params=params)
+                return pd.read_sql_query(query, self.engine, index_col=index_col, params=params)
             except Exception as error:
                 DB._logger.error(f"An error ocurred recovering regions dataframe from DB. Cause: {error}")
                 raise error
 
         try:
-            cursor = self.conn.cursor(cursor_factory=LoggingCursor)
-            cursor.execute(query, params)
-            result = cursor.fetchall()
+            with self.engine.connect() as connection:
+                result = connection.execute(query, params).fetchall()
         except Exception as error:
             DB._logger.error(f"An error ocurred recovering regions catalogue from DB. Cause: {error}")
             raise error
-        finally:
-            cursor.close()
 
         catalogue = dict()
         for (name, ra, dec, diam, width, height) in result:
@@ -207,7 +190,7 @@ class DB:
                   columns: List[str] = None,
                   limit: int = None,
                   use_region_id: bool = True,
-                  extra_size: float = 1.0) -> pandas.DataFrame:
+                  extra_size: float = 1.0) -> pd.DataFrame:
         """
         Returns a Pandas DataFrame containing the stars of the given region.
 
@@ -275,14 +258,14 @@ class DB:
                 """
 
         try:
-            return pandas.read_sql_query(query, self.conn, index_col=index_columns, params=params)
+            return pd.read_sql_query(query, self.engine, index_col=index_columns, params=params)
         except Exception as error:
             DB._logger.error(f"An error ocurred recovering data for region: {region} from DB. Cause: {error}")
             raise error
 
     def save_regions(self, regions: Regions):
         """
-        Save the given regions into the database.
+        Save given regions into the database.
 
         Args:
             regions (Regions): The regions to be saved into the database.
@@ -290,89 +273,61 @@ class DB:
         regions_name = list(map(lambda x: x.name, regions))
         DB._logger.debug(f"Saving regions: {', '. join(regions_name)} into db ...")
 
-        query = """
-            INSERT INTO public.regions (name, ra, dec, diam, properties)
-            VALUES %s ON CONFLICT (name) DO
-            UPDATE SET properties = EXCLUDED.properties
-            RETURNING id
-            """
-
         data = []
         for region in regions:
-            name = region.name
-            ra = region.coords.ra.degree
-            dec = region.coords.dec.degree
-            diam = region.diam.value
-            if isinstance(region, OpenCluster):
-                properties = {'g1_class': region.g1_class}
-            else:
-                properties = dict()
+            entry = {
+                'name': region.name,
+                'ra': region.coords.ra.degree,
+                'dec': region.coords.dec.degree,
+                'diam': region.diam.value,
+                'properties': dict()
+            }
 
-            data.append((name, ra, dec, diam, json.dumps(properties)))
+            if isinstance(region, OpenCluster):
+                entry['properties'] = {'g1_class': region.g1_class, 'trumpler': region.trumpler}
+
+            data.append(entry)
 
         try:
-            cursor = self.conn.cursor(cursor_factory=LoggingCursor)
-            serials = execute_values(cursor, query, data, fetch=True)
-            self.conn.commit()
+            regions_table = self.metadata.tables['regions']
+
+            # https://docs.sqlalchemy.org/en/13/dialects/postgresql.html
+            # https://docs.sqlalchemy.org/en/13/dialects/postgresql.html#sqlalchemy.dialects.postgresql.Insert.on_conflict_do_update
+            insert_stmt = insert(regions_table).values(data).returning(regions_table.c.id)
+            do_update_stmt = insert_stmt.on_conflict_do_update(index_elements=['name'],
+                                                               set_=dict(properties=insert_stmt.excluded.properties))
+
+            with self.engine.connect() as connection:
+                serials = connection.execute(do_update_stmt).fetchall()
         except Exception as error:
             DB._logger.error(f"An error ocurred saving regions data into DB. Cause: {error}")
-            self.conn.rollback()
             raise error
-        finally:
-            cursor.close()
 
         for region, serial in zip(regions, serials):
             region.serial = next(iter(serial))
 
-    def save_stars(self, region: Region, stars: astropy.table, columns: List[str]):
+    def save_stars(self, region: Region, stars: pd.DataFrame, columns: List[str]):
         """
         Save the stars associated to the given region into the database.
 
         Args:
             region (Region): The region containing the stars.
-            starts (astropy.table): The table with the stars to be saved into the database.
+            starts (pd.DataFrame): The DataFrame with the stars to be saved into the database.
             columns (List[str]): A list with the columns to be saved into the database.
         """
         DB._logger.debug(f"Saving stars for region {region} into db ...")
 
-        required_columns = ['region_id', 'source_id', 'solution_id', 'designation']
-        columns = required_columns + list(filter(lambda x: x not in required_columns, columns))
-
-        query = f"""
-            INSERT INTO public.gaiadr2_source ({','.join(columns)})
-            VALUES %s ON CONFLICT (region_id, source_id) DO NOTHING
-            """
-
-        columns.remove('region_id')
-
-        data = []
-        for star in stars:
-            try:
-                star_data = [region.serial]
-                for column in columns:
-                    value = star[column]
-                    if isinstance(value, np.ma.core.MaskedConstant):
-                        try:
-                            value = int(f"{value}")
-                        except ValueError:
-                            value = None
-                    if isinstance(value, bytes):
-                        value = value.decode("utf-8")
-                    star_data.append(value)
-                data.append(star_data)
-            except Exception as error:
-                self._logger.error(f"Error processing star {star['source_id']}. Cause: {error}")
-
-        if len(data) == 0:
-            return
+        stars.insert(0, "region_id", np.full(len(stars), fill_value=region.serial, dtype=np.int32))
+        stars.set_index(['region_id', 'source_id'], inplace=True)
 
         try:
-            cursor = self.conn.cursor(cursor_factory=LoggingCursor)
-            execute_values(cursor, query, data, page_size=10000)
-            self.conn.commit()
+            with self.engine.connect() as connection:
+                stars.to_sql('gaiadr2_source',
+                             con=connection,
+                             if_exists='append',
+                             index=True,
+                             chunksize=10000,
+                             method='multi')
         except Exception as error:
             DB._logger.error(f"An error ocurred saving stars data into DB. Cause: {error}")
-            self.conn.rollback()
             raise error
-        finally:
-            cursor.close()
