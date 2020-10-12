@@ -62,10 +62,8 @@ class Gaia:
         for counter, region in zip(range(1, number_of_regions + 1), regions):
             try:
                 Gaia._logger.info(f"({counter} / {number_of_regions}) Downloading {region} stars from Gaia DR2 ...")
-                source_id = self.db.get_stars_source_id(regions={region})
-                stars = self._download_stars_partitoned(region=region, extra_size=extra_size, exclude=source_id)
-                if stars is not None and len(stars) > 0:
-                    self._save_stars(region=region, stars=stars)
+                source_ids = self.db.get_stars_source_id(regions={region})
+                self._download_and_save(region=region, extra_size=extra_size, exclude=source_ids)
             except Exception as error:
                 Gaia._logger.error(
                     f"An error occurred while downloading stars for region {region} from Gaia DR2 database. Cause: {error}"
@@ -74,40 +72,45 @@ class Gaia:
         self._logout()
         Gaia._logger.info(f"🏁 Finished downloading stars")
 
-    def _download_stars_partitoned(self,
-                                   region: Region,
-                                   extra_size: float,
-                                   exclude: Set[SourceID] = {}) -> Union[Table, None]:
-        data = None
+    def _download_and_save(self, region: Region, extra_size: float, exclude: Set[SourceID] = {}):
+        """
+        Download and save stars for the given region.
+
+        This operation is partitioned to improve memory management.
+        Set `Gaia.partition_size` to change the partition size.
+
+        Args:
+            region (Region): The region that contains the stars to be downloaded.
+            extra_size (float): A positive number with the extra size to extend the region.
+            exclude (Set[SourceID]): Source ids to be excluded from the download. Defaults to {}.
+        """
         downloaded_ids = exclude.copy()
         while True:
-            result = self._download_stars(region,
-                                          extra_size=extra_size,
-                                          exclude=downloaded_ids,
-                                          limit=Gaia.partition_size)
-            if result is not None and len(result) > 0:
-                Gaia._logger.debug(f"Downloaded {len(result)} stars from Gaia DR2 for region '{region}'")
-                data = result if data is None else astropy.table.vstack([data, result])
-                downloaded_ids |= set(result['source_id'])
-                if len(result) < Gaia.partition_size:
+            stars = self._download_partition(region,
+                                             extra_size=extra_size,
+                                             exclude=downloaded_ids,
+                                             limit=Gaia.partition_size)
+
+            if stars is not None and len(stars) > 0:
+                Gaia._logger.debug(f"Downloaded {len(stars)} stars from Gaia DR2 for region '{region}'")
+                downloaded_ids |= set(stars['source_id'])
+                self._save_stars(region=region, stars=stars)
+                if len(stars) < Gaia.partition_size:
+                    Gaia._logger.info(
+                        f"Downloaded {len(downloaded_ids) - len(exclude)} new stars for region '{region}'")
                     break
             else:
-                if data is None:
-                    if len(exclude) > 0:
-                        Gaia._logger.info(f"No new data has been downloaded from Gaia DR2 for region '{region}'")
-                    else:
-                        Gaia._logger.warn(f"No data has been found in the Gaia DR2 database for region '{region}'")
+                if len(exclude) > 0:
+                    Gaia._logger.info(f"No new data has been downloaded from Gaia DR2 for region '{region}'")
                 else:
-                    Gaia._logger.info(f"Downloaded {len(data)} new stars for region '{region}'")
+                    Gaia._logger.warn(f"No data has been found in the Gaia DR2 database for region '{region}'")
                 break
 
-        return data
-
-    def _download_stars(self,
-                        region: Region,
-                        extra_size: float,
-                        exclude: Set[SourceID] = {},
-                        limit: int = None) -> Union[Table, None]:
+    def _download_partition(self,
+                            region: Region,
+                            extra_size: float,
+                            exclude: Set[SourceID] = {},
+                            limit: int = None) -> Union[Table, None]:
         """
         Download data from Gaia DR2 for the given region with an optional extra size
         to extend the given region.
@@ -115,7 +118,7 @@ class Gaia:
         Args:
             region (Region): The region that contains the stars to be downloaded.
             extra_size (float): A positive number with the extra size to extend the region.
-            exclude (Set[SourceID]): Source ids to be excluded from the download.
+            exclude (Set[SourceID]): Source ids to be excluded from the download. Defaults to {}.
             limit (int, optional): Limit result to the top n entries. Defaults to None.
 
         Returns:
@@ -228,6 +231,8 @@ class Gaia:
         Gaia._logger.debug(f"Saving stars into db ...")
 
         try:
+            stars['priam_flags'] = stars['priam_flags'].astype(np.float64)
+            stars['flame_flags'] = stars['flame_flags'].astype(np.float64)
             stars = stars.to_pandas()
             self.db.save_regions([region])
             self.db.save_stars(region=region, stars=stars, columns=stars.columns)
