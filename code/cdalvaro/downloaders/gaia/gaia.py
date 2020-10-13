@@ -32,7 +32,7 @@ class Gaia:
     """
 
     _logger = Logger.instance()
-    partition_size = 500000
+    partition_size = 500_000
 
     def __init__(self, db: DB, username: str = None, password: str = None, remove_jobs: bool = True):
         self.db = db

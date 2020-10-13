@@ -92,6 +92,8 @@ if len(clusters) == 0:
 gaia_username = os.getenv('GAIA_USER', None)
 gaia_password = os.getenv('GAIA_PASS', None)
 
+Gaia.partition_size = os.getenv('GAIA_PARTITION_SIZE', 500_000)
+
 gaia = Gaia(db=db, username=gaia_username, password=gaia_password)
 gaia.download_and_save(regions=clusters, extra_size=args.extra_size)
 
