@@ -86,16 +86,12 @@ class Gaia:
         """
         downloaded_ids = exclude.copy()
         while True:
-            stars = self._download_partition(region,
-                                             extra_size=extra_size,
-                                             exclude=downloaded_ids,
-                                             limit=Gaia.partition_size)
-
+            stars = self._download_partition(region, extra_size=extra_size, exclude=downloaded_ids)
             if stars is not None and len(stars) > 0:
                 Gaia._logger.debug(f"Downloaded {len(stars)} stars from Gaia DR2 for region '{region}'")
                 downloaded_ids |= set(stars['source_id'])
                 self._save_stars(region=region, stars=stars)
-                if len(stars) < Gaia.partition_size:
+                if Gaia.partition_size is None or len(stars) < Gaia.partition_size:
                     Gaia._logger.info(
                         f"Downloaded {len(downloaded_ids) - len(exclude)} new stars for region '{region}'")
                     break
@@ -106,11 +102,7 @@ class Gaia:
                     Gaia._logger.warn(f"No data has been found in the Gaia DR2 database for region '{region}'")
                 break
 
-    def _download_partition(self,
-                            region: Region,
-                            extra_size: float,
-                            exclude: Set[SourceID] = {},
-                            limit: int = None) -> Union[Table, None]:
+    def _download_partition(self, region: Region, extra_size: float, exclude: Set[SourceID] = {}) -> Table:
         """
         Download data from Gaia DR2 for the given region with an optional extra size
         to extend the given region.
@@ -119,36 +111,31 @@ class Gaia:
             region (Region): The region that contains the stars to be downloaded.
             extra_size (float): A positive number with the extra size to extend the region.
             exclude (Set[SourceID]): Source ids to be excluded from the download. Defaults to {}.
-            limit (int, optional): Limit result to the top n entries. Defaults to None.
 
         Returns:
-            Union[Table, None]: An astropy table with the downloaded data, or None if an error occurs.
+            Table: An astropy table with the downloaded data, or None if an error occurs.
         """
         job = None
         try:
             query, temp_table_name, temp_table = self._compose_query(region=region,
                                                                      extra_size=extra_size,
-                                                                     exclude=exclude,
-                                                                     limit=limit)
-            job = gaia.Gaia.launch_job_async(query,
-                                             upload_resource=temp_table,
-                                             upload_table_name=temp_table_name,
-                                             verbose=Gaia._logger.level <= logging.DEBUG)
+                                                                     exclude=exclude)
+            job = gaia.Gaia.launch_job_async(query, upload_resource=temp_table, upload_table_name=temp_table_name)
             result = job.get_results()
         except Exception as error:
             Gaia._logger.error(f"Error executing job for region {region}. Cause: {error}")
-            return None
+            raise error
         finally:
             if job is not None and self._logged and self.remove_jobs:
                 try:
-                    gaia.Gaia.remove_jobs(jobs_list=[job.jobid], verbose=Gaia._logger.level <= logging.DEBUG)
+                    gaia.Gaia.remove_jobs(jobs_list=[job.jobid])
                     Gaia._logger.debug(f"Job {job.jobid} successfully removed")
                 except Exception as error:
                     Gaia._logger.error(f"Error removing job: {job.jobid} from Gaia server. Cause: {error}")
 
         return result
 
-    def _compose_query(self, region: Region, extra_size: float, exclude: Set[SourceID], limit: int = None) -> str:
+    def _compose_query(self, region: Region, extra_size: float, exclude: Set[SourceID]) -> str:
         """
         Compose the query to download data from Gaia DR2 for the given region.
 
@@ -159,7 +146,6 @@ class Gaia:
             region (Region): The region that contains the stars to be downloaded.
             extra_size (float): A positive number to extend the given region diameter.
             exclude (Set[SourceID]): Source ids to be excluded from the download.
-            limit (int, optional): Limit query to the top n entries. Defaults to None.
 
         Returns:
             str: A string with the download query.
@@ -167,10 +153,8 @@ class Gaia:
         ra = region.coords.ra.degree
         dec = region.coords.dec.degree
 
-        query = "SELECT" if limit is None else f"SELECT TOP {limit}"
-
-        query += f"""
-            {', '.join(map(lambda x: f"A.{x}", GaiaMetadata.columns()))}
+        query = f"""
+            SELECT {', '.join(map(lambda x: f"A.{x}", GaiaMetadata.columns()))}
             FROM {gaia.Gaia.MAIN_GAIA_TABLE} A
             """
 
@@ -217,6 +201,11 @@ class Gaia:
         query += """
             ORDER BY A.source_id ASC
             """
+
+        if Gaia.partition_size is not None:
+            query += f"""
+                LIMIT {Gaia.partition_size}
+                """
 
         return query, temp_table_name, temp_table
 
