@@ -153,8 +153,9 @@ class Gaia:
         ra = region.coords.ra.degree
         dec = region.coords.dec.degree
 
-        query = f"""
-            SELECT {', '.join(map(lambda x: f"A.{x}", GaiaMetadata.columns()))}
+        query = "SELECT" if Gaia.partition_size is None else f"SELECT TOP {Gaia.partition_size}"
+        query += f"""
+            {', '.join(map(lambda x: f"A.{x}", GaiaMetadata.columns()))}
             FROM {gaia.Gaia.MAIN_GAIA_TABLE} A
             """
 
@@ -201,11 +202,6 @@ class Gaia:
         query += """
             ORDER BY A.source_id ASC
             """
-
-        if Gaia.partition_size is not None:
-            query += f"""
-                LIMIT {Gaia.partition_size}
-                """
 
         return query, temp_table_name, temp_table
 
