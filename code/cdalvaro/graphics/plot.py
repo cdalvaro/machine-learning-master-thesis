@@ -105,7 +105,7 @@ class Plot:
             ax.set_title(title)
 
         ax.set_xlabel(r'$B_{mag} - R_{mag}$')
-        ax.set_ylabel(r'G_{mag}')
+        ax.set_ylabel(r'$G_{mag}$')
 
         if xlim is not None:
             ax.set_xlim(xlim)
@@ -113,7 +113,7 @@ class Plot:
             ax.set_ylim(ylim)
 
         g = sns.scatterplot(data=df_cluster,
-                            x="phot_bg-rg_mean_mag",
+                            x="bp_rp",
                             y="phot_g_mean_mag",
                             hue="is_contained",
                             size='parallax',

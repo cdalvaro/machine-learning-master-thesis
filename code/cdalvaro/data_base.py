@@ -116,12 +116,11 @@ class DB:
         DB._logger.debug(f"Getting the stars's source_id for regions: {', '.join(regions_name)} from DB ...")
 
         try:
-            regions_t = self.metadata.tables['regions']
             gaiadr2_t = self.metadata.tables['gaiadr2_source']
 
-            join_obj = gaiadr2_t.join(regions_t, gaiadr2_t.c.region_id == regions_t.c.id)
+            region_ids = list(self.get_regions_id(regions=regions).values())
             select_stmt = select([gaiadr2_t.c.source_id
-                                  ]).select_from(join_obj).where(regions_t.c.name == any_(regions_name)).order_by(
+                                  ]).select_from(gaiadr2_t).where(gaiadr2_t.c.region_id == any_(region_ids)).order_by(
                                       gaiadr2_t.c.region_id, gaiadr2_t.c.source_id)
 
             with self.engine.connect() as connection:
@@ -219,9 +218,10 @@ class DB:
 
         params = dict()
         if use_region_id:
-            params['name'] = region.name
+            region_ids = self.get_regions_id(regions=set([region])).values()
+            params['region_id'] = next(iter(region_ids))
             query += """
-                region_id = (SELECT id FROM public.regions WHERE name = %(name)s)
+                region_id = %(region_id)s
                 """
         else:
             # https://www.postgresql.org/docs/current/functions-geometry.html
