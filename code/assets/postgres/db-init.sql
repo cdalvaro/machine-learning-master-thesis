@@ -149,3 +149,195 @@ CREATE TABLE IF NOT EXISTS public.gaiadr2_source (
 PARTITION BY LIST (region_id);
 
 CREATE INDEX source_id_idx ON public.gaiadr2_source (source_id);
+
+COMMENT ON TABLE public.gaiadr2_source IS 'Table that replicates Gaia DR2 data. More info at: https://gea.esac.esa.int/archive/documentation/GDR2/Gaia_archive/chap_datamodel/sec_dm_main_tables/ssec_dm_gaia_source.html';
+
+COMMENT ON COLUMN public.gaiadr2_source.region_id IS 'ID of the container region';
+
+COMMENT ON COLUMN public.gaiadr2_source.source_id IS 'Unique source identifier (unique within a particular Data Release)';
+
+COMMENT ON COLUMN public.gaiadr2_source.solution_id IS 'Solution Identifier';
+
+COMMENT ON COLUMN public.gaiadr2_source.designation IS 'Unique source designation (unique across all Data Releases)';
+
+COMMENT ON COLUMN public.gaiadr2_source.random_index IS 'Random index used to select subsets';
+
+COMMENT ON COLUMN public.gaiadr2_source.ref_epoch IS 'Reference epoch (Time[Julian Years])';
+
+COMMENT ON COLUMN public.gaiadr2_source.ra IS 'Right ascension (Angle[deg])';
+
+COMMENT ON COLUMN public.gaiadr2_source.ra_error IS 'Standard error of right ascension (Angle[mas])';
+
+COMMENT ON COLUMN public.gaiadr2_source.dec IS 'Declination (Angle[deg])';
+
+COMMENT ON COLUMN public.gaiadr2_source.dec_error IS 'Standard error of declination (Angle[mas])';
+
+COMMENT ON COLUMN public.gaiadr2_source.parallax IS 'Parallax (Angle[mas])';
+
+COMMENT ON COLUMN public.gaiadr2_source.parallax_error IS 'Standard error of parallax (Angle[mas])';
+
+COMMENT ON COLUMN public.gaiadr2_source.parallax_over_error IS 'Parallax divided by its error';
+
+COMMENT ON COLUMN public.gaiadr2_source.pmra IS 'Proper motion in right ascension direction (Angular Velocity[mas/year])';
+
+COMMENT ON COLUMN public.gaiadr2_source.pmra_error IS 'Standard error of proper motion in right ascension direction (Angular Velocity[mas/year])';
+
+COMMENT ON COLUMN public.gaiadr2_source.pmdec IS 'Proper motion in declination direction (Angular Velocity[mas/year])';
+
+COMMENT ON COLUMN public.gaiadr2_source.pmdec_error IS 'Standard error of proper motion in declination direction (Angular Velocity[mas/year])';
+
+COMMENT ON COLUMN public.gaiadr2_source.ra_dec_corr IS 'Correlation between right ascension and declination (Dimensionless[see description])';
+
+COMMENT ON COLUMN public.gaiadr2_source.ra_parallax_corr IS 'Correlation between right ascension and parallax (Dimensionless[see description])';
+
+COMMENT ON COLUMN public.gaiadr2_source.ra_pmra_corr IS 'Correlation between right ascension and proper motion in right ascension (Dimensionless[see description])';
+
+COMMENT ON COLUMN public.gaiadr2_source.ra_pmdec_corr IS 'Correlation between right ascension and proper motion in declination (Dimensionless[see description])';
+
+COMMENT ON COLUMN public.gaiadr2_source.dec_parallax_corr IS 'Correlation between declination and parallax (Dimensionless[see description])';
+
+COMMENT ON COLUMN public.gaiadr2_source.dec_pmra_corr IS 'Correlation between declination and proper motion in right ascension (Dimensionless[see description])';
+
+COMMENT ON COLUMN public.gaiadr2_source.dec_pmdec_corr IS 'Correlation between declination and proper motion in declination (Dimensionless[see description])';
+
+COMMENT ON COLUMN public.gaiadr2_source.parallax_pmra_corr IS 'Correlation between parallax and proper motion in right ascension (Dimensionless[see description])';
+
+COMMENT ON COLUMN public.gaiadr2_source.parallax_pmdec_corr IS 'Correlation between parallax and proper motion in declination (Dimensionless[see description])';
+
+COMMENT ON COLUMN public.gaiadr2_source.pmra_pmdec_corr IS 'Correlation between proper motion in right ascension and proper motion in declination (Dimensionless[see description])';
+
+COMMENT ON COLUMN public.gaiadr2_source.astrometric_n_obs_al IS 'Total number of observations AL';
+
+COMMENT ON COLUMN public.gaiadr2_source.astrometric_n_obs_ac IS 'Total number of observations AC';
+
+COMMENT ON COLUMN public.gaiadr2_source.astrometric_n_good_obs_al IS 'Number of good observations AL';
+
+COMMENT ON COLUMN public.gaiadr2_source.astrometric_n_bad_obs_al IS 'Number of bad observations AL';
+
+COMMENT ON COLUMN public.gaiadr2_source.astrometric_gof_al IS 'Goodness of fit statistic of model wrt along-scan observations';
+
+COMMENT ON COLUMN public.gaiadr2_source.astrometric_chi2_al IS 'AL chi-square value';
+
+COMMENT ON COLUMN public.gaiadr2_source.astrometric_excess_noise IS 'Excess noise of the source';
+
+COMMENT ON COLUMN public.gaiadr2_source.astrometric_excess_noise_sig IS 'Significance of excess noise';
+
+COMMENT ON COLUMN public.gaiadr2_source.astrometric_params_solved IS 'Which parameters have been solved for?';
+
+COMMENT ON COLUMN public.gaiadr2_source.astrometric_primary_flag IS 'Primary or seconday';
+
+COMMENT ON COLUMN public.gaiadr2_source.astrometric_weight_al IS 'Mean astrometric weight of the source (Angle[mas^−2])';
+
+COMMENT ON COLUMN public.gaiadr2_source.astrometric_pseudo_colour IS 'Astrometrically determined pseudocolour of the source (Misc[μm^−1])';
+
+COMMENT ON COLUMN public.gaiadr2_source.astrometric_pseudo_colour_error IS 'Standard error of the pseudocolour of the source (Misc[μm^−1])';
+
+COMMENT ON COLUMN public.gaiadr2_source.mean_varpi_factor_al IS 'Mean Parallax factor AL';
+
+COMMENT ON COLUMN public.gaiadr2_source.astrometric_matched_observations IS 'Matched FOV transits used in the AGIS solution';
+
+COMMENT ON COLUMN public.gaiadr2_source.visibility_periods_used IS 'Number of visibility periods used in Astrometric solution';
+
+COMMENT ON COLUMN public.gaiadr2_source.astrometric_sigma5d_max IS 'The longest semi-major axis of the 5-d error ellipsoid (Angle[mas])';
+
+COMMENT ON COLUMN public.gaiadr2_source.frame_rotator_object_type IS 'The type of the source mainly used for frame rotation';
+
+COMMENT ON COLUMN public.gaiadr2_source.matched_observations IS 'Amount of observations matched to this source';
+
+COMMENT ON COLUMN public.gaiadr2_source.duplicated_source IS 'Source with duplicate sources';
+
+COMMENT ON COLUMN public.gaiadr2_source.phot_g_n_obs IS 'Number of observations contributing to G photometry';
+
+COMMENT ON COLUMN public.gaiadr2_source.phot_g_mean_flux IS 'G-band mean flux (Flux[e-/s])';
+
+COMMENT ON COLUMN public.gaiadr2_source.phot_g_mean_flux_error IS 'Error on G-band mean flux (Flux[e-/s])';
+
+COMMENT ON COLUMN public.gaiadr2_source.phot_g_mean_flux_over_error IS 'G-band mean flux divided by its error';
+
+COMMENT ON COLUMN public.gaiadr2_source.phot_g_mean_mag IS 'G-band mean magnitude (Magnitude[mag])';
+
+COMMENT ON COLUMN public.gaiadr2_source.phot_bp_n_obs IS 'Number of observations contributing to BP photometry';
+
+COMMENT ON COLUMN public.gaiadr2_source.phot_bp_mean_flux IS 'Integrated BP mean flux (Flux[e-/s])';
+
+COMMENT ON COLUMN public.gaiadr2_source.phot_bp_mean_flux_error IS 'Error on the integrated BP mean flux (Flux[e-/s])';
+
+COMMENT ON COLUMN public.gaiadr2_source.phot_bp_mean_flux_over_error IS 'Integrated BP mean flux divided by its error';
+
+COMMENT ON COLUMN public.gaiadr2_source.phot_bp_mean_mag IS 'Integrated BP mean magnitude (Magnitude[mag])';
+
+COMMENT ON COLUMN public.gaiadr2_source.phot_rp_n_obs IS 'Number of observations contributing to RP photometry';
+
+COMMENT ON COLUMN public.gaiadr2_source.phot_rp_mean_flux IS 'Integrated RP mean flux (Flux[e-/s])';
+
+COMMENT ON COLUMN public.gaiadr2_source.phot_rp_mean_flux_error IS 'Error on the integrated RP mean flux (Flux[e-/s])';
+
+COMMENT ON COLUMN public.gaiadr2_source.phot_rp_mean_flux_over_error IS 'Integrated RP mean flux divided by its error';
+
+COMMENT ON COLUMN public.gaiadr2_source.phot_rp_mean_mag IS 'Integrated RP mean magnitude (Magnitude[mag])';
+
+COMMENT ON COLUMN public.gaiadr2_source.phot_bp_rp_excess_factor IS 'BP/RP excess factor';
+
+COMMENT ON COLUMN public.gaiadr2_source.phot_proc_mode IS 'Photometry processing mode';
+
+COMMENT ON COLUMN public.gaiadr2_source.bp_rp IS 'BP - RP colour (Magnitude[mag])';
+
+COMMENT ON COLUMN public.gaiadr2_source.bp_g IS 'BP - G colour (Magnitude[mag])';
+
+COMMENT ON COLUMN public.gaiadr2_source.g_rp IS 'RP colour (Magnitude[mag])';
+
+COMMENT ON COLUMN public.gaiadr2_source.radial_velocity IS 'Radial velocity (Velocity[km/s])';
+
+COMMENT ON COLUMN public.gaiadr2_source.radial_velocity_error IS 'Radial velocity error (Velocity[km/s])';
+
+COMMENT ON COLUMN public.gaiadr2_source.rv_nb_transits IS 'Number of transits used to compute radial velocity';
+
+COMMENT ON COLUMN public.gaiadr2_source.rv_template_teff IS 'Teff of the template used to compute radial velocity (Temperature[K])';
+
+COMMENT ON COLUMN public.gaiadr2_source.rv_template_logg IS 'logg of the template used to compute radial velocity (GravitySurface[log cgs])';
+
+COMMENT ON COLUMN public.gaiadr2_source.rv_template_fe_h IS 'Fe/H of the template used to compute radial velocity (Abundances[dex])';
+
+COMMENT ON COLUMN public.gaiadr2_source.phot_variable_flag IS 'Photometric variability flag (Dimensionless[see description])';
+
+COMMENT ON COLUMN public.gaiadr2_source.l IS 'Galactic longitude (Angle[deg])';
+
+COMMENT ON COLUMN public.gaiadr2_source.b IS 'Galactic latitude (Angle[deg])';
+
+COMMENT ON COLUMN public.gaiadr2_source.ecl_lon IS 'Ecliptic longitude (Angle[deg])';
+
+COMMENT ON COLUMN public.gaiadr2_source.ecl_lat IS 'Ecliptic latitude (Angle[deg])';
+
+COMMENT ON COLUMN public.gaiadr2_source.priam_flags IS 'flags for the Apsis-Priam results (Dimensionless[see description])';
+
+COMMENT ON COLUMN public.gaiadr2_source.teff_val IS 'Stellar effective temperature (Temperature[K])';
+
+COMMENT ON COLUMN public.gaiadr2_source.teff_percentile_lower IS 'teff_val lower uncertainty (Temperature[K])';
+
+COMMENT ON COLUMN public.gaiadr2_source.teff_percentile_upper IS 'teff_val upper uncertainty (Temperature[K])';
+
+COMMENT ON COLUMN public.gaiadr2_source.a_g_val IS 'Line-of-sight extinction in the G band, A_G (Magnitude[mag])';
+
+COMMENT ON COLUMN public.gaiadr2_source.a_g_percentile_lower IS 'a_g_val lower uncertainty (Magnitude[mag])';
+
+COMMENT ON COLUMN public.gaiadr2_source.a_g_percentile_upper IS 'a_g_val upper uncertainty (Magnitude[mag])';
+
+COMMENT ON COLUMN public.gaiadr2_source.e_bp_min_rp_val IS 'Line-of-sight reddening E(BP-RP) (Magnitude[mag])';
+
+COMMENT ON COLUMN public.gaiadr2_source.e_bp_min_rp_percentile_lower IS 'e_bp_min_rp_val lower uncertainty (Magnitude[mag])';
+
+COMMENT ON COLUMN public.gaiadr2_source.e_bp_min_rp_percentile_upper IS 'e_bp_min_rp_val upper uncertainty (Magnitude[mag])';
+
+COMMENT ON COLUMN public.gaiadr2_source.flame_flags IS 'Flags for the Apsis-FLAME results (Dimensionless[see description])';
+
+COMMENT ON COLUMN public.gaiadr2_source.radius_val IS 'Stellar radius (Length & Distance[Solar Radius])';
+
+COMMENT ON COLUMN public.gaiadr2_source.radius_percentile_lower IS 'radius_val lower uncertainty (Length & Distance[Solar Radius])';
+
+COMMENT ON COLUMN public.gaiadr2_source.radius_percentile_upper IS 'radius_val upper uncertainty (Length & Distance[Solar Radius])';
+
+COMMENT ON COLUMN public.gaiadr2_source.lum_val IS 'Stellar luminosity (Luminosity[Solar Luminosity])';
+
+COMMENT ON COLUMN public.gaiadr2_source.lum_percentile_lower IS 'lum_val lower uncertainty (Luminosity[Solar Luminosity])';
+
+COMMENT ON COLUMN public.gaiadr2_source.lum_percentile_upper IS 'lum_val upper uncertainty (Luminosity[Solar Luminosity])';
