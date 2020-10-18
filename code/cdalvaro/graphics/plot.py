@@ -105,7 +105,7 @@ class Plot:
             ax.set_title(title)
 
         ax.set_xlabel(r'$B_{mag} - R_{mag}$')
-        ax.set_ylabel(r'G_{mag}')
+        ax.set_ylabel(r'$G_{mag}$')
 
         if xlim is not None:
             ax.set_xlim(xlim)
