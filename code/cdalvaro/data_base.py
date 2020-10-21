@@ -189,7 +189,8 @@ class DB:
                   columns: List[str] = None,
                   limit: int = None,
                   use_region_id: bool = True,
-                  extra_size: float = 1.0) -> pd.DataFrame:
+                  extra_size: float = 1.0,
+                  filter_null_columns: Union[bool, Set[str]] = False) -> pd.DataFrame:
         """
         Returns a Pandas DataFrame containing the stars of the given region.
 
@@ -199,6 +200,7 @@ class DB:
             limit (int, optional): The maximum number of stars to be recovered. Defaults no limit.
             use_region_id (bool, optional): Use the region_id to get stars. If False select starts by position fields. Defaults to True.
             extra_size (float, optional): A positive number to extend the region which contains the stars to be recovered. Defaults to 1.0.
+            filter_null_columns (Union[bool, Set[str]], optional): Filter entries with null values in the given columns. Defaults to False.
 
         Returns:
             DataFrame: A Pandas DataFrame with the recovered stars
@@ -206,7 +208,7 @@ class DB:
         DB._logger.debug(f"Getting stars for region {region}")
 
         index_columns = ['region_id', 'source_id']
-        if columns is not None:
+        if columns is not None and '*' not in columns:
             columns = index_columns + list(filter(lambda x: x not in index_columns, columns))
         else:
             columns = ['*']
@@ -246,6 +248,20 @@ class DB:
                 query += """
                     BOX(POINT(%(ra1)s, %(dec1)s), POINT(%(ra2)s, %(dec2)s)) @> POINT(ra, dec)
                     """
+
+        if isinstance(filter_null_columns, bool):
+            if filter_null_columns:
+                if '*' in columns:
+                    query += "AND gaiadr2_source IS NOT NULL"
+                else:
+                    columns = list(filter(lambda column: column not in index_columns, columns))
+                    query += " ".join(list(map(lambda column: f"AND {column} IS NOT NULL", columns)))
+        elif len(filter_null_columns) > 0:
+            if '*' in filter_null_columns:
+                query += "AND gaiadr2_source IS NOT NULL"
+            else:
+                filter_null_columns = list(filter(lambda column: column not in index_columns, filter_null_columns))
+                query += " ".join(list(map(lambda column: f"AND {column} IS NOT NULL", filter_null_columns)))
 
         query += """
             ORDER BY region_id, source_id ASC
