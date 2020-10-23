@@ -221,6 +221,9 @@ class DB:
         params = dict()
         if use_region_id:
             region_ids = self.get_regions_id(regions=set([region])).values()
+            if len(region_ids) == 0:
+                raise RuntimeError(f"Region '{region.name}' is not available in DB")
+
             params['region_id'] = next(iter(region_ids))
             query += """
                 region_id = %(region_id)s
