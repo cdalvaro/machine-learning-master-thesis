@@ -25,6 +25,7 @@
 %imagenes
 \usepackage[dvips]{epsfig}
 \usepackage{graphicx}
+\usepackage[export]{adjustbox}
 \usepackage{color}
 
 %colores en tablas
@@ -109,13 +110,29 @@
 \newcommand{\Id}{\mathrm{Id}}
 \newcommand{\diag}{\mathrm{diag}}
 
-
-
-
-
 \newcommand{\creaportada}{\begingroup
 \thispagestyle{empty}
-\includegraphics[width= 0.8\textwidth]{../figures/unir-logo}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[t]{0.8\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{../figures/unir-logo}
+  \end{subfigure}
+  \\ \vspace{1cm}
+  \begin{subfigure}[t]{0.8\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[height=2.5cm,valign=c]{../figures/esa-gaia-logo.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[height=3cm,valign=c]{../figures/github_qr.pdf}
+    \end{subfigure}
+  \end{subfigure}
+\end{figure}
 
 \vspace{1cm}
 \centering{
