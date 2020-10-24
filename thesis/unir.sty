@@ -112,29 +112,9 @@
 
 \newcommand{\creaportada}{\begingroup
 \thispagestyle{empty}
+\includegraphics[width=0.8\textwidth]{../figures/unir-logo}
 
-\begin{figure}
-  \centering
-  \begin{subfigure}[t]{0.8\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{../figures/unir-logo}
-  \end{subfigure}
-  \\ \vspace{1cm}
-  \begin{subfigure}[t]{0.8\textwidth}
-    \centering
-    \begin{subfigure}[t]{0.45\textwidth}
-        \centering
-        \includegraphics[height=2.5cm,valign=c]{../figures/esa-gaia-logo.png}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.45\textwidth}
-        \centering
-        \includegraphics[height=3cm,valign=c]{../figures/github_qr.pdf}
-    \end{subfigure}
-  \end{subfigure}
-\end{figure}
-
-\vspace{1cm}
+\vspace{1.5cm}
 \centering{
 \begin{tabular}{!{\color{azulunir}\vrule width 2pt}p{12cm}}
 {\Large {\bf Universidad Internacional de la Rioja (UNIR)}} \\ \vspace{0.1cm}
@@ -148,20 +128,35 @@
 \noindent
 \flushleft{
 {\bf Master's Thesis}\\  \vspace{0.3cm}
-{\bf Presented by:} \theauthor\\  \vspace{0.3cm}
+{\bf Author:} \theauthor\\  \vspace{0.3cm}
 {\bf Directed by:} \@director %\thedirector
 }
-\vspace{3cm}
+
+\vspace{1cm}
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}{0.8\textwidth}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+      \centering
+      \includegraphics[height=2.5cm,valign=c]{../figures/esa-gaia-logo.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+      \centering
+      \includegraphics[height=3cm,valign=c]{../figures/github_qr.pdf}
+    \end{subfigure}
+  \end{subfigure}
+\end{figure}
+
+\vspace{2cm}
 
 {\color{azulunir}{City:}} \@nombreciudad\\
 {\color{azulunir}{Date:}} \thedate
 \newpage
 \thispagestyle{empty}
 \endgroup}
-
-
-
-
 
 %---------------------------
 %cabecera del trabajo
