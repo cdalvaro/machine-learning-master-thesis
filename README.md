@@ -43,10 +43,10 @@ giving an extra marging to take into account stars outside clusters.
 
 ## Code
 
-All code used in this project is available inside [`code/`](code) directory.
+All code used in this project is available inside [`src/`](src) directory.
 It is written in Python and contains downloaders, data managers, and the ML algorithms described in the thesis.
 
-For more information see: [code/README.md](code/README.md)
+For more information see: [src/README.md](src/README.md)
 
 ## Acknowledgement
 
