@@ -3,9 +3,6 @@ version: "3.4"
 services:
   downloader:
     image: ghcr.io/cdalvaro/gaia-downloader:latest
-    build:
-      context: ./
-      dockerfile: downloader.Dockerfile
     container_name: gaia_downloader
     command: |
       --cluster ALL --exclude "Platais 8"
