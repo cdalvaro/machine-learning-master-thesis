@@ -6,13 +6,12 @@
 \usepackage{eso-pic}
 \usepackage{float}
 \usepackage{graphicx}
-\usepackage{natbib}
+\usepackage{apacite}
 \usepackage{picture}
 \usepackage{subcaption}
 
 % Bibliography style
-\bibliographystyle{abbrvnat}
-\setcitestyle{authoryear,open={(},close={)}}
+\bibliographystyle{apacite}
 
 \setlength{\headheight}{15pt}
 
@@ -89,7 +88,7 @@ The original description of the VizieR service was published in 2000, \cite[A\&A
 \mainmatter
 \chapter{Introduction}
 
-Stellar open clusters (OC) \cite[]{janes1982open} are groups of stars gravitationally bound originated from a single molecular gas cloud.
+Stellar open clusters (OC) \cite{janes1982open} are groups of stars gravitationally bound originated from a single molecular gas cloud.
 Thus they share the same chemical composition and age, and they have similar relative positions and proper motion.
 These astronomical objects are of fundamental importance to understand the spiral structure,
 the dynamics and the chemical evolution of our galaxy.
@@ -97,19 +96,19 @@ the dynamics and the chemical evolution of our galaxy.
 Although most stars in the Milky Way are presented isolated, it is considered that most of them (or even all)
 are formed in clustered environments and spend a period of time gravitationally bound with their siblings embedded
 in their original molecular cloud
-\cite[]{clarke2000theformationofstellarclusters} \cite[]{portegies2010young}.
+\cite{clarke2000theformationofstellarclusters} \cite{portegies2010young}.
 The evolution of these systems tends to sparse them in a few million years by interacting gravitationally with other systems.
 Galactic tidal forces and mechanisms that involves the gas loss driven by stellar feedback are other causes of disruption
-\cite[]{brinkmann2017bound}.
+\cite{brinkmann2017bound}.
 Nevertheless, a small fraction of these systems will survive in the initial state and persist bound in bigger timescales.
 
 Young OC allow us to research stars formation regions and improve our understanding about the mechanisms that create those stars.
 On the other side, older OC give us information about stellar processes and how the galactic disk evolves.
 Some highly disturbed orbits could also provide evidence of recent merge events and accretion traces from outside the galaxy
-\cite[]{cantat2016abundances}.
+\cite{cantat2016abundances}.
 
 The study of OC has been pushed forward thanks to the huge and precise dataset from the Gaia mission
-\cite[]{collaboration2016description} Gaia DR2 \cite[]{gaia2018gaia}, available since 2018.
+\cite{collaboration2016description} Gaia DR2 \cite{gaia2018gaia}, available since 2018.
 This dataset has helped to review already known open clusters and to find new ones.
 
 \section{Aims}
@@ -118,7 +117,7 @@ The goal of this work is to \emph{achieve a viable model for open cluster charac
 such as clustering algorithms and artificial neural networks.
 This model must be a non-supervised non-parameterized algorithm valid for any selected OC.
 
-The OpenClust catalogue \cite[]{dias2002new} has been used to make a preselection of sky regions for the Gaia DR2 data download.
+The OpenClust catalogue \cite{dias2002new} has been used to make a preselection of sky regions for the Gaia DR2 data download.
 This download is not limited to the sized registered in the catalogue. Instead, a wider region is downloaded for each cluster to include
 stars from outside the cluster and take them into account when training the model so the model will be able to take apart those outsiders
 when characterizing a non known cluster.
@@ -217,17 +216,17 @@ With Gaia DR2, which contains great quality astrometrical and photometric data f
 a new opportunity to simplify and optimize this processes is presented.
 In this context new approaches are being developed to improve current detection methods and automate the OC characterization.
 This work tries to take the best from \emph{Clusterix 2.0. A Virtual Observatory tool to estimate cluster membership probability}
-\cite[]{balaguer2020clusterix} and \emph{Hunting for open clusters in Gaia DR2: 582 new open clusters
-in the Galactic disc} \cite[]{castro2020hunting}, and merge them into a single \emph{machine learning}
+\cite{balaguer2020clusterix} and \emph{Hunting for open clusters in Gaia DR2: 582 new open clusters
+in the Galactic disc} \cite{castro2020hunting}, and merge them into a single \emph{machine learning}
 tool capable of finding open clusters eficiently without requiring powerful machines to perform the computations.
 
 The first one is a non-parametrized method. It determines empirically the frequency functions asociated to astrometrical variables
 without making any assumption about their profiles. However, it heavily does depend on the initial field selection and other
 parameters related to frequency functions. \emph{Clusterix 2.0.} is a web app tool inside the Spanish Virtual Observatory
 (VO) framework and works together with other VO tool such as:
-\emph{TOPCAT} \cite[][\url{http://www.starlink.ac.uk/topcat/}]{taylor2005topcat},
-\emph{Aladin} \cite[][\url{https://aladin.u-strasbg.fr/aladin.gml}]{bonnarel2000aladin},
-\emph{VOSA} \cite[][\url{http://svo2.cab.inta-csic.es/theory/vosa/}]{bayo2008vosa}, etc.
+\emph{TOPCAT} \cite{taylor2005topcat},
+\emph{Aladin} \cite{bonnarel2000aladin},
+\emph{VOSA} \cite{bayo2008vosa}, among other.
 
 The second tool is based on Big Data techniques. Its purpose is to analyze the whole Gaia DR2 dataset looking for OCs by using
 machine learning algorithms divided in two stages. In the first stage, the algorithm looks for posible OC candidates by searching
@@ -235,7 +234,7 @@ overdensities in the galactic disc.
 The second stage studies candidates found in the first one by generating images with H-R diagrams and passing them
 as sources to an Artificial Neural Network (ANN) which identifies isochrone patterns in photometric data (color and magnitude).
 Before this approach was put into practice there were 1200 OCs known. Now, this number has been increased up to more than 2000 OCs
-available at the Vizier catalogue \cite[][\url{https://vizier.unistra.fr}]{ochsenbein2000vizier}.
+available at the Vizier catalogue \cite{ochsenbein2000vizier}.
 
 The method developed in this project takes as base the approach made by \citeauthor{castro2020hunting} but rapidly diverges.
 In first place, performance has been taken into account since the begining, trying to get a reliable method without compromising the
