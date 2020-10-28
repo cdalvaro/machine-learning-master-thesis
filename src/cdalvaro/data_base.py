@@ -324,14 +324,13 @@ class DB:
         for region, serial in zip(regions, serials):
             region.serial = next(iter(serial))
 
-    def save_stars(self, region: Region, stars: pd.DataFrame, columns: List[str]):
+    def save_stars(self, region: Region, stars: pd.DataFrame):
         """
         Save the stars associated to the given region into the database.
 
         Args:
             region (Region): The region containing the stars.
             starts (pd.DataFrame): The DataFrame with the stars to be saved into the database.
-            columns (List[str]): A list with the columns to be saved into the database.
         """
         DB._logger.debug(f"Saving stars for region {region} into db ...")
 
@@ -344,7 +343,7 @@ class DB:
                              con=connection,
                              if_exists='append',
                              index=True,
-                             chunksize=10000,
+                             chunksize=100_000,
                              method='multi')
         except Exception as error:
             DB._logger.error(f"An error ocurred saving stars data into DB. Cause: {error}")
