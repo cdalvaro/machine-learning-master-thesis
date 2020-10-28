@@ -218,9 +218,8 @@ class Gaia:
         try:
             stars['priam_flags'] = stars['priam_flags'].astype(np.float64)
             stars['flame_flags'] = stars['flame_flags'].astype(np.float64)
-            stars = stars.to_pandas()
-            self.db.save_regions([region])
-            self.db.save_stars(region=region, stars=stars, columns=stars.columns)
+            self.db.save_regions(set([region]))
+            self.db.save_stars(region=region, stars=stars.to_pandas())
         except Exception as error:
             Gaia._logger.error(f"Error saving data for region {region}. Cause: {error}")
 
