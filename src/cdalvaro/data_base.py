@@ -343,7 +343,7 @@ class DB:
                              con=connection,
                              if_exists='append',
                              index=True,
-                             chunksize=100_000,
+                             chunksize=5_000,
                              method='multi')
         except Exception as error:
             DB._logger.error(f"An error ocurred saving stars data into DB. Cause: {error}")
