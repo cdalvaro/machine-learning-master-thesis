@@ -3,6 +3,12 @@ from keras.layers import InputSpec, Layer
 
 
 class ClusteringLayer(Layer):
+    """
+    This layer converts the input sample to soft label, i.e. a vector that represents
+    the probability of the sample belonging to each cluster.
+
+    The probability is calculated with student's t-distribution.
+    """
     def __init__(self, n_clusters, weights=None, alpha: float = 1.0, **kwargs):
         if 'input_shape' not in kwargs and 'input_dim' in kwargs:
             kwargs['input_shape'] = (kwargs.pop('input_dim'), )
@@ -32,6 +38,9 @@ class ClusteringLayer(Layer):
             q_ij = 1.0 / (1.0 + dist(x_i, µ_j)^2), then normalize it.
             q_ij can be interpreted as the probability of assingning sample i to cluster j.
             (i.e., a soft assignment)
+
+        Reference:
+            Unsupervised Deep Embedding for Clustering Analysis - 3.1.1 Soft Assignment
 
         Args:
             inputs: The variable containing data, shape=(n_samples, n_features)
