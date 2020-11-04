@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
+from .color_palette import color_palette, set_color_palette
+
 
 class Plot:
 
@@ -10,6 +12,7 @@ class Plot:
     def __init__(self, save_figs: bool = False, figs_path: str = '.'):
         self.save_figs = save_figs
         self.figs_path = figs_path
+        set_color_palette()
 
     def plot_clusters_catalogue_distribution(self,
                                              df_catalogue,
@@ -17,7 +20,8 @@ class Plot:
                                              img_ext: str = default_ext,
                                              title: str = None,
                                              xlim: tuple = None,
-                                             ylim: tuple = None):
+                                             ylim: tuple = None,
+                                             hue: str = 'diam'):
         fig, ax = plt.subplots(figsize=(12, 6))
         if title is not None:
             ax.set_title(title)
@@ -30,16 +34,13 @@ class Plot:
         if ylim is not None:
             ax.set_ylim(ylim)
 
-        g = sns.scatterplot(data=df_catalogue,
-                            x="ra",
-                            y="dec",
-                            hue="diam",
-                            size="diam",
-                            palette="ch:r=-.5,l=.75",
-                            ax=ax)
+        g = sns.scatterplot(data=df_catalogue, x="ra", y="dec", hue=hue, size=hue, palette=color_palette(), ax=ax)
         plt.legend().set_title("Diameter (arcmin)")
 
-        self._save_figure(fig, name=img_name, img_ext=img_ext)
+        if self.save_figs:
+            self._save_figure(fig, name=img_name, img_ext=img_ext)
+
+        return fig, ax, g
 
     def plot_cluster_proper_motion(self,
                                    df_cluster,
@@ -47,7 +48,9 @@ class Plot:
                                    img_ext: str = default_ext,
                                    title: str = None,
                                    xlim: tuple = None,
-                                   ylim: tuple = None):
+                                   ylim: tuple = None,
+                                   hue: str = 'cluster_g',
+                                   legend: bool = True):
         fig, ax = plt.subplots(figsize=(6, 6))
         if title is not None:
             ax.set_title(title)
@@ -60,9 +63,19 @@ class Plot:
         if ylim is not None:
             ax.set_ylim(ylim)
 
-        g = sns.scatterplot(data=df_cluster, x="pmra", y="pmdec", hue="is_contained", s=12, ax=ax, legend=False)
+        g = sns.scatterplot(data=df_cluster,
+                            x="pmra",
+                            y="pmdec",
+                            hue=hue,
+                            palette=color_palette(),
+                            s=12,
+                            ax=ax,
+                            legend=legend)
 
-        self._save_figure(fig, name=img_name, img_ext=img_ext)
+        if self.save_figs:
+            self._save_figure(fig, name=img_name, img_ext=img_ext)
+
+        return fig, ax, g
 
     def plot_cluster_parallax_histogram(self,
                                         df_cluster,
@@ -71,7 +84,10 @@ class Plot:
                                         title: str = None,
                                         bins='auto',
                                         xlim: tuple = None,
-                                        stat: str = 'count'):
+                                        ylim: tuple = None,
+                                        stat: str = 'count',
+                                        hue: str = 'cluster_g',
+                                        legend: bool = True):
         fig, ax = plt.subplots(figsize=(6, 6), tight_layout=True)
         if title is not None:
             ax.set_title(title)
@@ -81,17 +97,23 @@ class Plot:
 
         if xlim is not None:
             ax.set_xlim(xlim)
+        if ylim is not None:
+            ax.set_ylim(ylim)
 
         g = sns.histplot(data=df_cluster,
                          x='parallax',
-                         hue="is_contained",
-                         legend=False,
+                         hue=hue,
+                         palette=color_palette(),
+                         legend=legend,
                          bins=bins,
                          kde=True,
                          ax=ax,
                          stat=stat)
 
-        self._save_figure(fig, name=img_name, img_ext=img_ext)
+        if self.save_figs:
+            self._save_figure(fig, name=img_name, img_ext=img_ext)
+
+        return fig, ax, g
 
     def plot_cluster_isochrone_curve(self,
                                      df_cluster,
@@ -99,7 +121,9 @@ class Plot:
                                      img_ext: str = default_ext,
                                      title: str = None,
                                      xlim: tuple = None,
-                                     ylim: tuple = None):
+                                     ylim: tuple = None,
+                                     hue: str = 'cluster_g',
+                                     legend: bool = True):
         fig, ax = plt.subplots(figsize=(6, 6))
         if title is not None:
             ax.set_title(title)
@@ -115,17 +139,20 @@ class Plot:
         g = sns.scatterplot(data=df_cluster,
                             x="bp_rp",
                             y="phot_g_mean_mag",
-                            hue="is_contained",
+                            hue=hue,
+                            palette=color_palette(),
                             size='parallax',
                             sizes=(2, 20),
                             ax=ax,
-                            legend=False)
+                            legend=legend)
 
         ax.invert_yaxis()
 
-        self._save_figure(fig, name=img_name, img_ext=img_ext)
+        if self.save_figs:
+            self._save_figure(fig, name=img_name, img_ext=img_ext)
+
+        return fig, ax, g
 
     def _save_figure(self, fig, name: str, img_ext: str):
-        if self.save_figs:
-            name = name.replace(' ', '_').lower()
-            fig.savefig(f"{self.figs_path}/{name}.{img_ext}")
+        name = name.replace(' ', '_').lower()
+        fig.savefig(f"{self.figs_path}/{name}.{img_ext}")
