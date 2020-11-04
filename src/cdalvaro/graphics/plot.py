@@ -49,7 +49,7 @@ class Plot:
                                    title: str = None,
                                    xlim: tuple = None,
                                    ylim: tuple = None,
-                                   hue: str = 'clusters',
+                                   hue: str = 'cluster_g',
                                    legend: bool = True):
         fig, ax = plt.subplots(figsize=(6, 6))
         if title is not None:
@@ -86,7 +86,7 @@ class Plot:
                                         xlim: tuple = None,
                                         ylim: tuple = None,
                                         stat: str = 'count',
-                                        hue: str = 'clusters',
+                                        hue: str = 'cluster_g',
                                         legend: bool = True):
         fig, ax = plt.subplots(figsize=(6, 6), tight_layout=True)
         if title is not None:
@@ -122,7 +122,7 @@ class Plot:
                                      title: str = None,
                                      xlim: tuple = None,
                                      ylim: tuple = None,
-                                     hue: str = 'clusters',
+                                     hue: str = 'cluster_g',
                                      legend: bool = True):
         fig, ax = plt.subplots(figsize=(6, 6))
         if title is not None:
