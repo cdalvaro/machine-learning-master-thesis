@@ -1,37 +1,49 @@
-from enum import auto
-from keras.backend.cntk_backend import update
 from keras.models import Model
-from keras.optimizers import Optimizer, SGD
+from keras.optimizers import Adam, Optimizer, SGD
 import numpy as np
-from scipy.cluster.hierarchy import weighted
+import os
 from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score
 from typing import List, Union
 
 from .autoencoder import autoencoder, KernelInitializer
 from .clustering_layer import ClusteringLayer
+from ..utils import estimate_n_clusters
 
 
-class DEC:
-    def __init__(self, data, dims: List[int] = None, n_clusters: int = None, n_jobs: int = None, save_dir: str = None):
-        # TODO: Add documentation
-        if dims is None:
-            self._dims = [data.shape[-1], 500, 500, 2000, 10]
-        elif dims[0] != data.shape[-1]:
-            ValueError(f"First dims value must be equal to data.shape[-1] -> {dims[0]} != {data.shape[-1]}")
-        else:
-            self._dims = dims
+class DEC(object):
+    def __init__(self,
+                 dims: List[int],
+                 n_clusters: int,
+                 activation: str = 'relu',
+                 alpha: float = 1.0,
+                 initializer: KernelInitializer = 'glorot_uniform'):
+        """
+        Unsupervised Deep Embedding for Clustering Analysis (DEC)
+        Link: http://proceedings.mlr.press/v48/xieb16.pdf
 
-        self._data = data
+        DEC learns a mapping from the data space to a lower-dimensional feature space
+        in which it iteratively optimizes a clustering objective.
+
+        Args:
+            dims (List[int]): DEC layers configuration. First element must be the number of features.
+            n_clusters (int): The number of clusters to be found.
+            activation (str, optional): Activation function used in encoder models. Defaults to relu.
+            alpha (float, optional): Degrees of freedom of the Student's t-distribution. Defaults to 1.0.
+            initializer (KernelInitializer, optional): Kernel initializer used in encoder models. Defaults to glorot_uniform.
+            optimizer (Optimizer, optional): Optimizer used in encoder models. Defaults to SGD.
+        """
+        super(DEC, self).__init__()
+
+        self._dims = dims
         self._n_clusters = n_clusters
-        self._n_jobs = n_jobs
-        self.save_dir = save_dir
-        self._kmeans = None
-        self._model = None
-        self._pretrain_autoencoder = None
-        self._encoder = None
-        self._autoencoder = None
-        self._built = False
+        self._pretrained = False
+
+        # Autoencoder and encoder models
+        self._autoencoder, self._encoder = autoencoder(dims=dims, activation=activation, initializer=initializer)
+
+        # DEC model
+        clustering_layer = ClusteringLayer(n_clusters, alpha=alpha, name='clustering')(self._encoder.output)
+        self._model = Model(inputs=self._encoder.input, outputs=[clustering_layer, self._autoencoder.output])
 
     @property
     def dims(self):
@@ -45,119 +57,167 @@ class DEC:
     def model(self):
         return self._model
 
-    def fit_predict(self, n_epochs):
-        # TODO: Add documentation
-        pass
+    @property
+    def autoencoder(self):
+        return self._autoencoder
 
-    def build(self,
-              activation: str = 'relu',
-              kernel_initializer: KernelInitializer = 'glorot_uniform',
-              optimizer: Optimizer = None,
-              loss: Union[str, List[str]] = 'mse'):
-        # TODO: Add documentation
-        if optimizer is None:
-            optimizer = SGD(lr=1, momentum=0.9)
+    @property
+    def encoder(self):
+        return self._encoder
 
-        if self._n_clusters is None:
-            self._n_clusters = self._estimate_n_clusters()
+    def load_weights(self, weights: str):
+        """
+        Load weights for DEC model from file
 
-        # K-Means
-        self._kmeans = KMeans(self._n_clusters, n_jobs=self._n_jobs)
+        Args:
+            weights (str): The file path with saved weights
+        """
+        self._model.load_weights(weights)
 
-        # Pretrain autoencoder
-        self._pretrain_autoencoder, _ = autoencoder(dims=self._dims,
-                                                    activation=activation,
-                                                    kernel_initializer=kernel_initializer)
+    def extract_features(self, x):
+        return self._encoder.predict(x)
 
-        self._pretrain_autoencoder.compile(optimizer=optimizer, loss=loss)
+    def pretrain(self,
+                 x,
+                 optimizer: Optimizer = Adam(),
+                 loss: Union[str, List[str]] = 'mse',
+                 epochs: int = 200,
+                 batch_size: int = 256,
+                 save_dir: str = None,
+                 verbose: int = 1):
+        """
+        Pretrain autoencoder model.
 
-        # TODO: Check if we need here a previous model
+        Args:
+            x: The data used for pretraining.
+            optimizer (Optimizer, optional): [description]. Defaults to Adam.
+            loss (Union[str, List[str]], optional): [description]. Defaults to 'mse'.
+            epochs (int, optional): The number of epochs for pretraining. Defaults to 200.
+            batch_size (int, optional): The batch size for pretraining. Defaults to 256.
+            save_dir (str, optional): The directory for saving autoencoder model weights. Defaults to None.
+            verbose (int, optional): The verbosity level. Defaults to 0.
+        """
+        if verbose > 0:
+            print("Pretraining autoencoder model...")
+        self._autoencoder.compile(optimizer=optimizer, loss=loss)
+        self._autoencoder.fit(x, x, batch_size=batch_size, epochs=epochs, verbose=verbose)
+        self._pretrained = True
 
-        # Jointly refining DEC model
-        self._autoencoder, self._encoder = autoencoder(dims=self._dims,
-                                                       activation=activation,
-                                                       kernel_initializer=kernel_initializer)
+        if save_dir is not None:
+            if not os.path.isdir(save_dir):
+                os.makedirs(save_dir)
+            file_path = f"{save_dir}/dec_ae_weights.h5"
+            self._autoencoder.save_weights(file_path)
+            print(f"Pretrained weights have been saved to: {file_path}")
 
-        ## Soft labeling layer
-        clustering_layer = ClusteringLayer(n_clusters=self._n_clusters, name='clustering')(self._encoder.output)
+    def compile(self,
+                optimizer: Optimizer = SGD(1, 0.9),
+                loss: Union[str, List[str]] = 'kld',
+                loss_weights: List[float] = None):
+        """
+        Compile the DEC model.
 
-        self._model = Model(inputs=self._encoder.input, outputs=[clustering_layer, self._autoencoder.output])
-        self._model.compile(optimizer=optimizer, loss=['kld', 'mse'], loss_weights=[0.1, 1])
-
-        self._built = True
+        Args:
+            optimizer (Optimizer, optional): Optimizer instance. Defaults to SGD(1, 0.9).
+            loss (Union[str, List[str]], optional): The loss metric to be minimized. Defaults to 'kld'.
+            loss_weights (List[int], optional): Scalar coefficients to weight the loss contributions of different model outputs. Defaults to None.
+        """
+        self._model.compile(optimizer=optimizer, loss=loss, loss_weights=loss_weights)
 
     def fit(self,
-            epochs: int = 100,
-            batch_size: int = 128,
-            maxiter: int = 1000,
-            tolerance: float = 0.001,
-            update_interval: int = 100):
-        # TODO: Add documentation
-        if not self._built:
-            raise Exception("You must build your model before fitting it")
+            x,
+            batch_size: int = 256,
+            maxiter: int = 2000,
+            tol: float = 1e-3,
+            update_interval: int = 140,
+            save_dir: str = None,
+            verbose: int = 1):
+        """
+        Fit DEC model and give predictions for dataset `x`.
 
-        # K-Means
-        y_pred_last = self._kmeans.fit_predict(self._encoder.predict(self._data))
+        Args:
+            x: The dataset used for training and predicting.
+            batch_size (int, optional): The batch size. Defaults to 256.
+            maxiter (int, optional): Maximum iterations for training. Defaults to 1000.
+            tol (float, optional): Tolerance threshold to stop training. Defaults to 1e-3.
+            update_interval (int, optional): Number of iterations before updating internal predictions. Defaults to 140.
+            save_dir (str, optional): The directory for saving dec model weights. Defaults to None.
+            verbose (int, optional): The verbosity level. Defaults to 1.
 
-        # Autoencoder
-        self._pretrain_autoencoder.fit(self._data, self._data, batch_size=batch_size, epochs=epochs)
+        Returns:
+            Array with the predicted group for each `x` sample.
+        """
+        if verbose > 0:
+            print("Training DEC model...")
 
-        # Jointly refining DEC model
-        self._autoencoder.set_weights(self._pretrain_autoencoder.weights)
-        self._model.get_layer(name='clustering').set_weights([self._kmeans.cluster_centers_])
+        # DEC - Phase 1: parameter initialization with a deep autoencoder
+        # Reference:
+        #     Unsupervised Deep Embedding for Clustering Analysis - 3.2 Parameter initialization
+        kmeans = KMeans(self._n_clusters, n_init=20)
+        y_pred = kmeans.fit_predict(self._encoder.predict(x))
+        y_pred_last = np.copy(y_pred)
+        self._model.get_layer(name='clustering').set_weights([kmeans.cluster_centers_])
 
-        index = 0
-        index_array = np.arange(self._data.shape[0])
+        # DEC - Phase 2: Optimization
+        # Reference:
+        #     Unsupervised Deep Embedding for Clustering Analysis - 3.1 Clustering with KL divergence
+        loss, index = 0, 0
+        index_array = np.arange(x.shape[0])
         for it in range(maxiter):
             if it % update_interval == 0:
-                q, _ = self._model.predict(self._data, verbose=0)
+                q, _ = self._model.predict(x, verbose=0)
                 p = self._target_distribution(q)
                 y_pred = q.argmax(1)
 
                 # Stop criteria
                 delta_label = np.sum(y_pred != y_pred_last).astype(np.float32) / y_pred.shape[0]
                 y_pred_last = np.copy(y_pred)
-                if it > 0 and delta_label < tolerance:
-                    # TODO: Change print for logger
-                    print("Delta label", delta_label, "< tolerance", tolerance)
-                    print("Reached tolerance threshold. Stopping training.")
+                if it > 0 and delta_label < tol:
+                    if verbose > 0:
+                        print(f"Delta label: {delta_label:.4e} < tolerance: {tol}")
+                        print("Reached tolerance threshold. Stopping training.")
                     break
 
-            idx = index_array[index * batch_size:min((index + 1) * batch_size, self._data.shape[0])]
-            loss = self._model.train_on_batch(x=self._data[idx], y=[p[idx], self._data[idx]])
-            index = index + 1 if (index + 1) * batch_size <= self._data.shape[0] else 0
+            # Train on batch
+            idx = index_array[index * batch_size:min((index + 1) * batch_size, x.shape[0])]
+            loss = self._model.train_on_batch(x=x[idx], y=[p[idx], x[idx]])
+            index = index + 1 if (index + 1) * batch_size <= x.shape[0] else 0
+            if verbose > 0:
+                print(f"Iteration {it + 1}/{maxiter} - loss: {np.max(loss):.4e}")
 
-    def predict(self, data) -> np.ndarray:
-        # TODO: Add documentation
-        q, _ = self._model.predict(data, verbose=0)
-        return q.argmax(1)
+        self._trained = True
+        if save_dir is not None:
+            if not os.path.isdir(save_dir):
+                os.makedirs(save_dir)
+            file_path = f"{save_dir}/dec_model_weights.h5"
+            self._autoencoder.save_weights(file_path)
+            print(f"DEC model weights have been saved to: {file_path}")
 
-    def _target_distribution(self, q: np.ndarray) -> np.ndarray:
-        # TODO: Add documentation
-        weight = q**2 / q.sum(0)
-        return (weight.T / weight.sum(1)).T
-
-    def _estimate_n_clusters(self) -> int:
+    def predict(self, x, verbose: int = 0) -> np.ndarray:
         """
-        Estimate the number of clusters based on silhoutte score.
+        Generate predictions for the given dataset
 
-        Raises:
-            ValueError: If the number of clusters cannot be estimated.
+        Args:
+            x: The input data
 
         Returns:
-            int: The estimated number of clusters
+            np.ndarray: Numpy array of predictions
         """
-        best_score = -1.0
-        best_n_clusters = None
-        for n_clusters in range(2, 10):
-            kmeans = KMeans(n_clusters=n_clusters, n_jobs=self._n_jobs)
-            pred = kmeans.fit_predict(self._data)
-            score = silhouette_score(self._data, pred, metric='euclidean')
-            if score > best_score:
-                best_score = score
-                best_n_clusters = n_clusters
+        if not self._trained:
+            raise Exception("This model has not been trained yet")
+        q, _ = self._model.predict(x, verbose=verbose)
+        return q.argmax(1)
 
-        if best_n_clusters is None:
-            raise ValueError("Unable to estimate the number of clusters to be used")
+    @staticmethod
+    def _target_distribution(q: np.ndarray) -> np.ndarray:
+        """
+        Kullback-Leibler (KL) divergence
 
-        return best_n_clusters
+        Args:
+            q (np.ndarray): Model predictions
+
+        Returns:
+            np.ndarray: The computed distribution
+        """
+        weight = q**2 / q.sum(0)
+        return (weight.T / weight.sum(1)).T

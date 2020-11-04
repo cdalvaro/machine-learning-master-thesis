@@ -3,13 +3,24 @@ from keras.layers import InputSpec, Layer
 
 
 class ClusteringLayer(Layer):
-    """
-    This layer converts the input sample to soft label, i.e. a vector that represents
-    the probability of the sample belonging to each cluster.
-
-    The probability is calculated with student's t-distribution.
-    """
     def __init__(self, n_clusters, weights=None, alpha: float = 1.0, **kwargs):
+        """
+        This layer converts the input sample to soft label, i.e. a vector that represents
+        the probability of the sample belonging to each cluster.
+
+        The probability is calculated with student's t-distribution.
+
+        Args:
+            n_clusters (int): Number of clusters.
+            weights (optional): List of Numpy array with shape `(n_clusters, n_features)` which represents the initial cluster centers.
+            alpha (float, optional): Degrees of freedom of the Student's t-distribution. Defaults to 1.0.
+
+        Input shape:
+            2D tensor with shape: `(n_samples, n_features)`
+
+        Output shape:
+            2D tensor with shape: `(n_samples, n_clusters)`
+        """
         if 'input_shape' not in kwargs and 'input_dim' in kwargs:
             kwargs['input_shape'] = (kwargs.pop('input_dim'), )
         super(ClusteringLayer, self).__init__(**kwargs)

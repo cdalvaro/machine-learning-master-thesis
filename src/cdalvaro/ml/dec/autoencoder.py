@@ -8,7 +8,7 @@ KernelInitializer = TypeVar('KernelInitializer', bound=Union[str, Initializer])
 
 def autoencoder(dims: List[int],
                 activation: str = 'relu',
-                kernel_initializer: KernelInitializer = 'glorot_uniform') -> Tuple[Model, Model]:
+                initializer: KernelInitializer = 'glorot_uniform') -> Tuple[Model, Model]:
     """
     Fully connected symmetric autoencoder model.
 
@@ -16,7 +16,7 @@ def autoencoder(dims: List[int],
         dims (List[int]): List of the sizes of layers of encoder.
                           dims[0] is input dim, dims[-1] is size of the latent hidden layer.
         activation (str, optional): Activation function. Defaults to 'relu'.
-        kernel_initializer (KernelInitializer, optional): Kernel initializer. Defaults to 'glorot_uniform'.
+        initializer (KernelInitializer, optional): Kernel initializer. Defaults to 'glorot_uniform'.
 
     Returns:
         Tuple[Model, Model]: Autoencoder and encoder models
@@ -30,22 +30,20 @@ def autoencoder(dims: List[int],
     for i_layer in range(n_stacks - 1):
         layer = Dense(dims[i_layer + 1],
                       activation=activation,
-                      kernel_initializer=kernel_initializer,
+                      kernel_initializer=initializer,
                       name=f"encoder_{i_layer}")(layer)
 
     # Latent hidden layer
-    encoded_layer = Dense(dims[-1], kernel_initializer=kernel_initializer, name=f"encoder_{n_stacks - 1}")(layer)
+    encoded_layer = Dense(dims[-1], kernel_initializer=initializer, name=f"encoder_{n_stacks - 1}")(layer)
 
     # Decoder internal layers
     layer = encoded_layer
     for i_layer in range(n_stacks - 1, 0, -1):
-        layer = Dense(dims[i_layer],
-                      activation=activation,
-                      kernel_initializer=kernel_initializer,
+        layer = Dense(dims[i_layer], activation=activation, kernel_initializer=initializer,
                       name=f"decoder_{i_layer}")(layer)
 
     # Decoder output
-    layer = Dense(dims[0], kernel_initializer=kernel_initializer, name='decoder_0')(layer)
+    layer = Dense(dims[0], kernel_initializer=initializer, name='decoder_0')(layer)
     decoded_layer = layer
 
     _autoencoder = Model(inputs=input_layer, outputs=decoded_layer, name='autoencoder')
