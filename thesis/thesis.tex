@@ -88,6 +88,22 @@ The original description of the VizieR service was published in 2000, \cite[A\&A
 \mainmatter
 \chapter{Introduction}
 
+%% TODO: 1.1 Motivation
+
+% ¿Cuál es el problema a tratar?
+% ¿Cuáles crees que son las causas?
+% ¿Por qué es relevante el problema?
+
+%% TODO: 1.2 Planteamiento
+
+% ¿Cómo se podría solucionar el problema?
+% ¿Qué es lo que se propone?
+% Descripción del objetivo del trabajo en términos generales
+
+%% TODO: 1.3 Estructura de la memoria
+
+% Descripción breve de lo que se va a contar en cada uno de los capítulos siguientes.
+
 Stellar open clusters (OC) \cite{janes1982open} are groups of stars gravitationally bound originated from a single molecular gas cloud.
 Thus they share the same chemical composition and age, and they have similar relative positions and proper motion.
 These astronomical objects are of fundamental importance to understand the spiral structure,
@@ -110,53 +126,6 @@ Some highly disturbed orbits could also provide evidence of recent merge events 
 The study of OC has been pushed forward thanks to the huge and precise dataset from the Gaia mission
 \cite{collaboration2016description} Gaia DR2 \cite{gaia2018gaia}, available since 2018.
 This dataset has helped to review already known open clusters and to find new ones.
-
-\section{Aims}
-
-The goal of this work is to \emph{achieve a viable model for open cluster characterization based on machine learning techniques}
-such as clustering algorithms and artificial neural networks.
-This model must be a non-supervised non-parameterized algorithm valid for any selected OC.
-
-The OpenClust catalogue \cite{dias2002new} has been used to make a preselection of sky regions for the Gaia DR2 data download.
-This download is not limited to the sized registered in the catalogue. Instead, a wider region is downloaded for each cluster to include
-stars from outside the cluster and take them into account when training the model so the model will be able to take apart those outsiders
-when characterizing a non known cluster.
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=\columnwidth]{../figures/openclust_catalogue.pdf}
-  \caption{OpenClust Catalogue Distribution}
-\end{figure}
-
-A later filter will be applied to select only those OCs that fulfil one or more of the following criteria:
-
-\begin{itemize}
-  \item Cluster diameter above 25.0 arcmin
-  \item Number of stars in the selected region above 40,000 stars
-\end{itemize}
-
-The final downloaded set covers nearly 60 million stars, which is significantly smaller than the whole Gaia DR2 dataset which contains
-information for around 1,600 million stars.
-This restriction responds to a commitment to the project delivery dates and the available computing power,
-and to having a good basis for the correct model training. As an extension of this work, the trained model could be applied to a region
-not covered by this preselection for a later understanding of the results.
-
-The intention is to get a reliable and efficient non-parameterized neither supervised model over those parameterized or supervised ones.
-To measure the reliability of the resulting model comparisons with other VO tools will be made.
-
-The role for the ANN will be validating cluster members based on dynamincs and photometric data.
-
-These are te variables to be considered in this work:
-
-\begin{itemize}
-  \item OCs and stars \emph{right ascension}: $\alpha$ and \emph{declination}: $\delta$
-  \item OCs \emph{estimated sizes}: $r$
-  \item \emph{Proper motion}: $\mu_{\alpha}$, $\mu_{\delta}$ and \emph{parallax}: $\varpi$
-  \item \emph{Photometric}: $E(B-R)$, $G_{mag}$
-  \item \emph{Associated errors} will be taken into account to estimate prediction errors
-\end{itemize}
-
-Initially, no filter will be applied over parallax neither magnitude values to the selected objects from Gaia DR2.
 
 \chapter{State of the Art}
 
@@ -248,11 +217,95 @@ Thus, the main goal of this project is not the discovery of new open clusters or
 applied to already knonw open clusters, allows us the characterization of those OCs on an unsupervised way, with a reasonable computing
 power and taking into account the same selection of astrometric and photometric variables for every OC.
 
-\chapter{Requirements Description}
+%% TODO: Concluir con una última sección de resumen de conclusiones, resumiendo las principales averiguaciones del estudio del dominio
+% y cómo van a afectar al desarrollo específico del trabajo.
+
+\section{Aims}
+
+The goal of this work is to \emph{achieve a viable model for open cluster characterization based on machine learning techniques}
+such as clustering algorithms and artificial neural networks.
+This model must be a non-supervised non-parameterized algorithm valid for any selected OC.
+
+The OpenClust catalogue \cite{dias2002new} has been used to make a preselection of sky regions for the Gaia DR2 data download.
+This download is not limited to the sized registered in the catalogue. Instead, a wider region is downloaded for each cluster to include
+stars from outside the cluster and take them into account when training the model so the model will be able to take apart those outsiders
+when characterizing a non known cluster.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\columnwidth]{../figures/openclust_catalogue.pdf}
+  \caption{OpenClust Catalogue Distribution}
+\end{figure}
+
+A later filter will be applied to select only those OCs that fulfil one or more of the following criteria:
+
+\begin{itemize}
+  \item Cluster diameter above 25.0 arcmin
+  \item Number of stars in the selected region above 40,000 stars
+\end{itemize}
+
+The final downloaded set covers nearly 60 million stars, which is significantly smaller than the whole Gaia DR2 dataset which contains
+information for around 1,600 million stars.
+This restriction responds to a commitment to the project delivery dates and the available computing power,
+and to having a good basis for the correct model training. As an extension of this work, the trained model could be applied to a region
+not covered by this preselection for a later understanding of the results.
+
+The intention is to get a reliable and efficient non-parameterized neither supervised model over those parameterized or supervised ones.
+To measure the reliability of the resulting model comparisons with other VO tools will be made.
+
+The role for the ANN will be validating cluster members based on dynamincs and photometric data.
+
+These are te variables to be considered in this work:
+
+\begin{itemize}
+  \item OCs and stars \emph{right ascension}: $\alpha$ and \emph{declination}: $\delta$
+  \item OCs \emph{estimated sizes}: $r$
+  \item \emph{Proper motion}: $\mu_{\alpha}$, $\mu_{\delta}$ and \emph{parallax}: $\varpi$
+  \item \emph{Photometric}: $E(B-R)$, $G_{mag}$
+  \item \emph{Associated errors} will be taken into account to estimate prediction errors
+\end{itemize}
+
+Initially, no filter will be applied over parallax neither magnitude values to the selected objects from Gaia DR2.
+
+%% TODO: Fit structure to: general, specific, methodology
+
+% General: Caracterizar cúmulos abiertos
+% Específicos:
+% Obtener los datos requeridos para el análisis
+% Identificar los posibles métodos de clustering
+% Diseñar e implementar distintos algoritmos de clustering
+% Determinar la validez de los clusters caracterizados
 
 \chapter{Work Development}
 
+%% TODO: Las tecnologías empleadas para el desarrollo de las herramientas,
+% la organización del piloto, cómo ha transcurrido el experimento
+
+%% TODO: Añadir nuevo capítulo - Descripción de los resultados
+
+% Aquí se detallan los resultados obtenidos, con tablas de resumen, gráficas de resultados, identificación de datos relevantes, etc.
+% Es una exposición objetiva, sin valorar los resultados ni justificarlos.
+
+%% TODO: Añadir nuevo capítulo - Discusión
+
+% Se aporta la discusión de los resultados presentados en el capítulo anterior. En este capítulo se puede discutir la relevancia de
+% los resultados, presentar posibles explicaciones apra los datos anómalos y resaltar aquellos datos que sean parcitualarmente relevantes
+% para el análisis del experimento.
+
 \chapter{Conclusions and Future Work}
+
+%% TODO: 7.1 Conclusiones
+
+% Resumen final del trabajo y debe servir para informar del alcance y relevancia de la aportación.
+% Suele estructurarse empezando con un resuemn del problema tratado, de cómo se ha abordado y de por qué la solución sería valída.
+
+% Es recomendable que incluya también un resumen de las contribuciones del trabajo, en el que se relacionen las contribuciones y los
+% resultado obtenidos con ls objetivos panteados para el trabajo, discutiendo hasta qué punto has conseguido resolver los objetivos planteados.
+
+%% TODO: 7.2 Lineas de trabajo futuro
+
+% Debería señalar las perspectivas de futuro que abre el trabajo desarrollado para el campo de estudio definido. En el fondo,
+% debe justificar de qué modo puede emplearse la aportación desarrollada y en qué campos.
 
 \bibliography{references}
 \addcontentsline{toc}{chapter}{Bibliography}
