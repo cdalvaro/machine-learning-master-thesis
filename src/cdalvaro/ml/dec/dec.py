@@ -43,7 +43,7 @@ class DEC(object):
 
         # DEC model
         clustering_layer = ClusteringLayer(n_clusters, alpha=alpha, name='clustering')(self._encoder.output)
-        self._model = Model(inputs=self._encoder.input, outputs=[clustering_layer, self._autoencoder.output])
+        self._model = Model(inputs=self._encoder.input, outputs=clustering_layer)
 
     @property
     def dims(self):
@@ -161,11 +161,13 @@ class DEC(object):
         # DEC - Phase 2: Optimization
         # Reference:
         #     Unsupervised Deep Embedding for Clustering Analysis - 3.1 Clustering with KL divergence
-        loss, index = 0, 0
+        loss, index = [0.0], 0
         index_array = np.arange(x.shape[0])
         for it in range(maxiter):
             if it % update_interval == 0:
-                q, _ = self._model.predict(x, verbose=0)
+                if verbose > 0:
+                    print(f"Iteration {it + 1}/{maxiter} - loss: {np.max(loss):.4e}")
+                q = self._model.predict(x, verbose=verbose)
                 p = self._target_distribution(q)
                 y_pred = q.argmax(1)
 
@@ -180,10 +182,8 @@ class DEC(object):
 
             # Train on batch
             idx = index_array[index * batch_size:min((index + 1) * batch_size, x.shape[0])]
-            loss = self._model.train_on_batch(x=x[idx], y=[p[idx], x[idx]])
+            loss = self._model.train_on_batch(x=x[idx], y=p[idx])
             index = index + 1 if (index + 1) * batch_size <= x.shape[0] else 0
-            if verbose > 0:
-                print(f"Iteration {it + 1}/{maxiter} - loss: {np.max(loss):.4e}")
 
         self._trained = True
         if save_dir is not None:
@@ -205,7 +205,7 @@ class DEC(object):
         """
         if not self._trained:
             raise Exception("This model has not been trained yet")
-        q, _ = self._model.predict(x, verbose=verbose)
+        q = self._model.predict(x, verbose=verbose)
         return q.argmax(1)
 
     @staticmethod
