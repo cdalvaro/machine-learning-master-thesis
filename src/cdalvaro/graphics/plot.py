@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-import numpy as np
+import pandas as pd
 import seaborn as sns
 
 from .color_palette import color_palette, set_color_palette
@@ -34,7 +34,13 @@ class Plot:
         if ylim is not None:
             ax.set_ylim(ylim)
 
-        g = sns.scatterplot(data=df_catalogue, x="ra", y="dec", hue=hue, size=hue, palette=color_palette(), ax=ax)
+        g = sns.scatterplot(data=df_catalogue,
+                            x="ra",
+                            y="dec",
+                            hue=hue,
+                            size=hue,
+                            palette=color_palette(n_colors=len(pd.unique(df_catalogue[hue]))),
+                            ax=ax)
         plt.legend().set_title("Diameter (arcmin)")
 
         if self.save_figs:
@@ -67,7 +73,7 @@ class Plot:
                             x="pmra",
                             y="pmdec",
                             hue=hue,
-                            palette=color_palette(),
+                            palette=color_palette(n_colors=len(pd.unique(df_cluster[hue]))),
                             s=12,
                             ax=ax,
                             legend=legend)
@@ -103,7 +109,7 @@ class Plot:
         g = sns.histplot(data=df_cluster,
                          x='parallax',
                          hue=hue,
-                         palette=color_palette(),
+                         palette=color_palette(n_colors=len(pd.unique(df_cluster[hue]))),
                          legend=legend,
                          bins=bins,
                          kde=True,
@@ -140,7 +146,7 @@ class Plot:
                             x="bp_rp",
                             y="phot_g_mean_mag",
                             hue=hue,
-                            palette=color_palette(),
+                            palette=color_palette(n_colors=len(pd.unique(df_cluster[hue]))),
                             size='parallax',
                             sizes=(2, 20),
                             ax=ax,
