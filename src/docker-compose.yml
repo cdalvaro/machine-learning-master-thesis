@@ -14,6 +14,7 @@ services:
       DB_NAME: gaia
       DB_USER: gaia
       DB_PASSWORD: gaia
+      GAIA_PARTITION_SIZE: 200000
     depends_on:
       - db
 
