@@ -1,23 +1,24 @@
+import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
 
 def estimate_n_clusters(x, metric: str = 'euclidean', max_clusters: int = 10, verbose: bool = False) -> int:
     """
-        Estimate the number of clusters based on silhoutte score.
+    Estimate the number of clusters based on silhoutte score.
 
-        Args:
-            x (array-like): Data to be fit for best number of clusters estimation.
-            metric (str, optional): The metric to use when calculating distance between instances in a feature array. Defaults to euclidean.
-            max_clusters (int, optional): The maximum number of clusters to be tested. Defaults to 10.
-            verbose (bool, optional): Show algorithm progress. Defaults to False.
+    Args:
+        x (array-like): Data to be fit for best number of clusters estimation.
+        metric (str, optional): The metric to use when calculating distance between instances in a feature array. Defaults to euclidean.
+        max_clusters (int, optional): The maximum number of clusters to be tested. Defaults to 10.
+        verbose (bool, optional): Show algorithm progress. Defaults to False.
 
-        Raises:
-            ValueError: If the number of clusters cannot be estimated.
+    Raises:
+        ValueError: If the number of clusters cannot be estimated.
 
-        Returns:
-            int: The estimated number of clusters
-        """
+    Returns:
+        int: The estimated number of clusters
+    """
     best_score = -1.0
     best_n_clusters = None
     for n_clusters in range(2, max_clusters + 1):
@@ -37,3 +38,20 @@ def estimate_n_clusters(x, metric: str = 'euclidean', max_clusters: int = 10, ve
         print(f"Best silhouette score is {best_score} for {best_n_clusters} clusters")
 
     return best_n_clusters
+
+
+def filter_outliers(df: pd.DataFrame, q: float = 0.05) -> pd.Series:
+    """
+    Return a mask indicating those entries inside the specified quantile `q`.
+
+    Args:
+        df (DataFrame): Pandas DataFrame to be filtered.
+        q (float): The quantile threshold.
+
+    Returns:
+        pd.Series: A series indicating those entries inside the quantiles.
+    """
+    upper = df.quantile(1.0 - q)
+    lower = df.quantile(q)
+    mask = (df < upper) & (df > lower)
+    return mask
