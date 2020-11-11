@@ -1,6 +1,7 @@
 [![Python][python_badge]][python_link]
 [![keras][keras_badge]][keras_link]
 [![Jupyter][jupyter_badge]][notebooks_link]
+[![Astropy][astropy_badge]][astropy_link]
 
 [![gaia-downloader image][gaia_downloader_badge]][gaia_downlaoder_image]
 [![latex-document][latex_document_badge]][latex_document_workflow]
@@ -93,3 +94,5 @@ The original description of the VizieR service was published in 2000 (A&AS 143, 
 [keras_link]: https://keras.io/api/ "Keras API"
 [jupyter_badge]: https://img.shields.io/badge/Jupyter-Notebook-F37626?style=flat-square&logo=Jupyter
 [notebooks_link]: src/notebooks "Jupyter Notebooks"
+[astropy_badge]: https://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat-square
+[astropy_link]: https://www.astropy.org/
