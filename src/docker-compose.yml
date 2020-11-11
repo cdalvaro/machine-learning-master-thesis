@@ -5,8 +5,8 @@ services:
     image: ghcr.io/cdalvaro/gaia-downloader:latest
     container_name: gaia_downloader
     command: |
-      --cluster ALL --exclude "Platais 8"
-      --extra-size 1.5 --no-update-data
+      --cluster "Melotte 22" --cluster "NGC 2682"
+      --extra-size 1.5 --update-data
       --verbose
     restart: on-failure
     environment:
