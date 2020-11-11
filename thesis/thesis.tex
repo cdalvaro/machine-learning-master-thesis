@@ -2,13 +2,20 @@
 
 \usepackage{unir}
 
+\usepackage{apacite}
 \usepackage{caption}
 \usepackage{eso-pic}
 \usepackage{float}
 \usepackage{graphicx}
-\usepackage{apacite}
 \usepackage{picture}
 \usepackage{subcaption}
+
+\hypersetup{
+  colorlinks = true, % Colors links instead of ugly boxes
+  urlcolor   = azulunir, % Color for external hyperlinks
+  linkcolor  = azulunir, % Color of internal links
+  citecolor  = azulunir, % Color of citations
+}
 
 % Bibliography style
 \bibliographystyle{apacite}
@@ -222,6 +229,8 @@ Thus, the main goal of this project is not the discovery of new open clusters or
 applied to already knonw open clusters, allows us the characterization of those OCs on an unsupervised way, with a reasonable computing
 power and taking into account the same selection of astrometric and photometric variables for every OC.
 
+% TODO: Hablar sobre los algoritmos de clustering que se van a emplear: KMeans, DEC
+
 %% TODO: Concluir con una última sección de resumen de conclusiones, resumiendo las principales averiguaciones del estudio del dominio
 % y cómo van a afectar al desarrollo específico del trabajo.
 
@@ -329,20 +338,91 @@ The database has two main tables, \verb|regions| for storing cluster properties 
 which contains data for all downloaded stars. This second table is partitioned by region, storing all stars related to one cluster inside an independent
 table for faster access.
 
+Methods for retrieving information from the database are available through an instance of \verb|cdalvaro.DB|. This class contains methods
+for recovering stars information for a given region as a Pandas \verb|DataFrame| ready for data analysis.
+
 These containers are orchestrated with a \verb|docker-compose.yml| file which automatilly launches one instance of each container.
 
 The code developed for this work can be found inside the \verb|src| directory at GitHub:
 \href{https://github.com/cdalvaro/machine-learning-master-thesis}{cdalvaro/machine-learning-master-thesis}
 
-% TODO: Hablar de cómo funciona el descargador y cómo está formada la base de datos
-
 \section{Soft Clustering with K-Means}
 
-% TODO: Describir cómo funciona el clustering con KMedias
+Our first approach to find the open cluster inside the interest region is to use the K-Means algorithm.
+
+Since we are looking for a cluster, it seems reasonable to use a clustering algorithm and set it to find two clusters.
+One for the desired OC and another cluster which contains stars that don't belong to the open cluster.
+However, this idea is not right.
+
+This is due to the fact that OC's stars are sourounded by other stars with possibly similar properties. So, setting the number of clusters
+to two is too low to separate them properly.
+
+As shown in Figure \ref{fig:kmeans_comparisons_melotte_22}, bigger values for the number of clusters allow us to isolate more accurately
+the resonance in parallax at $\approx 7.5mas$. However, we have the disadvantage that more groups are formed, while our aim is to find just
+one small cluster and another with the rest of stars. This effect complicates our task of finding the desired OC. Thus, we have to find
+the right value to isolate the searched cluster without creating to many groups.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/kmeans_n2_pm_melotte_22.pdf}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/kmeans_n5_pm_melotte_22.pdf}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/kmeans_n8_pm_melotte_22.pdf}
+    \end{subfigure}
+  \end{subfigure}
+  \medskip
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/kmeans_n2_parallax_melotte_22.pdf}
+      \caption{N clusters = 2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/kmeans_n5_parallax_melotte_22.pdf}
+      \caption{N clusters = 5}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/kmeans_n8_parallax_melotte_22.pdf}
+      \caption{N clusters = 8}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{K-Means comparisons}
+  \label{fig:kmeans_comparisons_melotte_22}
+\end{figure}
+
+To solve this issue, we will try to estimate the best number of clusters by using the \emph{silhouette score}.
+
+The silhouette score is a metric used to determine how good a cluster is based on intra-cluster distances and nearest-cluster distances.
+The best possible value is 1, and the worst is -1. Negative values mean that some samples have been assigned to the wrong cluster.
 
 \section{Deep Embedded Clustering}
 
-% TODO: Describir cómo funciona el clustering usando dec
+Our initial approach allows us to find some groups that potentially contain the OC. However we need now a method to merge clusters
+by migrating stars from one group to another. So we can end up with the minimum number of clusters while preserving the open cluster.
+
+For that purpose we have adapted the Unsupervised Deep Embedding for Clustering Analysis or DEC model \cite{xie2016unsupervised} to our work.
+
+DEC is divided in two stages. In the first one and \emph{deep autoencoder} is pretrained to extract information from data and generate the
+the embedding vectors. In the second stage, a parameter optimization is performed, iterating between computing an auxiliary target distribution
+and minimizing the Kullback-Leiber (KL) divergence \cite{kullback1951information} to it.
+
+This model uses K-Means as the starting point, since it is used to create an initial clustering and then the DEC model is used to refined it.
 
 \section{Results}
 
