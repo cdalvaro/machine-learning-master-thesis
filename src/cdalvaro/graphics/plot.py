@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 import seaborn as sns
 
 from .color_palette import color_palette
@@ -10,7 +11,7 @@ def plot_clusters_catalogue_distribution(data: pd.DataFrame,
                                          xlim: tuple = None,
                                          ylim: tuple = None,
                                          hue: str = 'diam'):
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(12, 6), tight_layout=True)
     if title is not None:
         ax.set_title(title)
 
@@ -23,11 +24,12 @@ def plot_clusters_catalogue_distribution(data: pd.DataFrame,
         ax.set_ylim(ylim)
 
     palette = None
+    hue_order = None
     if hue is not None:
-        n_colors = len(pd.unique(data[hue]))
-        palette = color_palette(n_colors=n_colors)
+        hue_order = np.sort(pd.unique(data[hue]))
+        palette = color_palette(n_colors=len(hue_order))
 
-    g = sns.scatterplot(data=data, x="ra", y="dec", hue=hue, size=hue, palette=palette, ax=ax)
+    g = sns.scatterplot(data=data, x="ra", y="dec", hue=hue, hue_order=hue_order, size=hue, palette=palette, ax=ax)
 
     plt.legend().set_title("Diameter (arcmin)")
 
@@ -40,7 +42,7 @@ def plot_cluster_proper_motion(data: pd.DataFrame,
                                ylim: tuple = None,
                                hue: str = 'cluster_g',
                                legend: bool = True):
-    fig, ax = plt.subplots(figsize=(6, 6))
+    fig, ax = plt.subplots(figsize=(6, 6), tight_layout=True)
     if title is not None:
         ax.set_title(title)
 
@@ -53,16 +55,25 @@ def plot_cluster_proper_motion(data: pd.DataFrame,
         ax.set_ylim(ylim)
 
     palette = None
+    hue_order = None
     if hue is not None:
-        n_colors = len(pd.unique(data[hue]))
-        palette = color_palette(n_colors=n_colors)
+        hue_order = np.sort(pd.unique(data[hue]))
+        palette = color_palette(n_colors=len(hue_order))
 
-    g = sns.scatterplot(data=data, x="pmra", y="pmdec", hue=hue, palette=palette, s=12, ax=ax, legend=legend)
+    g = sns.scatterplot(data=data,
+                        x="pmra",
+                        y="pmdec",
+                        hue=hue,
+                        hue_order=hue_order,
+                        palette=palette,
+                        s=12,
+                        ax=ax,
+                        legend=legend)
 
     return fig, ax, g
 
 
-def plot_cluster_parallax_histogram(df_cluster,
+def plot_cluster_parallax_histogram(data,
                                     title: str = None,
                                     xlim: tuple = None,
                                     ylim: tuple = None,
@@ -83,13 +94,15 @@ def plot_cluster_parallax_histogram(df_cluster,
         ax.set_ylim(ylim)
 
     palette = None
+    hue_order = None
     if hue is not None:
-        n_colors = len(pd.unique(df_cluster[hue]))
-        palette = color_palette(n_colors=n_colors)
+        hue_order = np.sort(pd.unique(data[hue]))
+        palette = color_palette(n_colors=len(hue_order))
 
-    g = sns.histplot(data=df_cluster,
+    g = sns.histplot(data=data,
                      x='parallax',
                      hue=hue,
+                     hue_order=hue_order,
                      palette=palette,
                      legend=legend,
                      bins=bins,
@@ -106,7 +119,7 @@ def plot_cluster_isochrone_curve(data: pd.DataFrame,
                                  ylim: tuple = None,
                                  hue: str = 'cluster_g',
                                  legend: bool = True):
-    fig, ax = plt.subplots(figsize=(6, 6))
+    fig, ax = plt.subplots(figsize=(6, 6), tight_layout=True)
     if title is not None:
         ax.set_title(title)
 
@@ -119,14 +132,16 @@ def plot_cluster_isochrone_curve(data: pd.DataFrame,
         ax.set_ylim(ylim)
 
     palette = None
+    hue_order = None
     if hue is not None:
-        n_colors = len(pd.unique(data[hue]))
-        palette = color_palette(n_colors=n_colors)
+        hue_order = np.sort(pd.unique(data[hue]))
+        palette = color_palette(n_colors=len(hue_order))
 
     g = sns.scatterplot(data=data,
                         x="bp_rp",
                         y="phot_g_mean_mag",
                         hue=hue,
+                        hue_order=hue_order,
                         size='parallax',
                         sizes=(2, 20),
                         palette=palette,
