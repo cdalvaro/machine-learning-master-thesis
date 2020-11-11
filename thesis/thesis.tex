@@ -262,12 +262,14 @@ To achive this goal, the aim will be divided into the following milestones:
 
 In this chapter we address the different steps taken to perform the creation of the unsupervised clustering model for open cluster characterization.
 
-The development has been made with the Python programming language. Other auxiliary tools such as \emph{Docker}, \emph{PostgreSQL}, \emph{Jupyter Notebooks},
-and \emph{Scikit-Learn} and \emph{Keras} frameworks have been used too.
+All code is developed with the Python programming language \cite{Python3}. Other auxiliary tools such as \emph{Docker} \cite{merkel2014docker},
+\emph{PostgreSQL} \cite{postgresql}, \emph{Jupyter Notebooks} \cite{Kluyver2016jupyter}, and \emph{Astropy} \cite{astropy:2013} \cite{astropy:2018},
+\emph{Scikit-Learn} \cite{scikit-learn}, \emph{seaborn} \cite{michael_waskom_2017_883859}, \emph{SQLAlchemy} \cite{sqlalchemy} and
+\emph{Keras} \cite{chollet2015keras} frameworks have been used too.
 
 \section{Data Mining}
 
-As mentioned before, Gaia DR2 is the chosen data source for this work. Thus, the first step is to download the required data from Gaia DB
+As mentioned before, I have chosen the Gaia DR2 database as the data source for this work. Thus, the first step is to download the required data from Gaia DB
 and store it in a custom database for later access.
 
 Due to the large amount of data inside Gaia database, a complete download is not viable neither useful.
@@ -297,9 +299,40 @@ many \emph{null} values:
   \item Number of stars in the selected region above 40,000 stars
 \end{itemize}
 
-There is no upper limit to the number of stars inside a cluster, although for the sake of this work, smaller cluster will be prefered as
-a commitment to the project delivery dates and the available computing power. As an extension of this work, the trained model could be applied to a region
-not covered by this preselection for a later understanding of the results.
+As shown in Figure \ref{fig:OpenClustSelection} this selection stills being a good representation of all clusters in the Milky Way since they are
+equally distributed around the galaxy line.
+
+After this selection, the number of cluster to look up is 169 with nearly 75 million stars.
+
+Since there is no upper limit to the number of stars inside a cluster, for the sake of simplicity and as a commitment to the project delivery dates
+and the available computing power, smaller clusters will be prefered over the greatest ones.
+
+As an extension of this work, the designed model could be applied to a region not covered by this preselection for a later understanding of the results.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\columnwidth]{../figures/cluster_selection_tier1.pdf}
+  \caption{OpenClust Catalogue Selection Distribution}
+  \label{fig:OpenClustSelection}
+\end{figure}
+
+The download process has been performed with two Docker containers: a \emph{downloader} and the \emph{database}.
+
+The first one is a container built from a \verb|python:3.8| image that contains the \verb|cdalvaro| package and the \verb|downloader.py| script.
+This script is prepared to load the OpenClust catalogue, connect to the Gaia DR2 database, download all stars contained inside each cluster
+(with a radius multiplier to increse the area to be downloaded) and save the downloaded data inside the custom database hosted in the second container.
+
+The second container is just a \verb|postgres:12.4| image which loads an initial script when the database is not yet initialized for creating the
+database structure. This container is used later as the main database for data analysis.
+
+The database has two main tables, \verb|regions| for storing cluster properties such as location, diameter and other properties, and \verb|gaiadr2_source|
+which contains data for all downloaded stars. This second table is partitioned by region, storing all stars related to one cluster inside an independent
+table for faster access.
+
+These containers are orchestrated with a \verb|docker-compose.yml| file which automatilly launches one instance of each container.
+
+The code developed for this work can be found inside the \verb|src| directory at GitHub:
+\href{https://github.com/cdalvaro/machine-learning-master-thesis}{cdalvaro/machine-learning-master-thesis}
 
 % TODO: Hablar de cómo funciona el descargador y cómo está formada la base de datos
 
