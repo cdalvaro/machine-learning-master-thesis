@@ -9,8 +9,8 @@
 # Open Clusters Characterization in Gaia DR2 Using ML Algorithms
 
 <div align=center>
-  <a href="https://www.unir.net"><img src="https://github.com/cdalvaro/machine-learning-master-thesis/raw/main/figures/unir-logo.png" alt="UNIR" title="UNIR" hspace="30" height="128px" /></a>
-  <a href="https://sci.esa.int/gaia"><img src="https://github.com/cdalvaro/machine-learning-master-thesis/raw/main/figures/esa-gaia-logo.png" alt="ESA Gaia" title="ESA Gaia" hspace="30" height="128px" /></a>
+  <a href="https://www.unir.net"><img src="https://github.com/cdalvaro/machine-learning-master-thesis/raw/main/figures/unir-logo.png" alt="UNIR" title="UNIR" hspace="30" height="96px" /></a>
+  <a href="https://sci.esa.int/gaia"><img src="https://github.com/cdalvaro/machine-learning-master-thesis/raw/main/figures/esa-gaia-logo.png" alt="ESA Gaia" title="ESA Gaia" hspace="30" height="96px" /></a>
 </div>
 
 Author: [_Álvaro Yunta, Carlos D._][author_profile]
