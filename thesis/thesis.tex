@@ -463,34 +463,6 @@ Since we don't have a labeled dataset which allows as to train a supervised mode
 
 For that purpose we have adapted the Unsupervised Deep Embedding for Clustering Analysis or DEC model \cite{xie2016unsupervised} to our work.
 
-As we can see in Figure \ref{fig:dec_melotte_22}, the DEC model is able to merge similar clusters leaving alone the OC. Which is exactly what we are looking for.
-
-\begin{figure}[htbp]
-  \centering
-  \begin{subfigure}{0.9\textwidth}
-    \centering
-    \begin{subfigure}[t]{0.3\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{../figures/dec_pm_melotte_22.pdf}
-      \caption{Proper motions}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.3\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{../figures/dec_parallax_melotte_22.pdf}
-      \caption{Parallax}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.3\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{../figures/dec_isochrone_melotte_22.pdf}
-      \caption{Isochrone curve}
-    \end{subfigure}
-  \end{subfigure}
-  \caption{DEC model applied to Melotte 22}
-  \label{fig:dec_melotte_22}
-\end{figure}
-
 The implementation of this model is available in \verb|cdalvaro.ml.DEC| and it is developed with the Keras framework.
 
 The model is composed by a \emph{deep autoencoder}, a \emph{deep encoder} and a \emph{clustering layer}.
@@ -521,6 +493,34 @@ Inside \href{https://github.com/cdalvaro/machine-learning-master-thesis/blob/mai
 there is a notebook called
 \href{https://github.com/cdalvaro/machine-learning-master-thesis/blob/main/src/notebooks/cluster_characterization.ipynb}{cluster\_characterization.ipynb}
 that illustrates how DEC model process a region of stars trying to characterize the OC hidden inside that region.
+
+As we can see in Figure \ref{fig:dec_melotte_22}, the DEC model is able to merge similar clusters leaving alone the OC. Which is exactly what we are looking for.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/dec_pm_melotte_22.pdf}
+      \caption{Proper motions}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/dec_parallax_melotte_22.pdf}
+      \caption{Parallax}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/dec_isochrone_melotte_22.pdf}
+      \caption{Isochrone curve}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{DEC model applied to Melotte 22}
+  \label{fig:dec_melotte_22}
+\end{figure}
 
 \section{Results}
 
