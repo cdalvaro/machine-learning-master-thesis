@@ -7,6 +7,7 @@
 \usepackage{eso-pic}
 \usepackage{float}
 \usepackage{graphicx}
+\usepackage{minted}
 \usepackage{picture}
 \usepackage{subcaption}
 
@@ -27,7 +28,7 @@
 %---------------------------
 \title{Open Clusters Characterization in Gaia DR2 Using ML Algorithms}
 \author{Carlos David Álvaro Yunta}
-\date{13 de Septiembre de 2020}
+\date{12th of November, 2020}
 \director{César Augusto Guzmán Álvarez}
 \nombreciudad{Madrid, Spain}
 
@@ -148,18 +149,21 @@ stars belonging to the overdensity field.
 
 \begin{figure}[htbp]
   \centering
-  \begin{subfigure}[t]{0.45\textwidth}
+  \begin{subfigure}{0.9\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../figures/pm_melotte_22.pdf}
-    \caption{Proper motions}
-    \label{fig:pm_melotte_22}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{../figures/parallax_melotte_22.pdf}
-    \caption{Parallax}
-    \label{fig:pm_vec_melotte_22}
+    \begin{subfigure}[t]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/pm_melotte_22.pdf}
+      \caption{Proper motions}
+      \label{fig:pm_melotte_22}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/parallax_melotte_22.pdf}
+      \caption{Parallax}
+      \label{fig:pm_vec_melotte_22}
+    \end{subfigure}
   \end{subfigure}
   \caption{Open Cluster Melotte 22 (M45)}
 \end{figure}
@@ -170,22 +174,26 @@ Figure \ref{fig:pm_vec_melotte_22} shows the parallax density and confirms an ov
 
 However, as shown in Figures \ref{fig:pm_ngc_2682} and \ref{fig:parallax_ngc_2682}, in general it is not as easy and
 becomes necessary to consider other parameters such as distances, or even metallicity and age (derived from isochrone curves)
-and requires photometric data from stars in the studied field.
+and requires photometric data from stars in the studied field
+\footnote{All figures have been sampled in order to reduce the document size, but are still a faithful representation of the original data}.
 
 \begin{figure}[htbp]
   \centering
-  \begin{subfigure}[t]{0.45\textwidth}
+  \begin{subfigure}{0.9\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../figures/pm_ngc_2682.pdf}
-    \caption{Proper motions}
-    \label{fig:pm_ngc_2682}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{../figures/parallax_ngc_2682.pdf}
-    \caption{Parallax}
-    \label{fig:parallax_ngc_2682}
+    \begin{subfigure}[t]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/pm_ngc_2682.pdf}
+      \caption{Proper motions}
+      \label{fig:pm_ngc_2682}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/parallax_ngc_2682.pdf}
+      \caption{Parallax}
+      \label{fig:parallax_ngc_2682}
+    \end{subfigure}
   \end{subfigure}
   \caption{Open Cluster NGC 2682}
 \end{figure}
@@ -229,9 +237,9 @@ Thus, the main goal of this project is not the discovery of new open clusters or
 applied to already knonw open clusters, allows us the characterization of those OCs on an unsupervised way, with a reasonable computing
 power and taking into account the same selection of astrometric and photometric variables for every OC.
 
-% TODO: Hablar sobre los algoritmos de clustering que se van a emplear: KMeans, DEC
+% TODO: Hablar sobre los algoritmos de clustering que se van a emplear: K-Means, DEC
 
-%% TODO: Concluir con una última sección de resumen de conclusiones, resumiendo las principales averiguaciones del estudio del dominio
+% TODO: Concluir con una última sección de resumen de conclusiones, resumiendo las principales averiguaciones del estudio del dominio
 % y cómo van a afectar al desarrollo específico del trabajo.
 
 \chapter{Aims}
@@ -267,6 +275,8 @@ To achive this goal, the aim will be divided into the following milestones:
   \item To validate found OCs by determining their accuracy and precission.
 \end{itemize}
 
+% TODO: Hay que desarrollar más los objetivos
+
 \chapter{Method}
 
 In this chapter we address the different steps taken to perform the creation of the unsupervised clustering model for open cluster characterization.
@@ -291,7 +301,7 @@ when characterizing the cluster.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\columnwidth]{../figures/openclust_catalogue.pdf}
+  \includegraphics[width=0.9\textwidth]{../figures/openclust_catalogue.pdf}
   \caption{OpenClust Catalogue Distribution}
   \label{fig:OpenClustComplete}
 \end{figure}
@@ -320,7 +330,7 @@ As an extension of this work, the designed model could be applied to a region no
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\columnwidth]{../figures/cluster_selection_tier1.pdf}
+  \includegraphics[width=0.9\textwidth]{../figures/cluster_selection_tier1.pdf}
   \caption{OpenClust Catalogue Selection Distribution}
   \label{fig:OpenClustSelection}
 \end{figure}
@@ -331,8 +341,17 @@ The first one is a container built from a \verb|python:3.8| image that contains 
 This script is prepared to load the OpenClust catalogue, connect to the Gaia DR2 database, download all stars contained inside each cluster
 (with a radius multiplier to increse the area to be downloaded) and save the downloaded data inside the custom database hosted in the second container.
 
+Downloader image build instructions are available at \href{https://github.com/cdalvaro/machine-learning-master-thesis/blob/main/src/downloader.Dockerfile}{downloader.Dockerfile}
+and latest image is available for pulling from \href{https://github.blog/2020-09-01-introducing-github-container-registry/}{GitHub Container Registry}:
+
+\begin{minted}{sh}
+  docker pull ghcr.io/cdalvaro/gaia-downloader:latest
+\end{minted}
+
+This image is automatically built with \href{https://github.com/features/actions}{GitHub Actions} on every push to the \verb|main| branch.
+
 The second container is just a \verb|postgres:12.4| image which loads an initial script when the database is not yet initialized for creating the
-database structure. This container is used later as the main database for data analysis.
+database schema. This container is used later as the main database for data analysis.
 
 The database has two main tables, \verb|regions| for storing cluster properties such as location, diameter and other properties, and \verb|gaiadr2_source|
 which contains data for all downloaded stars. This second table is partitioned by region, storing all stars related to one cluster inside an independent
@@ -341,7 +360,8 @@ table for faster access.
 Methods for retrieving information from the database are available through an instance of \verb|cdalvaro.DB|. This class contains methods
 for recovering stars information for a given region as a Pandas \verb|DataFrame| ready for data analysis.
 
-These containers are orchestrated with a \verb|docker-compose.yml| file which automatilly launches one instance of each container.
+These containers are orchestrated with a \href{https://github.com/cdalvaro/machine-learning-master-thesis/blob/main/src/docker-compose.yml}{docker-compose.yml}
+file which automatilly launches one instance of each container.
 
 The code developed for this work can be found inside the \verb|src| directory at GitHub:
 \href{https://github.com/cdalvaro/machine-learning-master-thesis}{cdalvaro/machine-learning-master-thesis}
@@ -402,7 +422,7 @@ the right value to isolate the searched cluster without creating to many groups.
       \caption{N clusters = 8}
     \end{subfigure}
   \end{subfigure}
-  \caption{K-Means comparisons}
+  \caption{K-Means comparisons with Melotte 22}
   \label{fig:kmeans_comparisons_melotte_22}
 \end{figure}
 
@@ -413,23 +433,78 @@ The best possible value is 1, and the worst is -1. Negative values mean that som
 
 \section{Deep Embedded Clustering}
 
-Our initial approach allows us to find some groups that potentially contain the OC. However we need now a method to merge clusters
+Our initial approach allows us to find some groups that potentially contain the desired OC. However we need now a method for merging clusters
 by migrating stars from one group to another. So we can end up with the minimum number of clusters while preserving the open cluster.
+
+Since we don't have a labeled dataset which allows as to train a supervised model, we are required to use an unsupervised self-trained model.
 
 For that purpose we have adapted the Unsupervised Deep Embedding for Clustering Analysis or DEC model \cite{xie2016unsupervised} to our work.
 
-DEC is divided in two stages. In the first one and \emph{deep autoencoder} is pretrained to extract information from data and generate the
-the embedding vectors. In the second stage, a parameter optimization is performed, iterating between computing an auxiliary target distribution
-and minimizing the Kullback-Leiber (KL) divergence \cite{kullback1951information} to it.
+As we can see in Figure \ref{fig:dec_melotte_22}, the DEC model is able to merge similar clusters leaving alone the OC. Which is exactly what we are looking for.
 
-This model uses K-Means as the starting point, since it is used to create an initial clustering and then the DEC model is used to refined it.
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/dec_pm_melotte_22.pdf}
+      \caption{Proper motions}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/dec_parallax_melotte_22.pdf}
+      \caption{Parallax}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/dec_isochrone_melotte_22.pdf}
+      \caption{Isochrone curve}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{DEC model applied to Melotte 22}
+  \label{fig:dec_melotte_22}
+\end{figure}
+
+The implementation of this model is available in \verb|cdalvaro.ml.DEC| and it is developed with the Keras framework.
+
+The model is composed by a \emph{deep autoencoder}, a \emph{deep encoder} and a \emph{clustering layer}.
+
+Encoders are used to transform the input data into a latent space using a non-linear mapping function $f_{\theta} : X \rightarrow Z$.
+
+Although in this work we are managing a small number of features, this latent space allows us to reduce the number of features, avoiding
+this way the \emph{"curse of dimensionality"} \cite{bellman1961curse}.
+
+These encoders are pretrained before fitting the model to generate predictions. Then, the encoder is used to transform input data to the
+latent space $Z$. Once the data has been transformed, a K-Means clusterer is used to make an initial clustering of the data.
+
+With that initial configuration, the model iterates alternating between computing an auxiliary target distribution (Soft Assignment)
+and minimizing the Kullback-Leiber (KL) divergence \cite{kullback1951information} to it. This unsupervised algorithm allows us to improve
+the clustering.
+
+In the soft assignment stage, the \emph{Student's t-distribution} is used as a kernel to measure the similarity between the embedded points
+and the cluster centroid. While in the KL divergence minimization the algorithm iteratively refines clusters by learning from their high
+confidence assignments with the help of an auxiliary target distribution. The model is trained by matching the soft assignment to the target
+distribution. The choice of this target distribution is crucial for DEC's performance. In this work we have taken the target distribution
+from DEC's original paper \cite{xie2016unsupervised}, which is defined as follows:
+
+\begin{equation}
+  p_{ij} = \frac{q^{2}_{ij} / f_{j}}{\sum_{j'}q^{2}_{ij'}/f_{j'}}
+\end{equation}
+
+Inside \href{https://github.com/cdalvaro/machine-learning-master-thesis/blob/main/src/notebooks}{src/notebooks},
+there is a notebook called
+\href{https://github.com/cdalvaro/machine-learning-master-thesis/blob/main/src/notebooks/cluster_characterization.ipynb}{cluster\_characterization.ipynb}
+that illustrates how DEC model process a region of stars trying to characterize the OC hidden inside that region.
 
 \section{Results}
 
-%% TODO: Las tecnologías empleadas para el desarrollo de las herramientas,
+% TODO: Las tecnologías empleadas para el desarrollo de las herramientas,
 % la organización del piloto, cómo ha transcurrido el experimento
 
-%% TODO: Añadir nuevo capítulo - Descripción de los resultados
+% TODO: Añadir nuevo capítulo - Descripción de los resultados
 
 % Aquí se detallan los resultados obtenidos, con tablas de resumen, gráficas de resultados, identificación de datos relevantes, etc.
 % Es una exposición objetiva, sin valorar los resultados ni justificarlos.
