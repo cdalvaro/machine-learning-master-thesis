@@ -1,6 +1,7 @@
 [![Python][python_badge]][python_link]
 [![keras][keras_badge]][keras_link]
 [![Jupyter][jupyter_badge]][notebooks_link]
+[![Astropy][astropy_badge]][astropy_link]
 
 [![gaia-downloader image][gaia_downloader_badge]][gaia_downlaoder_image]
 [![latex-document][latex_document_badge]][latex_document_workflow]
@@ -8,8 +9,8 @@
 # Open Clusters Characterization in Gaia DR2 Using ML Algorithms
 
 <div align=center>
-  <a href="https://www.unir.net"><img src="https://github.com/cdalvaro/machine-learning-master-thesis/raw/main/figures/unir-logo.png" alt="UNIR" title="UNIR" hspace="30" height="128px" /></a>
-  <a href="https://sci.esa.int/gaia"><img src="https://github.com/cdalvaro/machine-learning-master-thesis/raw/main/figures/esa-gaia-logo.png" alt="ESA Gaia" title="ESA Gaia" hspace="30" height="128px" /></a>
+  <a href="https://www.unir.net"><img src="https://github.com/cdalvaro/machine-learning-master-thesis/raw/main/figures/unir-logo.png" alt="UNIR" title="UNIR" hspace="30" height="96px" /></a>
+  <a href="https://sci.esa.int/gaia"><img src="https://github.com/cdalvaro/machine-learning-master-thesis/raw/main/figures/esa-gaia-logo.png" alt="ESA Gaia" title="ESA Gaia" hspace="30" height="96px" /></a>
 </div>
 
 Author: [_Álvaro Yunta, Carlos D._][author_profile]
@@ -93,3 +94,5 @@ The original description of the VizieR service was published in 2000 (A&AS 143, 
 [keras_link]: https://keras.io/api/ "Keras API"
 [jupyter_badge]: https://img.shields.io/badge/Jupyter-Notebook-F37626?style=flat-square&logo=Jupyter
 [notebooks_link]: src/notebooks "Jupyter Notebooks"
+[astropy_badge]: https://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat-square
+[astropy_link]: https://www.astropy.org/

@@ -1,3 +1,8 @@
+[![Python][python_badge]][python_link]
+[![keras][keras_badge]][keras_link]
+[![Jupyter][jupyter_badge]][notebooks_link]
+[![Astropy][astropy_badge]][astropy_link]
+
 [![gaia-downloader image][gaia_downloader_badge]][gaia_downlaoder_image]
 [![latex-document][latex_document_badge]][latex_document_workflow]
 
@@ -60,5 +65,13 @@ The following environment variables can be established for tuning the downloader
 [jupyter]: https://jupyter.org
 [gaia_downloader_badge]: https://img.shields.io/github/workflow/status/cdalvaro/machine-learning-master-thesis/gaia-downloader%20image?style=flat-square&label=gaia-downloader&logo=Docker
 [gaia_downlaoder_image]: https://github.com/users/cdalvaro/packages/container/package/gaia-downloader
-[latex_document_badge]: https://img.shields.io/github/workflow/status/cdalvaro/machine-learning-master-thesis/Build%20LaTeX%20document?style=flat-square&label=LaTeX&logo=LaTeX
+[latex_document_badge]: https://img.shields.io/github/workflow/status/cdalvaro/machine-learning-master-thesis/Build%20LaTeX%20document?style=flat-square&label=LaTeX&logo=LaTeX&logoColor=008080
 [latex_document_workflow]: https://github.com/cdalvaro/machine-learning-master-thesis/actions?query=workflow%3A%22Build+LaTeX+document%22
+[python_badge]: https://img.shields.io/badge/Python-3.8-3776AB?style=flat-square&logo=Python
+[python_link]: https://docs.python.org/3.8/contents.html "Python 3.8"
+[keras_badge]: https://img.shields.io/badge/Keras-2.2-D00000?style=flat-square&logo=Keras&logoColor=D00000
+[keras_link]: https://keras.io/api/ "Keras API"
+[jupyter_badge]: https://img.shields.io/badge/Jupyter-Notebook-F37626?style=flat-square&logo=Jupyter
+[notebooks_link]: src/notebooks "Jupyter Notebooks"
+[astropy_badge]: https://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat-square
+[astropy_link]: https://www.astropy.org/
