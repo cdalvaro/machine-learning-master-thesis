@@ -156,6 +156,32 @@ We will take advantage of these properties to validate that the open clusters ob
   \label{fig:examples_of_isochrones}
 \end{figure}
 
+\chapter{Aims}
+
+\section{General}
+
+The main aim of this thesis is to \emph{build an unsupervised clustering model for open cluster characterization}.
+
+We want this model to be \emph{non-supervised non-parameterized} in order to fit a wide range of clusters without
+the need of fine tunning hyperparameters regarding the topology or size of the studied clusters.
+
+\section{Specific}
+
+To achieve the general goal, we'll follow the following milestones:
+
+\begin{itemize}
+  \item Gather information on the \emph{state of the art}.
+  \item Research unsupervised clustering algorithms suitable for grouping stars previously recovered.
+  \item Recover data from Gaia DR2 database. This data will be taken as source for the machine learning model to characterize open clusters
+  by grouping stars into clusters.
+  \item Select and implement unsupervised clustering algorithms from the previous study.
+  \item Use those algorithms with different datasets to find OCs.
+  \item Look for an independent method to characterize OCs in order to make comparisons.
+  \item Validate found OCs with our custom model by making comparisons with the independent method.
+\end{itemize}
+
+% TODO: Hay que desarrollar más los objetivos
+
 \chapter{State of the Art}
 
 An initial approach to find OC is the search of overdensities along the galactic disk. In general, this is the initial point,
@@ -222,15 +248,15 @@ and requires photometric data from stars in the studied field
 At this point, it looks reasonable that the study of each individual cluster requires its own parametrization and technique
 to identify it.
 
-With Gaia DR2, which contains great quality astrometrical and photometric data for a huge number of stars,
+With Gaia DR2, which contains great quality astrometric and photometric data for a huge number of stars,
 a new opportunity to simplify and optimize this processes is presented.
 In this context new approaches are being developed to improve current detection methods and automate the OC characterization.
 This work tries to take the best from \emph{Clusterix 2.0. A Virtual Observatory tool to estimate cluster membership probability}
 \cite{balaguer2020clusterix} and \emph{Hunting for open clusters in Gaia DR2: 582 new open clusters
 in the Galactic disc} \cite{castro2020hunting}, and merge them into a single \emph{machine learning}
-tool capable of finding open clusters eficiently without requiring powerful machines to perform the computations.
+tool capable of finding open clusters efficiently without requiring powerful machines to perform the computations.
 
-The first one is a non-parametrized method. It determines empirically the frequency functions asociated to astrometrical variables
+The first one is a non-parametrized method. It determines empirically the frequency functions associated to astrometrical variables
 without making any assumption about their profiles. However, it heavily does depend on the initial field selection and other
 parameters related to frequency functions. \emph{Clusterix 2.0.} is a web app tool inside the Spanish Virtual Observatory
 (VO) framework and works together with other VO tool such as:
@@ -247,7 +273,7 @@ Before this approach was put into practice there were 1200 OCs known. Now, this 
 available at the Vizier catalogue \cite{ochsenbein2000vizier}.
 
 The method developed in this project takes as base the approach made by \citeauthor{castro2020hunting} but rapidly diverges.
-In first place, performance has been taken into account since the begining, trying to get a reliable method without compromising the
+In first place, performance has been taken into account since the beginning, trying to get a reliable method without compromising the
 needs of supercomputers.
 To achieve this, instead of blindly analyzing the whole galactic disk a fields selection is made focusing in those regions with known OCs.
 Then, these fields are analyzed with an homogeneous methodology based on machine learning algorithms using as sources astrometric and
@@ -255,50 +281,13 @@ photometric variables. The goal is the characterization of each individual star 
 or not.
 
 Thus, the main goal of this project is not the discovery of new open clusters or even candidates, but the development of a model that,
-applied to already knonw open clusters, allows us the characterization of those OCs on an unsupervised way, with a reasonable computing
+applied to already known open clusters, allows us the characterization of those OCs on an unsupervised way, with a reasonable computing
 power and taking into account the same selection of astrometric and photometric variables for every OC.
 
 % TODO: Hablar sobre los algoritmos de clustering que se van a emplear: K-Means, DEC
 
 % TODO: Concluir con una última sección de resumen de conclusiones, resumiendo las principales averiguaciones del estudio del dominio
 % y cómo van a afectar al desarrollo específico del trabajo.
-
-\chapter{Aims}
-
-\section{General}
-
-The main aim of this thesis is to \emph{build an unsupervised clustering model for open cluster characterization}.
-
-We want this model to be \emph{non-supervised non-parameterized} in order to fit a wide range of clusters without
-the need of fine tunning hyperparameters regarding the topology or size of the studied clusters.
-
-To measure the reliability of the resulting model comparisons with other VO tools will be made.
-
-The role for the ANN will be validating cluster members based on dynamincs data.
-
-These are te variables to be considered in this work:
-
-\begin{itemize}
-  \item OCs and stars \emph{right ascension}: $\alpha$ and \emph{declination}: $\delta$
-  \item OCs \emph{estimated sizes}: $r$
-  \item \emph{Proper motion}: $\mu_{\alpha}$, $\mu_{\delta}$ and \emph{parallax}: $\varpi$
-  \item \emph{Associated errors} will be taken into account to estimate prediction errors
-\end{itemize}
-
-\section{Specific}
-
-To achive this goal, the aim will be divided into the following milestones:
-
-\begin{itemize}
-  \item To recover data from Gaia DR2 database. This data will be taken as source for the machine learning model to characterize open clusters
-  by grouping stars into clusters.
-  \item To research unsupervised clustering algorithms suitable for grouping stars previously recovered.
-  \item To select and implement unsupervised clustering algorithms from the previous study.
-  \item To apply implemented tools to different datasets from first point to find OCs.
-  \item To validate found OCs by determining their accuracy and precission.
-\end{itemize}
-
-% TODO: Hay que desarrollar más los objetivos
 
 \chapter{Method}
 
@@ -309,13 +298,23 @@ All code is developed with the Python programming language \cite{Python3}. Other
 \emph{Scikit-Learn} \cite{scikit-learn}, \emph{seaborn} \cite{michael_waskom_2017_883859}, \emph{SQLAlchemy} \cite{sqlalchemy} and
 \emph{Keras} \cite{chollet2015keras} frameworks have been used too.
 
+As mentioned before, we want to characterize clusters looking at their dynamics properties.
+So, these are the main features we will take into account for clustering:
+
+\begin{itemize}
+  \item OCs and stars \emph{right ascension}: $\alpha$ and \emph{declination}: $\delta$
+  \item OCs \emph{estimated sizes}: $r$
+  \item \emph{Proper motion}: $\mu_{\alpha}$, $\mu_{\delta}$ and \emph{parallax}: $\varpi$
+  \item \emph{Associated errors} will be taken into account to estimate prediction errors
+\end{itemize}
+
 \section{Data Mining}
 
 As mentioned before, I have chosen the Gaia DR2 database as the data source for this work. Thus, the first step is to download the required data from Gaia DB
 and store it in a custom database for later access.
 
 Due to the large amount of data inside Gaia database, a complete download is not viable neither useful.
-In order to squize the size of the dataset to be downloaded, the OpenClust catalogue \cite{dias2002new} (Figure \ref{fig:OpenClustComplete})
+In order to reduce the size of the dataset to be downloaded, the OpenClust catalogue \cite{dias2002new} (Figure \ref{fig:OpenClustComplete})
 has been used to make a preselection of sky regions.
 
 This download is not limited to the size registered in the catalogue. Instead, a wider region is downloaded for each cluster to include
@@ -330,7 +329,7 @@ when characterizing the cluster.
 \end{figure}
 
 The downloaded dataset covers nearly 114 million stars (42GB of compressed data), that is significantly smaller than the whole Gaia DR2 dataset, which contains
-information for around 1,600 million stars, but stils being too large.
+information for approximately 1,600 million stars, but it is still being too large.
 
 Since not all the downloaded clusters are good enough, the following filters are applied to discard some clusters which don't have enough stars or contain too
 many \emph{null} values:
@@ -347,7 +346,7 @@ equally distributed around the galaxy line.
 After this selection, the number of cluster to look up is 169 with nearly 75 million stars.
 
 Since there is no upper limit to the number of stars inside a cluster, for the sake of simplicity and as a commitment to the project delivery dates
-and the available computing power, smaller clusters will be prefered over the greatest ones.
+and the available computing power, smaller clusters will be preferred over the greatest ones.
 
 As an extension of this work, the designed model could be applied to a region not covered by this preselection for a later understanding of the results.
 
@@ -362,7 +361,7 @@ The download process has been performed with two Docker containers: a \emph{down
 
 The first one is a container built from a \verb|python:3.8| image that contains the \verb|cdalvaro| package and the \verb|downloader.py| script.
 This script is prepared to load the OpenClust catalogue, connect to the Gaia DR2 database, download all stars contained inside each cluster
-(with a radius multiplier to increse the area to be downloaded) and save the downloaded data inside the custom database hosted in the second container.
+(with a radius multiplier to increase the area to be downloaded) and save the downloaded data inside the custom database hosted in the second container.
 
 Downloader image build instructions are available at \href{https://github.com/cdalvaro/machine-learning-master-thesis/blob/main/src/downloader.Dockerfile}{downloader.Dockerfile}
 and latest image is available for pulling from \href{https://github.blog/2020-09-01-introducing-github-container-registry/}{GitHub Container Registry}:
@@ -384,7 +383,7 @@ Methods for retrieving information from the database are available through an in
 for recovering stars information for a given region as a Pandas \verb|DataFrame| ready for data analysis.
 
 These containers are orchestrated with a \href{https://github.com/cdalvaro/machine-learning-master-thesis/blob/main/src/docker-compose.yml}{docker-compose.yml}
-file which automatilly launches one instance of each container.
+file which automatically launches one instance of each container.
 
 The code developed for this work can be found inside the \verb|src| directory at GitHub:
 \href{https://github.com/cdalvaro/machine-learning-master-thesis}{cdalvaro/machine-learning-master-thesis}
@@ -397,7 +396,7 @@ Since we are looking for a cluster, it seems reasonable to use a clustering algo
 One for the desired OC and another cluster which contains stars that don't belong to the open cluster.
 However, this idea is not right.
 
-This is due to the fact that OC's stars are sourounded by other stars with possibly similar properties. So, setting the number of clusters
+This is due to the fact that OC's stars are surrounded by other stars with possibly similar properties. So, setting the number of clusters
 to two is too low to separate them properly.
 
 As shown in Figure \ref{fig:kmeans_comparisons_melotte_22}, bigger values for the number of clusters allow us to isolate more accurately
@@ -492,7 +491,7 @@ from DEC's original paper \cite{xie2016unsupervised}, which is defined as follow
 Inside \href{https://github.com/cdalvaro/machine-learning-master-thesis/blob/main/src/notebooks}{src/notebooks},
 there is a notebook called
 \href{https://github.com/cdalvaro/machine-learning-master-thesis/blob/main/src/notebooks/cluster_characterization.ipynb}{cluster\_characterization.ipynb}
-that illustrates how DEC model process a region of stars trying to characterize the OC hidden inside that region.
+that illustrates how DEC model processes a region of stars trying to characterize the OC hidden inside that region.
 
 As we can see in Figure \ref{fig:dec_melotte_22}, the DEC model is able to merge similar clusters leaving alone the OC. Which is exactly what we are looking for.
 
@@ -522,7 +521,7 @@ As we can see in Figure \ref{fig:dec_melotte_22}, the DEC model is able to merge
   \label{fig:dec_melotte_22}
 \end{figure}
 
-\section{Results}
+\chapter{Results}
 
 % TODO: Las tecnologías empleadas para el desarrollo de las herramientas,
 % la organización del piloto, cómo ha transcurrido el experimento
@@ -532,7 +531,7 @@ As we can see in Figure \ref{fig:dec_melotte_22}, the DEC model is able to merge
 % Aquí se detallan los resultados obtenidos, con tablas de resumen, gráficas de resultados, identificación de datos relevantes, etc.
 % Es una exposición objetiva, sin valorar los resultados ni justificarlos.
 
-\chapter{Discussion}
+\section{Discussion}
 
 % Se aporta la discusión de los resultados presentados en el capítulo anterior. En este capítulo se puede discutir la relevancia de
 % los resultados, presentar posibles explicaciones apra los datos anómalos y resaltar aquellos datos que sean parcitualarmente relevantes
