@@ -13,9 +13,11 @@
   <a href="https://sci.esa.int/gaia"><img src="https://github.com/cdalvaro/machine-learning-master-thesis/raw/main/figures/esa-gaia-logo.png" alt="ESA Gaia" title="ESA Gaia" hspace="30" height="96px" /></a>
 </div>
 
-Author: [_Álvaro Yunta, Carlos D._][author_profile]
+<br/>
 
-Supervisor: [_Guzmán Álvarez, César A._][supervisor_profile]
+Author: [_Álvaro Yunta, Carlos D._][author_profile] ([@cdalvaro](https://github.com/cdalvaro))
+
+Supervisor: [_Guzmán Álvarez, César A._][supervisor_profile] ([@cguz](https://github.com/cguz))
 
 ## Table of Contents
 
