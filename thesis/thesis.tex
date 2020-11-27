@@ -428,33 +428,52 @@ These containers are orchestrated with a \verb|docker-compose.yml| file which au
 The developed code for this work can be found inside the \verb|src| directory at GitHub:
 \href{https://github.com/cdalvaro/machine-learning-master-thesis}{cdalvaro/machine-learning-master-thesis} repository.
 
-\section{Soft Clustering with K-Means}
+\section{Feature Selection}
 
-% TODO: Hablar sobre la selección de variables
+As mentioned before, we want our model to characterize open clusters by looking at their dynamics properties.
 
-Our first approach to find the open cluster inside the interest region is to use the K-Means algorithm.
+Also, we want to maintain as simple as possible our clustering model in order to avoid requiring too much computing resources.
 
-As mentioned before, we want to characterize clusters by looking at their dynamics properties.
-So, these are the main features we will take into account for clustering:
+Proper motion in right ascension and declination seems like a natural choice since, as we know, stars belonging to the same OC share a common motion vector.
+
+Parallax is another important feature. It lets us know how far stars are from us. And, since all stars within an open cluster were born from the same dust cloud,
+they must all have similar parallax.
+
+However, we are not going to use these raw features. Instead, we are taken a combination of them.
+
+First, we correct proper motion in right ascension and declination by dividing them by the parallax. That way we normalize these quantities and help our clustering
+models to improve their performance.
+
+Another computed property that we are considering is the modulus of the proper motion. That way, we relate both features and therefore force our model to keep them tight.
+
+So, as summary, these are the features we are going to use as sources for our clustering models:
 
 \begin{itemize}
-  \item OCs and stars \emph{right ascension}: $\alpha$ and \emph{declination}: $\delta$
-  \item OCs \emph{estimated sizes}: $r$
-  \item \emph{Proper motion}: $\mu_{\alpha}$, $\mu_{\delta}$ and \emph{parallax}: $\varpi$
-  \item \emph{Associated errors} will be taken into account to discard data with excessive uncertainty
+  \item \emph{Proper motion in right ascension}: $\mu_{\alpha}$
+  \item \emph{Proper motion in declination}: $\mu_{\delta}$
+  \item \emph{Parallax}: $\varpi$
 \end{itemize}
 
-Since we are looking for a cluster, it seems reasonable to use a clustering algorithm and set it to find two clusters.
+This feature selection has been refined by iterating over the K-Means clustering process with a fixed number of clusters and varying the feature selection in each case.
+The final selection is the one with best silhouette score. This process is explained in more detail in Appendix \ref{chap:feature_selection}.
+
+\section{Soft Clustering with K-Means}
+
+Once we have found the set of features that best describes our problem, we can begin to search for the OC in the study region.
+
+Our first approach to find the open cluster within the region of interest is to use the K-Means algorithm.
+
+Since we are looking for a single cluster, it seems reasonable to use a clustering algorithm and set it to find two clusters.
 One for the desired OC and another cluster which contains stars that don't belong to the open cluster.
-However, this idea is not right.
+However, this idea is not completely right.
 
 This is due to the fact that OC's stars are surrounded by other stars with possibly similar properties. So, setting the number of clusters
 to two is too low to separate them properly.
 
 As shown in Figure \ref{fig:kmeans_comparisons_melotte_22}, bigger values for the number of clusters allow us to isolate more accurately
 the resonance in parallax at $\approx 7.5mas$. However, we have the disadvantage that more groups are formed, while our aim is to find just
-one small cluster and another with the rest of stars. This effect complicates our task of finding the desired OC. Thus, we have to find
-the right value to isolate the searched cluster without creating to many groups.
+one small cluster and another with the rest of stars. This effect complicates our task of finding the desired OC. Therefore, we have to find
+a way to set the right value for the number of clusters to isolate the searched cluster without creating to many groups.
 
 \begin{figure}[htbp]
   \centering
@@ -613,7 +632,8 @@ As we can see in Figure \ref{fig:dec_melotte_22}, the DEC model is able to merge
 \addcontentsline{toc}{chapter}{Bibliography}
 
 \appendix
-\chapter{Appendix}
+\chapter{Feature Selection}
+\label{chap:feature_selection}
 
 %\includepdf[pages=-]{anexo.pdf} # TODO: Descomentar cuando el artículo esté hecho
 \end{document}
