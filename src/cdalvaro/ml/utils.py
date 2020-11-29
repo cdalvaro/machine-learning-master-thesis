@@ -43,7 +43,7 @@ def estimate_n_clusters(x,
         raise ValueError("Unable to estimate the number of clusters to be used")
 
     if verbose:
-        print(f"Best silhouette score is {best_score} for {best_n_clusters} clusters")
+        print(f"Best silhouette score is {best_score:.4f} for {best_n_clusters} clusters")
 
     return best_n_clusters, best_kmeans
 

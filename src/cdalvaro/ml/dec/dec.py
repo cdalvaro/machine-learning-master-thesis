@@ -7,7 +7,6 @@ from typing import List, Union
 
 from .autoencoder import autoencoder, KernelInitializer
 from .clustering_layer import ClusteringLayer
-from ..utils import estimate_n_clusters
 
 
 class DEC(object):
@@ -161,23 +160,22 @@ class DEC(object):
         # DEC - Phase 2: Optimization
         # Reference:
         #     Unsupervised Deep Embedding for Clustering Analysis - 3.1 Clustering with KL divergence
-        loss, index = [0.0], 0
-        index_array = np.arange(x.shape[0])
+        loss, index = 1.0, 0
+        index_array, p = np.arange(x.shape[0]), []
         for it in range(maxiter):
             if it % update_interval == 0:
                 if verbose > 0:
                     print(f"Iteration {it + 1}/{maxiter} - loss: {np.max(loss):.4e}")
                 q = self._model.predict(x, verbose=verbose)
                 p = self._target_distribution(q)
-                y_pred = q.argmax(1)
+                y_pred = np.argmax(q, 1)
 
                 # Stop criteria
-                delta_label = np.sum(y_pred != y_pred_last).astype(np.float32) / y_pred.shape[0]
+                delta_label = np.sum(y_pred != y_pred_last, dtype=np.float32) / y_pred.shape[0]
                 y_pred_last = np.copy(y_pred)
                 if it > 0 and delta_label < tol:
                     if verbose > 0:
-                        print(f"Delta label: {delta_label:.4e} < tolerance: {tol}")
-                        print("Reached tolerance threshold. Stopping training.")
+                        print(f"Reached tolerance threshold: {delta_label:.4e} < {tol}. Stopping training.")
                     break
 
             # Train on batch
@@ -206,7 +204,7 @@ class DEC(object):
         if not self._trained:
             raise Exception("This model has not been trained yet")
         q = self._model.predict(x, verbose=verbose)
-        return q.argmax(1)
+        return np.argmax(q, 1)
 
     @staticmethod
     def _target_distribution(q: np.ndarray) -> np.ndarray:

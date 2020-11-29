@@ -13,9 +13,11 @@
   <a href="https://sci.esa.int/gaia"><img src="https://github.com/cdalvaro/machine-learning-master-thesis/raw/main/figures/esa-gaia-logo.png" alt="ESA Gaia" title="ESA Gaia" hspace="30" height="96px" /></a>
 </div>
 
-Author: [_Álvaro Yunta, Carlos D._][author_profile]
+<br/>
 
-Supervisor: [_Guzmán Álvarez, César A._][supervisor_profile]
+Author: [_Álvaro Yunta, Carlos D._][author_profile] ([@cdalvaro](https://github.com/cdalvaro))
+
+Supervisor: [_Guzmán Álvarez, César A._][supervisor_profile] ([@cguz](https://github.com/cguz))
 
 ## Table of Contents
 
@@ -27,7 +29,16 @@ Supervisor: [_Guzmán Álvarez, César A._][supervisor_profile]
 
 ## Abstract
 
-🚧 This is a work in progress project ...
+The characterization and knowledge of _Open Clusters_ allows us to better understand properties and mechanisms about the Universe
+such as stellar formation and the regions where those events occur. They also provide information about stellar processes and the
+evolution of the galactic disk.
+
+In this work, we develope a method to characterize those clusters by using _artificial intelligence_ tools like clustering
+by _K-Means_, or clustering based on _Artificial Neural Networks_ by implementing the _Deep Embedded Clustering_
+model. We are using _Gaia DR2 database_ as data source for testing our models.
+
+The developed method aims to improve the existing ones both in terms of _computational efficiency_, with lower computational requirements,
+and _ease of use_, by reducing the number of hyperparameters to configure in order to obtain a good characterization of the analyzed clusters.
 
 ## Data
 

@@ -8,6 +8,13 @@ def set_color_palette():
     sns.set_palette(color_palette(as_cmap=False))
 
 
-def color_palette(as_cmap: bool = False, **kwargs):
-    # https://medium.com/@morganjonesartist/color-guide-to-seaborn-palettes-da849406d44f
-    return sns.color_palette('BrBG_r', as_cmap=as_cmap, **kwargs)
+def color_palette(reverse: bool = False, **kwargs):
+    # http://seaborn.pydata.org/tutorial/color_palettes.html
+    if 'as_cmap' not in kwargs:
+        kwargs['as_cmap'] = False
+
+    palette_name = 'rocket'
+    if reverse:
+        palette_name += '_r'
+
+    return sns.color_palette(palette_name, **kwargs)
