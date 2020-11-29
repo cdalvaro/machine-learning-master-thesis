@@ -358,7 +358,7 @@ However, although this second cluster is almost isolated, there are stars that d
 
 Figure \ref{fig:raw_parallax_hr_diagram_mellote_22} shows the parallax histogram and the H-R diagram for this cluster, respectively.
 
-The first one shows a resonance at $\approx 7.5mas$ belonging the OC. While the second figure would help us to look for isochrone curves and so,
+The figure on the left shows a resonance at $\approx 7.5mas$ belonging the OC. While the figure on the right would help us to look for isochrone curves and so,
 to determine the age of these stars.
 
 \section{Data Mining}
@@ -450,6 +450,7 @@ The developed code for this work can be found inside the \verb|src| directory at
 \href{https://github.com/cdalvaro/machine-learning-master-thesis}{cdalvaro/machine-learning-master-thesis} repository.
 
 \section{Feature Selection}
+\label{sec:feature_selection}
 
 As mentioned before, we want our model to characterize open clusters by looking at their dynamics properties.
 
@@ -467,34 +468,42 @@ models to improve their performance.
 
 Another computed property that we are considering is the modulus of the proper motion. That way, we relate both features and therefore force our model to keep them tight.
 
-So, as summary, these are the features we are going to use as sources for our clustering models:
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{../figures/features_melotte_22.pdf}
+  \end{subfigure}
+  \caption{Feature pairplot}
+  \label{fig:features_melotte_22}
+\end{figure}
+
+So, in summary, these are the features we are going to use as sources for our clustering models:
 
 \begin{itemize}
-  \item \emph{Proper motion in right ascension}: $\mu_{\alpha}$
-  \item \emph{Proper motion in declination}: $\mu_{\delta}$
+  \item \emph{Proper motion in right ascension} (corrected by parallax): $\mu_{\alpha}$
+  \item \emph{Proper motion in declination} (corrected by parallax): $\mu_{\delta}$
   \item \emph{Parallax}: $\varpi$
+  \item \emph{Proper motion modulus}: $\left\| \vec{\mu} \right\|$
 \end{itemize}
 
 This feature selection has been refined by iterating over the K-Means clustering process with a fixed number of clusters and varying the feature selection in each case.
-The final selection is the one with best silhouette score. This process is explained in more detail in Appendix \ref{chap:feature_selection}.
+The final selection is the one with best \emph{silhouette score} \cite{rousseeuw1987silhouettes}.
+
+The silhouette score is a metric used to determine how good a cluster is based on intra-cluster distances and nearest-cluster distances.
+The best possible value is 1, and the worst is -1. Negative values mean that some samples have been assigned to the wrong cluster.
+
+This process is explained in more detail in Appendix \ref{chap:feature_selection}.
 
 \section{Soft Clustering with K-Means}
 
-Once we have found the set of features that best describes our problem, we can begin to search for the OC in the study region.
+Once we have found the set of features that best describes our problem, we can begin searching for the OC in the study region.
 
 Our first approach to find the open cluster within the region of interest is to use the K-Means algorithm.
 
 Since we are looking for a single cluster, it seems reasonable to use a clustering algorithm and set it to find two clusters.
-One for the desired OC and another cluster which contains stars that don't belong to the open cluster.
+One for the desired OC and another which contains stars that do not belong to the open cluster.
 However, this idea is not completely right.
-
-This is due to the fact that OC's stars are surrounded by other stars with possibly similar properties. So, setting the number of clusters
-to two is too low to separate them properly.
-
-As shown in Figure \ref{fig:kmeans_comparisons_melotte_22}, bigger values for the number of clusters allow us to isolate more accurately
-the resonance in parallax at $\approx 7.5mas$. However, we have the disadvantage that more groups are formed, while our aim is to find just
-one small cluster and another with the rest of stars. This effect complicates our task of finding the desired OC. Therefore, we have to find
-a way to set the right value for the number of clusters to isolate the searched cluster without creating to many groups.
 
 \begin{figure}[htbp]
   \centering
@@ -540,19 +549,83 @@ a way to set the right value for the number of clusters to isolate the searched 
   \label{fig:kmeans_comparisons_melotte_22}
 \end{figure}
 
-To solve this issue, we will try to estimate the best number of clusters by using the \emph{silhouette score}.
+This is due to the fact that OC's stars are surrounded by other stars with possibly similar properties. So, setting the number of clusters
+to two is too low to separate them properly.
 
-The silhouette score is a metric used to determine how good a cluster is based on intra-cluster distances and nearest-cluster distances.
-The best possible value is 1, and the worst is -1. Negative values mean that some samples have been assigned to the wrong cluster.
+As shown in Figure \ref{fig:kmeans_comparisons_melotte_22}, bigger values for the number of clusters allow us to isolate more accurately
+the resonance in parallax at $\approx 7.5mas$. However, we have the disadvantage that more groups are formed, while our aim is to find just
+one small cluster that contains the stars that belong to the OC and another one with the remaining stars.
 
-\section{Deep Embedded Clustering}
+This effect complicates our task of finding the desired OC. Therefore, we have to find
+a way to set the right value for the number of clusters to isolate the searched cluster without creating too many groups.
 
-Our initial approach allows us to find some groups that potentially contain the desired OC. However we need now a method for merging clusters
-by migrating stars from one group to another. So we can end up with the minimum number of clusters while preserving the open cluster.
+To solve this issue, we will try to estimate the best number of clusters by using one more time the \emph{silhouette score}.
 
-Since we don't have a labeled dataset which allows as to train a supervised model, we are required to use an unsupervised self-trained model.
+The following example can be found in the Jupyter notebook: \verb|cluster_characterization.ipynb| (available at \verb|src/notebooks|).
+It shows how to estimate the best number of clusters for Melotte 22 by using \verb|cdalvaro.ml.estimate_n_clusters| method.
 
-For that purpose we have adapted the Unsupervised Deep Embedding for Clustering Analysis or DEC model \cite{xie2016unsupervised} to our work.
+\begin{minted}{python}
+  n_clusters, kmeans = estimate_n_clusters(melotte22_df, min_clusters=3,
+                                           max_clusters=10, verbose=True)
+
+  # Output
+  # Silhouette score for 3 clusters: 0.5420
+  # Silhouette score for 4 clusters: 0.5393
+  # Silhouette score for 5 clusters: 0.5608
+  # Silhouette score for 6 clusters: 0.5336
+  # Silhouette score for 7 clusters: 0.5306
+  # Silhouette score for 8 clusters: 0.4978
+  # Silhouette score for 9 clusters: 0.5214
+  # Silhouette score for 10 clusters: 0.5199
+  # Best silhouette score is 0.5608 for 5 clusters
+\end{minted}
+
+K-Means does a good job making an initial clustering, as shown in Figure \ref{fig:kmeans_melotte_22}. However, too many clusters arise from this characterization
+and the open cluster is still polluted with stars that do not belong to it. Even more, we would like to reduce the amount of clusters too.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/kmeans_pm_melotte_22.pdf}
+      \caption{Proper Motion}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/kmeans_parallax_melotte_22.pdf}
+      \caption{Parallax}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{K-Means model applied to Melotte 22}
+  \label{fig:kmeans_melotte_22}
+\end{figure}
+
+If we take a look into the H-R diagram (Figure \ref{fig:kmeans_hr_diagram_melotte_22}), we can identify the isochrone curve for Melotte 22 cluster.
+This curve has a good shape, but again, it contains outsider stars. Therefore, we would like to find a better model that improves this initial characterization
+by reducing the amount of clusters and also that would be able to remove outsiders from the OC.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{0.5\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{../figures/kmeans_isochrone_melotte_22.pdf}
+  \end{subfigure}
+  \caption{Melotte 22 H-R diagram with K-Means characterization}
+  \label{fig:kmeans_hr_diagram_melotte_22}
+\end{figure}
+
+\section{Deep Embedded Clustering (DEC)}
+
+Our initial approach allows us to find some groups that potentially contain the desired OC. However, as we have seen, the result is not enough
+accurate. Therefore, we need a method for merging clusters by migrating stars from one group to another,
+so we can end up with the minimum number of clusters while preserving the open cluster.
+
+Since we do not have a labeled dataset which allows us to train a supervised model, we have no choice but to use an unsupervised self-trained model.
+
+For that reason we have adapted the \emph{Unsupervised Deep Embedding for Clustering Analysis} or \emph{DEC} model \cite{xie2016unsupervised} to our work.
 
 The implementation of this model is available in \verb|cdalvaro.ml.DEC| and it is developed with the Keras framework.
 
@@ -560,57 +633,78 @@ The model is composed by a \emph{deep autoencoder}, a \emph{deep encoder} and a 
 
 Encoders are used to transform the input data into a latent space using a non-linear mapping function $f_{\theta} : X \rightarrow Z$.
 
-Although in this work we are managing a small number of features, this latent space allows us to reduce the number of features, avoiding
-this way the \emph{"curse of dimensionality"} \cite{bellman1961curse}.
+Although, as explained in section \ref{sec:feature_selection}, the number of features we are managing is not too large, this latent space allows us to reduce
+the number of features, avoiding this way the \emph{"curse of dimensionality"} \cite{bellman1961curse}.
 
 These encoders are pretrained before fitting the model to generate predictions. Then, the encoder is used to transform input data to the
-latent space $Z$. Once the data has been transformed, a K-Means clusterer is used to make an initial clustering of the data.
+latent space $Z$. Once the data has been transformed, a K-Means clusterer is used to make an initial clustering.
 
 With that initial configuration, the model iterates alternating between computing an auxiliary target distribution (Soft Assignment)
 and minimizing the Kullback-Leiber (KL) divergence \cite{kullback1951information} to it. This unsupervised algorithm allows us to improve
 the clustering.
 
-In the soft assignment stage, the \emph{Student's t-distribution} is used as a kernel to measure the similarity between the embedded points
-and the cluster centroid. While in the KL divergence minimization the algorithm iteratively refines clusters by learning from their high
-confidence assignments with the help of an auxiliary target distribution. The model is trained by matching the soft assignment to the target
-distribution. The choice of this target distribution is crucial for DEC's performance. In this work we have taken the target distribution
-from DEC's original paper \cite{xie2016unsupervised}, which is defined as follows:
-
 \begin{equation}
   p_{ij} = \frac{q^{2}_{ij} / f_{j}}{\sum_{j'}q^{2}_{ij'}/f_{j'}}
+  \label{eq:student_tdistribution}
 \end{equation}
 
-Inside \href{https://github.com/cdalvaro/machine-learning-master-thesis/blob/main/src/notebooks}{src/notebooks},
-there is a notebook called
-\href{https://github.com/cdalvaro/machine-learning-master-thesis/blob/main/src/notebooks/cluster_characterization.ipynb}{cluster\_characterization.ipynb}
-that illustrates how DEC model processes a region of stars trying to characterize the OC hidden inside that region.
+In the soft assignment stage, the \emph{Student's t-distribution} is used as a kernel to measure the similarity
+between the embedded points and the cluster centroid. While in the KL divergence minimization the algorithm iteratively refines clusters by learning
+from their high confidence assignments with the help of an auxiliary target distribution. The model is trained by matching the soft assignment to the
+target distribution. The choice of this target distribution is crucial for DEC's performance. In this work we have taken the target distribution
+from DEC's original paper \cite{xie2016unsupervised}, which is defined in Equation \ref{eq:student_tdistribution}.
 
-As we can see in Figure \ref{fig:dec_melotte_22}, the DEC model is able to merge similar clusters leaving alone the OC. Which is exactly what we are looking for.
+Figure \ref{fig:dec_model_setup} shows the layer setup of our DEC model. It is simpler than the one tested on the original paper \cite{xie2016unsupervised},
+since the number of selected features in our work is smaller. Therefore, using the same configuration would result in a model too
+powerful that would incur in overfitting issues unable to make right predictions.
 
 \begin{figure}[htbp]
   \centering
   \begin{subfigure}{0.9\textwidth}
     \centering
-    \begin{subfigure}[t]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{../figures/dec_diagram.pdf}
+  \end{subfigure}
+  \caption{DEC model layer setup}
+  \label{fig:dec_model_setup}
+\end{figure}
+
+Once the model is ready, we can test it by applying it to the Melotte 22 dataset. Notebook \verb|cluster_characterization.ipynb| illustrates how DEC model
+processes a region of stars trying to characterize the open cluster hidden within that region.
+
+As shown in Figure \ref{fig:dec_melotte_22}, the DEC model is able to move stars from one group to another removing some clusters and improving the OC characterization.
+This is exactly what we are looking for.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.45\textwidth}
       \centering
       \includegraphics[width=\textwidth]{../figures/dec_pm_melotte_22.pdf}
-      \caption{Proper motions}
+      \caption{Proper Motion}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[t]{0.3\textwidth}
+    \begin{subfigure}[t]{0.45\textwidth}
       \centering
       \includegraphics[width=\textwidth]{../figures/dec_parallax_melotte_22.pdf}
       \caption{Parallax}
     \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.3\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{../figures/dec_isochrone_melotte_22.pdf}
-      \caption{Isochrone curve}
-    \end{subfigure}
   \end{subfigure}
   \caption{DEC model applied to Melotte 22}
   \label{fig:dec_melotte_22}
+\end{figure}
+
+The H-R diagram has been improved as well, and the isochrone curve of the open cluster is sharper than the one obtained with the K-Means algorithm
+(Figure \ref{fig:kmeans_hr_diagram_melotte_22}).
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{0.5\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/dec_isochrone_melotte_22.pdf}
+  \end{subfigure}
+  \caption{Melotte 22 H-R diagram with DEC characterization}
+  \label{fig:dec_hr_diagram_melotte_22}
 \end{figure}
 
 \chapter{Results}
