@@ -8,9 +8,9 @@
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{minted}
-\usepackage[nottoc]{tocbibind}
 \usepackage{picture}
 \usepackage{subcaption}
+\usepackage[nottoc]{tocbibind}
 
 \hypersetup{
   colorlinks = true, % Colors links instead of ugly boxes
@@ -132,7 +132,7 @@ The original description of the VizieR service was published in 2000, \cite[A\&A
 
 % Descripción breve de lo que se va a contar en cada uno de los capítulos siguientes.
 
-Stellar open clusters (OC) \cite{janes1982open} are groups of stars gravitationally bound originated from a single molecular gas cloud.
+Stellar open clusters (OCs) \cite{janes1982open} are groups of stars gravitationally bound originated from a single molecular gas cloud.
 Thus they share the same chemical composition and age, and they have similar relative positions and proper motion.
 These astronomical objects are of fundamental importance to understand the spiral structure,
 the dynamics and the chemical evolution of our galaxy.
@@ -146,18 +146,18 @@ Galactic tidal forces and mechanisms that involves the gas loss driven by stella
 \cite{brinkmann2017bound}.
 Nevertheless, a small fraction of these systems will survive in the initial state and persist bound in bigger timescales.
 
-Young OC allow us to research stars formation regions and improve our understanding about the mechanisms that create those stars.
-On the other side, older OC give us information about stellar processes and how the galactic disk evolves.
+Young OCs allow us to research stars formation regions and improve our understanding about the mechanisms that create those stars.
+On the other side, older OCs give us information about stellar processes and how the galactic disk evolves.
 Some highly disturbed orbits could also provide evidence of recent merge events and accretion traces from outside the galaxy
 \cite{cantat2016abundances}.
 
-The study of OC has been pushed forward thanks to the huge and precise dataset from the Gaia mission
+The study of OCs has been pushed forward thanks to the huge and precise dataset from the Gaia mission
 \cite{collaboration2016description} Gaia DR2 \cite{gaia2018gaia}, available since 2018.
 This dataset has helped to review already known open clusters and to find new ones.
 
 Stars that belong to a same OC share relative positions, so their parallax value is similar among them. They also share similar values of
-proper motion, both in right ascension and declination. Another property, since these stars were born from the same gas cloud and at the same
-temporary stage, their metallicity must be uniform. However, to take into account this last property, we face the inconvenient that this
+proper motion, both in right ascension and declination. Another property is that their metallicity must be uniform, since these stars were
+born from the same gas cloud and at the same temporary stage. However, to take into account this last property, we face the inconvenient that this
 parameter is not directly available in Gaia DR2 database. We will avoid this issue by looking at $E(b-r) / G_{mag}$ diagrams with well
 defined isochrone curves \cite{bressan2012parsec}. These isochrone curves are derived from theoretical models that mainly involve metallicity
 and mass/brightness from stars. With these models we can define important properties for the development of stars and their evolution in the
@@ -166,12 +166,12 @@ Hertzsprung–Russell (H-R) diagram. Examples of these curves are shown in Figur
 Again, since these stars were born close in time, regarding their intrinsic properties (mass/brightness), these stars must present a very
 well defined and sharp profile with low sparsing through the main sequence in the H-R diagram.
 
-We will take advantage of these properties to validate that the open clusters obtained are right.
+We will take advantage of these properties to validate our OCs characterization.
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{../figures/theoretical_isochrones_in_hr_diagrams.pdf}
-  \caption{Examples of theoretical isochrones in the HR diagram taken from \protect\citeA[p.~16]{bressan2012parsec}}
+  \caption{Examples of theoretical isochrones in the H-R diagram taken from \protect\citeA[p.~16]{bressan2012parsec}}
   \label{fig:examples_of_isochrones}
 \end{figure}
 
@@ -199,8 +199,6 @@ To achieve the general goal, we will follow the following milestones:
   \item Validate found OCs with our custom model by making comparisons with the independent method.
 \end{itemize}
 
-% TODO: Hay que desarrollar más los objetivos
-
 \chapter{State of the Art}
 
 % TODO: Hablar de la misión Gaia
@@ -223,19 +221,19 @@ stars belonging to the overdensity field.
     \centering
     \begin{subfigure}[t]{0.45\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{../figures/pm_melotte_22.pdf}
+      \includegraphics[width=\textwidth]{../figures/melotte_22/pm_melotte_22.pdf}
       \caption{Proper motions}
       \label{fig:pm_melotte_22}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.45\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{../figures/parallax_melotte_22.pdf}
+      \includegraphics[width=\textwidth]{../figures/melotte_22/parallax_melotte_22.pdf}
       \caption{Parallax}
       \label{fig:pm_vec_melotte_22}
     \end{subfigure}
   \end{subfigure}
-  \caption{Open Cluster Melotte 22 (M45)}
+  \caption{Open Cluster Melotte 22 (Messier 45)}
 \end{figure}
 
 Figure \ref{fig:pm_melotte_22} shows the proper motion distribution in right ascension and declination.
@@ -253,14 +251,14 @@ and requires photometric data from stars in the studied field
     \centering
     \begin{subfigure}[t]{0.45\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{../figures/pm_ngc_6494.pdf}
+      \includegraphics[width=\textwidth]{../figures/ngc_6494/pm_ngc_6494.pdf}
       \caption{Proper motions}
       \label{fig:pm_ngc_6494}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.45\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{../figures/parallax_ngc_6494.pdf}
+      \includegraphics[width=\textwidth]{../figures/ngc_6494/parallax_ngc_6494.pdf}
       \caption{Parallax}
       \label{fig:parallax_ngc_6494}
     \end{subfigure}
@@ -323,7 +321,7 @@ All code has been developed with the Python programming language \cite{Python3}.
   \centering
   \begin{subfigure}{0.5\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../figures/raw_pm_melotte_22.pdf}
+    \includegraphics[width=\textwidth]{../figures/melotte_22/raw_pm_melotte_22.pdf}
   \end{subfigure}
   \caption{Melotte 22 proper motions}
   \label{fig:raw_pm_melotte_22}
@@ -344,12 +342,12 @@ However, although this second cluster is almost isolated, there are stars that d
     \centering
     \begin{subfigure}[t]{0.45\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{../figures/raw_parallax_melotte_22.pdf}
+      \includegraphics[width=\textwidth]{../figures/melotte_22/raw_parallax_melotte_22.pdf}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.45\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{../figures/raw_hr_diagram_melotte_22.pdf}
+      \includegraphics[width=\textwidth]{../figures/melotte_22/raw_hr_diagram_melotte_22.pdf}
     \end{subfigure}
   \end{subfigure}
   \caption{Melotte 22 parallax and H-R diagram}
@@ -472,9 +470,9 @@ Another computed property that we are considering is the modulus of the proper m
   \centering
   \begin{subfigure}{0.9\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../figures/features_melotte_22.pdf}
+    \includegraphics[width=\textwidth]{../figures/melotte_22/features_melotte_22.pdf}
   \end{subfigure}
-  \caption{Feature pairplot}
+  \caption{Melotte 22 feature pairplot}
   \label{fig:features_melotte_22}
 \end{figure}
 
@@ -511,17 +509,17 @@ However, this idea is not completely right.
     \centering
     \begin{subfigure}[t]{0.3\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{../figures/kmeans_n2_pm_melotte_22.pdf}
+      \includegraphics[width=\textwidth]{../figures/kmeans/kmeans_n2_pm_melotte_22.pdf}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.3\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{../figures/kmeans_n5_pm_melotte_22.pdf}
+      \includegraphics[width=\textwidth]{../figures/kmeans/kmeans_n5_pm_melotte_22.pdf}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.3\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{../figures/kmeans_n8_pm_melotte_22.pdf}
+      \includegraphics[width=\textwidth]{../figures/kmeans/kmeans_n8_pm_melotte_22.pdf}
     \end{subfigure}
   \end{subfigure}
   \medskip
@@ -529,19 +527,19 @@ However, this idea is not completely right.
     \centering
     \begin{subfigure}[t]{0.3\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{../figures/kmeans_n2_parallax_melotte_22.pdf}
+      \includegraphics[width=\textwidth]{../figures/kmeans/kmeans_n2_parallax_melotte_22.pdf}
       \caption{N clusters = 2}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.3\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{../figures/kmeans_n5_parallax_melotte_22.pdf}
+      \includegraphics[width=\textwidth]{../figures/kmeans/kmeans_n5_parallax_melotte_22.pdf}
       \caption{N clusters = 5}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.3\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{../figures/kmeans_n8_parallax_melotte_22.pdf}
+      \includegraphics[width=\textwidth]{../figures/kmeans/kmeans_n8_parallax_melotte_22.pdf}
       \caption{N clusters = 8}
     \end{subfigure}
   \end{subfigure}
@@ -589,13 +587,13 @@ and the open cluster is still polluted with stars that do not belong to it. Even
     \centering
     \begin{subfigure}[t]{.45\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{../figures/kmeans_pm_melotte_22.pdf}
+      \includegraphics[width=\textwidth]{../figures/melotte_22/kmeans_pm_melotte_22.pdf}
       \caption{Proper Motion}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{.45\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{../figures/kmeans_parallax_melotte_22.pdf}
+      \includegraphics[width=\textwidth]{../figures/melotte_22/kmeans_parallax_melotte_22.pdf}
       \caption{Parallax}
     \end{subfigure}
   \end{subfigure}
@@ -611,7 +609,7 @@ by reducing the amount of clusters and also that would be able to remove outside
   \centering
   \begin{subfigure}{0.5\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../figures/kmeans_isochrone_melotte_22.pdf}
+    \includegraphics[width=\textwidth]{../figures/melotte_22/kmeans_hr_diagram_melotte_22.pdf}
   \end{subfigure}
   \caption{Melotte 22 H-R diagram with K-Means characterization}
   \label{fig:kmeans_hr_diagram_melotte_22}
@@ -680,13 +678,13 @@ This is exactly what we are looking for.
     \centering
     \begin{subfigure}[t]{0.45\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{../figures/dec_pm_melotte_22.pdf}
+      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_pm_melotte_22.pdf}
       \caption{Proper Motion}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.45\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{../figures/dec_parallax_melotte_22.pdf}
+      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_parallax_melotte_22.pdf}
       \caption{Parallax}
     \end{subfigure}
   \end{subfigure}
@@ -700,8 +698,8 @@ The H-R diagram has been improved as well, and the isochrone curve of the open c
 \begin{figure}[htbp]
   \centering
   \begin{subfigure}{0.5\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{../figures/dec_isochrone_melotte_22.pdf}
+    \centering
+    \includegraphics[width=\textwidth]{../figures/melotte_22/dec_hr_diagram_melotte_22.pdf}
   \end{subfigure}
   \caption{Melotte 22 H-R diagram with DEC characterization}
   \label{fig:dec_hr_diagram_melotte_22}
@@ -709,18 +707,30 @@ The H-R diagram has been improved as well, and the isochrone curve of the open c
 
 \chapter{Results}
 
-% TODO: Las tecnologías empleadas para el desarrollo de las herramientas,
-% la organización del piloto, cómo ha transcurrido el experimento
+We have seen in the previous chapter that the DEC model is able to refine the clustering made by K-Means. This allows us to get
+a more accurate characterization of the cluster.
 
-% TODO: Añadir nuevo capítulo - Descripción de los resultados
+In order to validate our model and be able to say how good or bad it is we need a different method to characterize the cluster
+and compare one against each other.
 
-% Aquí se detallan los resultados obtenidos, con tablas de resumen, gráficas de resultados, identificación de datos relevantes, etc.
+For that reason we have used tools from the Virtual Observatory (VO) such as Clusterix and TOPCAT to characterize the studied clusters.
+
+\section{Cluster Characterization with VO Tools}
+
+
+
+\section{Comparison}
+
+Until now, we have focus our study in Melotte 22 OC. Since our main aim is to get a model that fits well for a wide range of clusters,
+we present now the results obtained for a selection of clusters with different topologies.
+
+% TODO: Exposición de resultados y comentarios
 % Es una exposición objetiva, sin valorar los resultados ni justificarlos.
 
 \section{Discussion}
 
 % Se aporta la discusión de los resultados presentados en el capítulo anterior. En este capítulo se puede discutir la relevancia de
-% los resultados, presentar posibles explicaciones apra los datos anómalos y resaltar aquellos datos que sean parcitualarmente relevantes
+% los resultados, presentar posibles explicaciones para los datos anómalos y resaltar aquellos datos que sean particularmente relevantes
 % para el análisis del experimento.
 
 \chapter{Conclusions and Future Work}
@@ -728,10 +738,10 @@ The H-R diagram has been improved as well, and the isochrone curve of the open c
 \section{Conclusions}
 
 % Resumen final del trabajo y debe servir para informar del alcance y relevancia de la aportación.
-% Suele estructurarse empezando con un resuemn del problema tratado, de cómo se ha abordado y de por qué la solución sería valída.
+% Suele estructurarse empezando con un resumen del problema tratado, de cómo se ha abordado y de por qué la solución sería válida.
 
 % Es recomendable que incluya también un resumen de las contribuciones del trabajo, en el que se relacionen las contribuciones y los
-% resultado obtenidos con ls objetivos panteados para el trabajo, discutiendo hasta qué punto has conseguido resolver los objetivos planteados.
+% resultado obtenidos con ls objetivos planteados para el trabajo, discutiendo hasta qué punto has conseguido resolver los objetivos planteados.
 
 \section{Further Research}
 
