@@ -135,13 +135,13 @@ def plot_cluster_parallax_histogram(data,
     return fig, ax, g
 
 
-def plot_cluster_isochrone_curve(data: pd.DataFrame,
-                                 title: str = None,
-                                 xlim: tuple = None,
-                                 ylim: tuple = None,
-                                 hue: str = 'cluster_g',
-                                 legend: bool = True,
-                                 n_samples: int = N_SAMPLES):
+def plot_cluster_hr_diagram_curve(data: pd.DataFrame,
+                                  title: str = None,
+                                  xlim: tuple = None,
+                                  ylim: tuple = None,
+                                  hue: str = 'cluster_g',
+                                  legend: bool = True,
+                                  n_samples: int = N_SAMPLES):
 
     fig, ax = plt.subplots(figsize=(6, 6), tight_layout=True)
 
@@ -160,9 +160,8 @@ def plot_cluster_isochrone_curve(data: pd.DataFrame,
 
     return fig, ax, g
 
-def pairplot(data: pd.DataFrame,
-             kind: str = 'scatter',
-             n_samples: int = N_SAMPLES):
+
+def pairplot(data: pd.DataFrame, kind: str = 'scatter', n_samples: int = N_SAMPLES):
 
     data = _resample_data(data, n_samples).copy()
     hue = 'cluster_g'
