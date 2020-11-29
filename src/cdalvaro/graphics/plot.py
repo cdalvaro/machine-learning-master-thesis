@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import xlabel
 import pandas as pd
 import numpy as np
 import seaborn as sns
@@ -15,13 +14,15 @@ def _resample_data(data: pd.DataFrame, n_samples: int) -> pd.DataFrame:
     return data
 
 
-def _get_color_properties(data: pd.DataFrame, hue: str) -> dict:
+def _get_color_properties(data: pd.DataFrame, hue: str = None, **kwargs) -> dict:
     properties = dict()
     if hue is not None:
         hue_order = np.sort(pd.unique(data[hue]))
-        palette = color_palette(n_colors=len(hue_order))
+        palette = color_palette(n_colors=len(hue_order), **kwargs)
 
         properties.update({'hue': hue, 'hue_order': hue_order, 'palette': palette})
+    else:
+        properties['palette'] = color_palette(**kwargs)
 
     return properties
 
@@ -159,8 +160,23 @@ def plot_cluster_isochrone_curve(data: pd.DataFrame,
 
     return fig, ax, g
 
+def pairplot(data: pd.DataFrame,
+             kind: str = 'scatter',
+             n_samples: int = N_SAMPLES):
+
+    data = _resample_data(data, n_samples).copy()
+    hue = 'cluster_g'
+    data[hue] = 'g0'
+
+    color_props = _get_color_properties(data, hue=hue)
+
+    g = sns.pairplot(data=data, kind=kind, **color_props)
+    g.legend.remove()
+    g.tight_layout()
+
+    return g
+
 
 def save_figure(fig, name: str, img_ext: str = "pdf", save_dir='./'):
-    if save_dir is not None:
-        name = name.replace(' ', '_').lower()
-        fig.savefig(f"{save_dir}/{name}.{img_ext}")
+    name = name.replace(' ', '_').lower()
+    fig.savefig(f"{save_dir}/{name}.{img_ext}")
