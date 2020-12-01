@@ -1,13 +1,9 @@
-from __future__ import annotations
-
 from astropy.coordinates import SkyCoord
 import astropy.units as u
-import json
 import numpy as np
 import os
 import pandas as pd
 from sqlalchemy import create_engine, MetaData, select, any_
-from sqlalchemy.dialects import postgresql
 from sqlalchemy.dialects.postgresql import insert
 from typing import Dict, List, Set, TypeVar, Union
 
@@ -49,7 +45,7 @@ class DB:
         self.metadata.reflect()
 
     @staticmethod
-    def instance(host: str, port: int) -> DB:
+    def instance(host: str, port: int) -> 'DB':
         """
         Returns a database manager instance pointed to host:port
 
