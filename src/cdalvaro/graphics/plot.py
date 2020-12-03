@@ -1,3 +1,5 @@
+from typing import Dict
+from matplotlib.axes import Axes
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -27,14 +29,16 @@ def _get_color_properties(data: pd.DataFrame, hue: str = None, **kwargs) -> dict
     return properties
 
 
-def _set_axis_properties(ax,
+def _set_axis_properties(ax: Axes,
                          title: str = None,
                          xlabel: str = None,
                          ylabel: str = None,
                          xlim: tuple = None,
                          ylim: tuple = None,
                          invert_xaxis: bool = False,
-                         invert_yaxis: bool = False):
+                         invert_yaxis: bool = False,
+                         yscale: str = None,
+                         xscale: str = None):
 
     if title is not None:
         ax.set_title(title)
@@ -57,6 +61,12 @@ def _set_axis_properties(ax,
     if invert_yaxis:
         ax.invert_yaxis()
 
+    if yscale is not None:
+        ax.set_yscale(yscale)
+
+    if xscale is not None:
+        ax.set_xscale(xscale)
+
 
 def plot_clusters_catalogue_distribution(data: pd.DataFrame,
                                          title: str = None,
@@ -76,6 +86,31 @@ def plot_clusters_catalogue_distribution(data: pd.DataFrame,
                          ylim=ylim)
 
     ax.legend().set_title("Diameter (arcmin)")
+
+    return fig, ax, g
+
+
+def plot_downloaded_data_histogram(data: pd.DataFrame,
+                                   title: str = None,
+                                   hue: str = 'desc',
+                                   legend_labels: Dict = None):
+
+    fig, ax = plt.subplots(figsize=(12, 6), tight_layout=True)
+
+    g = sns.barplot(x='diam', y='value', hue=hue, data=data, palette=color_palette(), ax=ax)
+
+    _set_axis_properties(ax, title=title, xlabel='Diameter (arcmin)', ylabel='', yscale='log')
+
+    if legend_labels is not None:
+        handles_labels = ax.get_legend_handles_labels()
+        labels = list()
+        for label in handles_labels[1]:
+            if label in legend_labels.keys():
+                labels.append(legend_labels[label])
+            else:
+                labels.append(label)
+
+        _ = ax.legend(handles=handles_labels[0], labels=labels)
 
     return fig, ax, g
 
@@ -176,6 +211,7 @@ def pairplot(data: pd.DataFrame, kind: str = 'scatter', n_samples: int = N_SAMPL
     return g
 
 
-def save_figure(fig, name: str, img_ext: str = "pdf", save_dir='./'):
+def save_figure(fig, name: str, format: str = "pdf", save_dir='./', **kwargs):
     name = name.replace(' ', '_').lower()
-    fig.savefig(f"{save_dir}/{name}.{img_ext}")
+    kwargs['format'] = format
+    fig.savefig(f"{save_dir}/{name}.{format}", **kwargs)
