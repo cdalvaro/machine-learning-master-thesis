@@ -155,18 +155,16 @@ The study of OCs has been pushed forward thanks to the huge and precise dataset 
 \cite{collaboration2016description} Gaia DR2 \cite{gaia2018gaia}, available since 2018.
 This dataset has helped to review already known open clusters and to find new ones.
 
-Stars that belong to a same OC share relative positions, so their parallax value is similar among them. They also share similar values of
-proper motion, both in right ascension and declination. Another property is that their metallicity must be uniform, since these stars were
-born from the same gas cloud and at the same temporary stage. However, to take into account this last property, we face the inconvenient that this
-parameter is not directly available in Gaia DR2 database. We will avoid this issue by looking at $E(b-r) / G_{mag}$ diagrams with well
-defined isochrone curves \cite{bressan2012parsec}. These isochrone curves are derived from theoretical models that mainly involve metallicity
-and mass/brightness from stars. With these models we can define important properties for the development of stars and their evolution in the
-Hertzsprung–Russell (H-R) diagram. Examples of these curves are shown in Figure \ref{fig:examples_of_isochrones}.
+Stars that belong to a same OC share relative positions, inherited from their original gas cloud.
+So their distance from the Earth is similar for all of them and, therefore, they have a narrow dispersion in their parallax value.
+They also share similar values of proper motion, both in right ascension and declination. Another property they share is their chemical composition.
+Thus, their metallicity must be uniform, since these stars were born from the same gas cloud and at the same time stage.
+However, to take this last property into account, we are faced with the drawback that this parameter is poorly reported in Gaia DR2 database.
 
-Again, since these stars were born close in time, regarding their intrinsic properties (mass/brightness), these stars must present a very
-well defined and sharp profile with low sparsing through the main sequence in the H-R diagram.
-
-We will take advantage of these properties to validate our OCs characterization.
+We will avoid this issue by looking at $E(b-r) / G_{mag}$ diagrams that reflect their connection with the isochrone curves, typical of their
+temporal evolution \cite{bressan2012parsec}. The isochrones are derived from theoretical models. These models are mainly based on metallicity
+and mass/brightness ratio of stars. They also have a direct correspondence with that presented by the Hertzsprung–Russell (H-R) diagram of the
+stars belonging to the cluster. Examples of these curves are shown in Figure \ref{fig:examples_of_isochrones}.
 
 \begin{figure}[htbp]
   \centering
@@ -174,6 +172,82 @@ We will take advantage of these properties to validate our OCs characterization.
   \caption{Examples of theoretical isochrones in the H-R diagram taken from \protect\citeA[p.~16]{bressan2012parsec}}
   \label{fig:examples_of_isochrones}
 \end{figure}
+
+Since these stars were born close in time, they should have a sharp, well-defined profile with little scattering through the main sequence in the H-R diagram.
+Examples for this kind of diagrams are presented in Figure \ref{fig:examples_of_hr_diagrams}.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/hr_diagram_melotte_22.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_6494/hr_diagram_ngc_6494.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{Examples of typical profiles in H-R diagrams for members of open clusters. On the left Melotte 22, on the right NGC 6494.}
+  \label{fig:examples_of_hr_diagrams}
+\end{figure}
+
+We will take advantage of these properties only to validate our characterization of OCs, but not to determine what stars belong to them. As we will explain later,
+we will only use dynamic properties such as proper motions and parallax to characterize open clusters.
+
+Although the members of a cluster appear in the observation visual field as an overdensity in positions, as shown in Figure \ref{fig:pos_ngc_2682}, these coordinates
+are not useful to separate those stars that belong to the cluster from the other which do not. However, if we look for overdensities in the proper motions configuration space,
+it is possible, at least at first instance, to assume a possible membership delimitation. See Figure \ref{fig:pm_ngc_2682}.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/pos_ngc_2682.png}
+      \caption{Positions map}
+      \label{fig:pos_ngc_2682}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/pm_ngc_2682.png}
+      \caption{Proper motions}
+      \label{fig:pm_ngc_2682}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2682 configuration spaces.}
+\end{figure}
+
+Overdensities in proper motion are not always so evident. Additionally, we will consider the parallax distribution to improve our cluster characterization.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/parallax_zoom_melotte_22.png}
+      \caption{Melotte 22 Parallax}
+      \label{fig:melotte_22_parallax_zoom}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/pm_melotte_22.png}
+      \caption{Melotte 22 Proper motion}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{Melotte 22 Parallax histogram, clearly differentiated around the value $\approx 7.3mas$ and the corresponding diagram from the photometric magnitudes.}
+  \label{fig:melotte_22_pm_parallax}
+\end{figure}
+
+In many other cases things are not so simple, and the characterization process can turn very difficult and tedious using tools such as the available ones at
+the Virtual Observatory (VO), and frequently it requires parametrizations based on prior knowledge about the studied region. The aim of this work is to test
+an unsupervised and non-parametrized model based on Machine Learning (ML) tools.
 
 \chapter{Aims}
 
@@ -356,7 +430,7 @@ However, although this second cluster is almost isolated, there are stars that d
 
 Figure \ref{fig:raw_parallax_hr_diagram_mellote_22} shows the parallax histogram and the H-R diagram for this cluster, respectively.
 
-The figure on the left shows a resonance at $\approx 7.5mas$ belonging the OC. While the figure on the right would help us to look for isochrone curves and so,
+The figure on the left shows a resonance at $\approx 7.3mas$ belonging the OC. While the figure on the right would help us to look for isochrone curves and so,
 to determine the age of these stars.
 
 \section{Data Mining}
@@ -551,7 +625,7 @@ This is due to the fact that OC's stars are surrounded by other stars with possi
 to two is too low to separate them properly.
 
 As shown in Figure \ref{fig:kmeans_comparisons_melotte_22}, bigger values for the number of clusters allow us to isolate more accurately
-the resonance in parallax at $\approx 7.5mas$. However, we have the disadvantage that more groups are formed, while our aim is to find just
+the resonance in parallax at $\approx 7.3mas$. However, we have the disadvantage that more groups are formed, while our aim is to find just
 one small cluster that contains the stars that belong to the OC and another one with the remaining stars.
 
 This effect complicates our task of finding the desired OC. Therefore, we have to find
