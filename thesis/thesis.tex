@@ -4,6 +4,7 @@
 
 \usepackage{apacite}
 \usepackage{caption}
+\usepackage{csquotes}
 \usepackage{eso-pic}
 \usepackage{float}
 \usepackage{graphicx}
@@ -187,10 +188,10 @@ Examples for this kind of diagrams are presented in Figure \ref{fig:examples_of_
     \hfill
     \begin{subfigure}[t]{0.45\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{../figures/ngc_6494/hr_diagram_ngc_6494.png}
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/hr_diagram_ngc_2682.png}
     \end{subfigure}
   \end{subfigure}
-  \caption{Examples of typical profiles in H-R diagrams for members of open clusters. On the left Melotte 22, on the right NGC 6494.}
+  \caption{Examples of typical profiles in H-R diagrams for members of open clusters. On the left Melotte 22, on the right NGC 2682.}
   \label{fig:examples_of_hr_diagrams}
 \end{figure}
 
@@ -237,8 +238,8 @@ Overdensities in proper motion are not always so evident. Additionally, we will 
     \hfill
     \begin{subfigure}[t]{0.45\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{../figures/melotte_22/pm_melotte_22.png}
-      \caption{Melotte 22 Proper motion}
+      \includegraphics[width=\textwidth]{../figures/melotte_22/hr_diagram_melotte_22.png}
+      \caption{Melotte 22 H-R diagram}
     \end{subfigure}
   \end{subfigure}
   \caption{Melotte 22 Parallax histogram, clearly differentiated around the value $\approx 7.3mas$ and the corresponding diagram from the photometric magnitudes.}
@@ -246,7 +247,7 @@ Overdensities in proper motion are not always so evident. Additionally, we will 
 \end{figure}
 
 In many other cases things are not so simple, and the characterization process can turn very difficult and tedious using tools such as the available ones at
-the Virtual Observatory (VO), and frequently it requires parametrizations based on prior knowledge about the studied region. The aim of this work is to test
+the Virtual Observatory (VO), and frequently it requires parametrization based on prior knowledge about the studied region. The aim of this work is to test
 an unsupervised and non-parametrized model based on Machine Learning (ML) tools.
 
 \chapter{Aims}
@@ -275,19 +276,17 @@ To achieve the general goal, we will follow the following milestones:
 
 \chapter{State of the Art}
 
-% TODO: Hablar de la misión Gaia
 % TODO: Hablar de KMedias y DEC
-% TODO: Mencionar trabajos relacionados
 
-An initial approach to find OC is the search of overdensities along the galactic disk. In general, this is the initial point,
-but even it looks simple, it presents a fundamental problem. The near field around the OC is fulled by two differenciated
-kind of stars populations: the ones which belong to the OC (from a tens or hundreds to a few thousand) and a background composed
-by thousands or millions of stars which don't belong to the OC. Find out which stars belong to the first group is the problem
-treated in this work. This selection is crucial to properly characterize the fundamental properties of the cluster
+An initial approach for finding OCs is the search of overdensities along the galactic disk. In general, this is the starting point but,
+although it seems simple, it presents a fundamental problem already discussed. The near field around the OC is filled with two types of
+distinct stars populations: those who belong to the OC (tens or hundreds to a few thousand) and a background made up of thousands or
+millions of stars that are not. Finding out which stars belong to the first group is the problem treated in this work.
+This selection is crucial to properly characterize the fundamental properties of the cluster
 (dynamics, total mass, age, chemical composition, etc.).
 
-Sometimes, this problem is easy to solve by looking into astrometric parameters, such as the analysis of proper motion of those
-stars belonging to the overdensity field.
+Sometimes, the problem is easy to solve, as we have seen, by studying astrometric parameters and looking for overdensities in the proper
+motion configuration space as well as in the parallax space.
 
 \begin{figure}[htbp]
   \centering
@@ -312,12 +311,12 @@ stars belonging to the overdensity field.
 
 Figure \ref{fig:pm_melotte_22} shows the proper motion distribution in right ascension and declination.
 It is easy to see that a subgroup can be located at [20, -45].
-Figure \ref{fig:pm_vec_melotte_22} shows the parallax density and confirms an overdensity at $\approx 7.5 mas$ corresponding to Mellote 22 OC.
+Figure \ref{fig:pm_vec_melotte_22} shows the parallax distribution and confirms an overdensity at
+$\approx 7.3 mas$ corresponding to Mellote 22 OC (See also Figure \ref{fig:melotte_22_parallax_zoom}).
 
 However, as shown in Figures \ref{fig:pm_ngc_6494} and \ref{fig:parallax_ngc_6494}, in general it is not as easy and
 becomes necessary to consider other parameters such as distances, or even metallicity and age (derived from isochrone curves)
-and requires photometric data from stars in the studied field
-\footnote{All figures have been sampled in order to reduce the document size, but are still a faithful representation of the original data}.
+and requires photometric data for the stars within the studied field.
 
 \begin{figure}[htbp]
   \centering
@@ -340,47 +339,108 @@ and requires photometric data from stars in the studied field
   \caption{Open Cluster NGC 6494}
 \end{figure}
 
-At this point, it looks reasonable that the study of each individual cluster requires its own parametrization and technique
-to identify it.
+At this point, it seems reasonable that the study of each individual group requires its own parametrization and technique
+to identify it. With Gaia DR2, which contains great high-quality astrometric and photometric data for a huge number of stars,
+a new opportunity presents itself to simplify and optimize these processes. In this context, new approaches are being developed
+to improve current detection methods and automate OC characterization.
 
-With Gaia DR2, which contains great quality astrometric and photometric data for a huge number of stars,
-a new opportunity to simplify and optimize this processes is presented.
-In this context new approaches are being developed to improve current detection methods and automate the OC characterization.
-This work tries to take the best from \emph{Clusterix 2.0. A Virtual Observatory tool to estimate cluster membership probability}
-\cite{balaguer2020clusterix} and \emph{Hunting for open clusters in Gaia DR2: 582 new open clusters
-in the Galactic disc} \cite{castro2020hunting}, and merge them into a single \emph{machine learning}
-tool capable of finding open clusters efficiently without requiring powerful machines to perform the computations.
+\section{Gaia Mission}
 
-The first one is a non-parametrized method. It determines empirically the frequency functions associated to astrometrical variables
-without making any assumption about their profiles. However, it heavily does depend on the initial field selection and other
-parameters related to frequency functions. \emph{Clusterix 2.0.} is a web app tool inside the Spanish Virtual Observatory
-(VO) framework and works together with other VO tool such as:
-\emph{TOPCAT} \cite{taylor2005topcat},
-\emph{Aladin} \cite{bonnarel2000aladin},
-\emph{VOSA} \cite{bayo2008vosa}, among other.
+In this work we make use of Gaia DR2 since, although Release 3 (Gaia DR3) is imminent, it has not been available in time for us.
+Gaia DR2 is a multidimensional dataset obtained by ESA's Gaia mission (located at L2, 1.5 million kilometers from Earth) and
+operational since 2014. The catalogue has high precision and accuracy astrometric data for more than 1.7 billion stellar sources,
+and magnitudes in three photometric filters (G, BP and RP) for more than 1,300 million sources.
+80\% of Gaia DR2 sources are weaker than $G_{mag} \approx 18$. For magnitudes $G \approx 21$ nominal uncertainties reach
+$2 mas$ for parallaxes and $5 mas \cdot years^{-1}$ in proper motions. But for closer sources, (at the bright end, $G < 14$),
+the precision is of the order of $0.02 mas$ and $0.05 mas \cdot year^{-1}$ respectively \cite{cantat2018gaia}. In general,
+open clusters, which is the main subject of this work, are at optimal data thresholds.
 
-The second tool is based on Big Data techniques. Its purpose is to analyze the whole Gaia DR2 dataset looking for OCs by using
-machine learning algorithms divided in two stages. In the first stage, the algorithm looks for posible OC candidates by searching
-overdensities in the galactic disc.
-The second stage studies candidates found in the first one by generating images with H-R diagrams and passing them
-as sources to an Artificial Neural Network (ANN) which identifies isochrone patterns in photometric data (color and magnitude).
-Before this approach was put into practice there were 1200 OCs known. Now, this number has been increased up to more than 2000 OCs
-available at the Vizier catalogue \cite{ochsenbein2000vizier}.
+In this context, and taking advantage of the opportunity provided by Gaia DR2, new approaches are being developed to improve current
+detection methods and automating OC characterization as much as possible. This is the case of tools such as Clusterix 2.0
+\cite{balaguer2020clusterix}, TOPCAT \cite{taylor2005topcat}, and VOSA \cite{bayo2008vosa}, (all of them developed by the Virtual Observatory).
+These tools work together and offer good results, although it is not possible to use them in an unattended process and free of certain
+different parametrization in each case.
 
-The method developed in this project takes as base the approach made by \citeauthor{castro2020hunting} but rapidly diverges.
-In first place, performance has been taken into account since the beginning, trying to get a reliable method without compromising the
-needs of supercomputers.
-To achieve this, instead of blindly analyzing the whole galactic disk a fields selection is made focusing in those regions with known OCs.
-Then, these fields are analyzed with an homogeneous methodology based on machine learning algorithms using as sources astrometric and
-photometric variables. The goal is the characterization of each individual star in the cluster, discerning wether the star belongs the OC
-or not.
+\section{Current Methods}
 
-Thus, the main goal of this project is not the discovery of new open clusters or even candidates, but the development of a model that,
-applied to already known open clusters, allows us the characterization of those OCs on an unsupervised way, with a reasonable computing
-power and taking into account the same selection of astrometric and photometric variables for every OC.
+TOPCAT alone does not offer an independent discrimination mechanisms to researchers. They should try an initial selection, staring from the
+map of proper motions, by delimiting the area where the cluster presumably appears. When this is not possible, it is necessary to have a
+certain knowledge about the cluster profile and to parametrize some approximated values. In both cases, the definition of the selected
+set must then be optimized step by step until reaching a result that can be considered reasonable.
 
-% TODO: Concluir con una última sección de resumen de conclusiones, resumiendo las principales averiguaciones del estudio del dominio
-% y cómo van a afectar al desarrollo específico del trabajo.
+Another tool is Clusterix 2.0, which is an interactive web-based tool \cite{balaguer2020clusterix}. It takes the proper motion diagram
+without assuming any prior profiles assumptions for the stars candidates membership and determines empirically the frequency functions.
+
+Clusterix uses normal Gaussian kernel functions, defined as:
+
+\begin{equation}
+  K(a, b) = \frac{1}{2 \pi h^{2}} \exp{ \left[ -\frac{1}{2}\frac{\left( a - a_{i} \right)^{2} + \left( b - b_{i} \right)^{2}}{ h^{2}} \right]}
+\end{equation}
+
+$(a, b)$ are referred to the proper motion configuration space, while a point located in the center of the cell $(i, j)$ provides the maximum
+contribution for calculating the local density. In this context, the number $h$ is called the \emph{smoothing} parameter and it is measured in
+the same units as proper motion.
+
+With this same purpose of applying non-parametric methods, various clustering algorithms have been applied in the past, UPMASK \cite{krone2014upmask}
+was developed to only use photometry and positions, and then it was adapted to the Gaia data \cite{cantat2018gaia} based only on proper motion and
+parallax. A similar approach has been carried out using DBSCAN and machine learning algorithms to discover new clusters.
+
+In this sense, Clusterix also claims to be a non-parametric method, but it critically depends on the initial selection for the field sizes to be analyzed.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{../figures/clusterix/selection.pdf}
+  \caption{Typical Clusterix 2.0 control panel.}
+  \label{fig:clusterix_control_panel}
+\end{figure}
+
+Clusterix relies on several assumptions, among other:
+
+\begin{displayquote}
+The non-field population does not occupy the entire workspace, but is spatially concentrated, which makes it possible to distinguish two regions
+in the workspace: the only field region (label 'f'), dominated by stars field, and the cluster + field region (label 'c+f'), which includes field
+stars and not field stars. \cite{balaguer2020clusterix}
+\end{displayquote}
+
+This fact implies defining three areas or regions with different radius. The first 'c+f' corresponds to the one in which the cluster members are
+presumed to be contained together with other field stars that are not part of the cluster. The second, broader, assumes that it only contains
+stars in an extended visual field without components of the cluster, and a third intermediate region, which is out of analysis (void area), which
+would correspond to a possible transition zone between the other two.
+
+The correct choice of these radii, even having a previous estimation for the 'c+f' region, significantly affects the execution of the algorithm and,
+in general, requires a generously wide field 'f'. There is no general rule that defines relative proportions of these areas.
+
+Finally, when an acceptable result is obtained, what Clusterix provides is a probability field associated with the set of stars under study.
+The dataset, with an extra column for the probability value of each object to belong to the open cluster, can be exported to TOPCAT
+for further optimization and final processing. Figure \ref{fig:clusterix_probability} shows an example of the probability distribution in the proper
+motion space for NGC 2682.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{../figures/clusterix/statistics.pdf}
+  \caption{Probability distribution in the proper motion space provided by Clusterix for NGC 2682.}
+  \label{fig:clusterix_probability}
+\end{figure}
+
+Finally, it is necessary to refer to the work of \cite{castro2020hunting}, which presents a method based on machine learning techniques to make
+a systematic search for overdensities in the astrometric space of the galactic disk and a subsequent identification of OC using photometric
+information, also from Gaia DR2.
+
+The method includes two phases: the first one uses an unsupervised clustering algorithm, DBSCAN, to search for overdensities
+$(l, b \pi, \mu_{\alpha} *, \mu_{\delta})$, ans subsequently applies a deep learning ANN trained with magnitude diagrams to identify isochrone
+patterns within the detected overdensities and thus proceed to confirm them as OC.
+
+It should be noted that for the execution of this method, MareNostrum 42 (Bacelona Supercomputing Center) was used. So the neural network could handle
+the image recognition process with isochrone patterns and not applying theoretical models derived from values such as metallicity, masses, among other.
+
+The result of this work is the recognition of 582 new open clusters distributed along the galactic disk for a galactic declination $b < 20^{\circ}$,
+which has meant an increase of 45\% over previously ones.
+
+Our aim in this work, linked to computational limitations compared to MareNostrum, is not to do a blind search for clusters, but to obtain a method,
+in the machine learning environment, that allows the characterization of open clusters through unsupervised and non-parametrized procedures in a
+single step. This method should not require further refinements with other tools.
+
+The result of Clusterix + TOPCAT, applied to the same clusters, will be used only for comparing and validating our results.
 
 \chapter{Method}
 
