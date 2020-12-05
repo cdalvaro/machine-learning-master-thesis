@@ -1,5 +1,6 @@
 astroquery ~= 0.4
 astropy ~= 4.2
+diagrams ~= 0.18
 matplotlib ~= 3.3
 numpy ~= 1.19
 pandas ~= 1.1
