@@ -462,7 +462,7 @@ All code has been developed with the Python programming language \cite{Python3}.
 \end{figure}
 
 For the sake of simplicity, we are taking \emph{Melotte 22 (Messier 45)} \cite{elsanhoury2019ppmxl} to illustrate the whole method. This cluster is well studied
-and their stars are not too mixed with other region stars.
+and their stars are not too mixed with other region stars, so images look clearly.
 
 Figure \ref{fig:raw_pm_melotte_22} shows \emph{proper motions in right ascension and declination} for a sample of the downloaded dataset for Melotte 22.
 At first sight, two main clusters can be distinguished, one of them centered nearly at (0, 0) and the second cluster with center at (20, -45). This second cluster
@@ -564,22 +564,83 @@ This image can be pulled from the \href{https://github.blog/2020-09-01-introduci
 The second container is just a \verb|postgres:12.4| image which loads an initial script when the database is not yet initialized for creating the
 database schema. This container is used later as the main database for data analysis.
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{../figures/services_diagram.pdf}
+  \caption{Data retrieval and analysis}
+  \label{fig:services_diagram}
+\end{figure}
+
+These containers are orchestrated with a \verb|docker-compose.yml| file which automatically launches one instance of each container.
+Figure \ref{fig:services_diagram} shows a diagram describing the services architecture for this work.
+
 The database has two main tables in \verb|public| schema:
 
 \begin{itemize}
-  \item \verb|regions| for storing cluster properties such as \emph{location}, \emph{diameter} and other properties
-  \item \verb|gaiadr2_source| which contains data for all downloaded stars from Gaia
+  \item \verb|public.regions| for storing cluster properties such as \emph{location}, \emph{diameter} and other properties
+  \item \verb|public.gaiadr2_source| which contains data for all downloaded stars from Gaia
 \end{itemize}
 
-The second table is partitioned by region, storing all stars related to one cluster inside an independent table for optimized access performance.
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{../figures/customdb_diagram.pdf}
+  \caption{Custom DB diagram}
+  \label{fig:customdb_diagram}
+\end{figure}
 
-Methods for retrieving information from the database are available through an instance of \verb|cdalvaro.DB|. This class contains methods
-for recovering stars information for a given region as a Pandas \verb|DataFrame| ready for data analysis.
+The second table is partitioned by region, storing all stars related to one region inside an independent table for optimized access performance.
+The partition tables are located inside \verb|gaiadr2| schema. See Figure \ref{fig:customdb_diagram}.
 
-These containers are orchestrated with a \verb|docker-compose.yml| file which automatically launches one instance of each container.
+Although \verb|public.gaiadr2_source| is partitioned, there is no need for us to directly access to one of those tables.
+We only need to know the \verb|id| for the desired region and query for its stars to the main table as follows:
+
+\begin{minted}{sql}
+  -- Get region id
+  SELECT id FROM public.regions WHERE name = 'Melotte 22';
+  -- output: id -> 302
+
+  -- Get stars for the given id
+  -- NOTE: PostgreSQL cannot optimize this query when region_id is
+  --       provided as a subquery. This is why we get first the region id.
+  SELECT * FROM public.gaiadr2_source WHERE region_id = 302;
+\end{minted}
+
+PostgreSQL knows that all stars we want to are located inside \verb|gaiadr2.region_302| so it does not need to query any other tables.
+This allows us to download data for as many regions as we want to without loosing efficiency when accessing for that data.
+
+\verb|gaiadr2_source| and its partitions contain all fields available at the Gaia DR2 database.
+A complete list of these fields and their description can be found at the following link:
+\sloppy\url{https://gea.esac.esa.int/archive/documentation/GDR2/Gaia_archive/chap_datamodel/sec_dm_main_tables/ssec_dm_gaia_source.html}
+
+Table \ref{tab:important_fields} shows a brief description of the fields used in this work.
+
+\begin{table}[h!]
+  \begin{center}
+    \begin{tabular}{r|c|l}
+      \textbf{Name} & \textbf{Units} & \textbf{Description} \\
+      \hline
+      \verb|ra| & Angle [deg] & Right ascension \\
+      \verb|dec| & Angle [deg] & Declination \\
+      \verb|parallax| & Angle [mas] & Parallax \\
+      \verb|pmra| & Angular Velocity [mas/year] & Proper motion in right ascension \\
+      \verb|pmdec| & Angular Velocity [mas/year] & Proper motion in declination \\
+      \verb|phot_g_mean_mag| & Magnitude [mag] & G-band mean magnitude \\
+      \verb|bp_rp| & Magnitude [mag] & BP - RP colour \\
+    \end{tabular}
+    \caption{Properties and descriptions of the fields used in this work.}
+    \label{tab:important_fields}
+  \end{center}
+\end{table}
+
+The downloader takes data from the Gaia DR2 database and save the selection into our custom database without modifying any value,
+so data preserves all its properties and units.
+
+Python methods for retrieving information from the database are available through an instance of \verb|cdalvaro.DB|.
+This class contains methods for recovering stars information for a given region as a Pandas \verb|DataFrame| ready for data analysis.
 
 The developed code for this work can be found inside the \verb|src| directory at GitHub:
 \href{https://github.com/cdalvaro/machine-learning-master-thesis}{cdalvaro/machine-learning-master-thesis} repository.
+(For the printed version of this work, you can scan the QR code on cover for accessing to it.)
 
 \section{Feature Selection}
 \label{sec:feature_selection}
@@ -590,19 +651,20 @@ Also, we want to maintain as simple as possible our clustering model in order to
 
 Proper motion in right ascension and declination seems like a natural choice since, as we know, stars belonging to the same OC share a common motion vector.
 
-Parallax is another important feature. It lets us know how far stars are from us. And, since all stars within an open cluster were born from the same dust cloud,
-they must all have similar parallax.
+Parallax is another important feature. It lets us know how far stars are from us.
+And, since all stars within an open cluster were born from the same dust cloud, they must all have similar parallax.
 
 However, we are not going to use these raw features. Instead, we are taken a combination of them.
 
-First, we correct proper motion in right ascension and declination by dividing them by the parallax. That way we normalize these quantities and help our clustering
-models to improve their performance.
+First, we correct proper motion in right ascension and declination by dividing them by the parallax.
+That way we normalize these quantities and help our clustering models to improve their performance.
 
-Another computed property that we are considering is the modulus of the proper motion. That way, we relate both features and therefore force our model to keep them tight.
+Another computed property that we are considering is the modulus of the proper motion.
+That way, we relate both features and therefore force our model to keep them tight.
 
 \begin{figure}[htbp]
   \centering
-  \begin{subfigure}{0.9\textwidth}
+  \begin{subfigure}{\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../figures/melotte_22/features_melotte_22.png}
   \end{subfigure}
@@ -610,7 +672,9 @@ Another computed property that we are considering is the modulus of the proper m
   \label{fig:features_melotte_22}
 \end{figure}
 
-So, in summary, these are the features we are going to use as sources for our clustering models:
+\pagebreak
+
+In summary, these are the features we are going to use as sources for our clustering models:
 
 \begin{itemize}
   \item \emph{Proper motion in right ascension} (corrected by parallax): $\mu_{\alpha}$
@@ -693,22 +757,18 @@ a way to set the right value for the number of clusters to isolate the searched 
 
 To solve this issue, we will try to estimate the best number of clusters by using one more time the \emph{silhouette score}.
 
-The following example can be found in the Jupyter notebook: \verb|cluster_characterization.ipynb| (available at \verb|src/notebooks|).
+The following example is a snippet copied from \verb|cluster_characterization.ipynb| Jupyter notebook (available at \verb|src/notebooks|).
 It shows how to estimate the best number of clusters for Melotte 22 by using \verb|cdalvaro.ml.estimate_n_clusters| method.
 
 \begin{minted}{python}
-  n_clusters, kmeans = estimate_n_clusters(melotte22_df, min_clusters=3,
-                                           max_clusters=10, verbose=True)
-
+  n_clusters, kmeans = estimate_n_clusters(melotte22_df,
+                                           min_clusters=3, max_clusters=7)
   # Output
   # Silhouette score for 3 clusters: 0.5420
   # Silhouette score for 4 clusters: 0.5393
   # Silhouette score for 5 clusters: 0.5608
   # Silhouette score for 6 clusters: 0.5336
   # Silhouette score for 7 clusters: 0.5306
-  # Silhouette score for 8 clusters: 0.4978
-  # Silhouette score for 9 clusters: 0.5214
-  # Silhouette score for 10 clusters: 0.5199
   # Best silhouette score is 0.5608 for 5 clusters
 \end{minted}
 
@@ -831,13 +891,26 @@ The H-R diagram has been improved as well, and the isochrone curve of the open c
 
 \begin{figure}[htbp]
   \centering
-  \begin{subfigure}{0.5\textwidth}
+  \begin{subfigure}{0.9\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../figures/melotte_22/dec_hr_diagram_melotte_22.png}
+    \begin{subfigure}[t]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_hr_diagram_melotte_22.png}
+      \caption{DEC H-R diagram}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/hr_diagram_melotte_22.png}
+      \caption{Clusterix+TOPCAT H-R diagram}
+    \end{subfigure}
   \end{subfigure}
-  \caption{Melotte 22 H-R diagram with DEC characterization}
-  \label{fig:dec_hr_diagram_melotte_22}
+  \caption{H-R diagram comparison between DEC clustering and Clusterix+TOPCAT method.}
+  \label{fig:hr_diagram_comparison}
 \end{figure}
+
+Finally, Figure \ref{fig:hr_diagram_comparison} shows a comparison between the H-R diagram obtained by DEC clustering and the one obtained
+using the Clusterix + TOPCAT method.
 
 \chapter{Results}
 
