@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
-from typing import Tuple
+from typing import List, Tuple
 
 
 def estimate_n_clusters(x,
@@ -63,3 +63,43 @@ def filter_outliers(df: pd.DataFrame, q: float = 0.05) -> pd.Series:
     lower = df.quantile(q)
     mask = (df < upper) & (df > lower)
     return mask
+
+
+def cluster_centers(df: pd.DataFrame, key: str, columns: List[str] = []) -> pd.DataFrame:
+    """
+    Return a Pandas DataFrame with centers for each cluster.
+
+    Args:
+        df (pd.DataFrame): The DataFrame with data to be analyzed.
+        key (str): The key of the cluster reference column.
+        columns (List[str], optional): List of columns to take into account. Defaults to [].
+
+    Returns:
+        pd.DataFrame: A DataFrame with center for each cluster and column.
+    """
+    if len(columns) > 0 and key not in columns:
+        columns.append(key)
+    __df = df[columns] if len(columns) > 0 else df
+
+    return __df.groupby(by=key).mean()
+
+
+def cluster_stats(df: pd.DataFrame, key: str, columns: List[str] = [], **kwargs) -> pd.DataFrame:
+    """
+    Return a Pandas DataFrame with statistics for each cluster.
+
+    Args:
+        df (pd.DataFrame): The DataFrame with data to be analyzed.
+        key (str): The key of the cluster reference column.
+        columns (List[str], optional): List of columns to take into account. Defaults to [].
+        **kwargs (optional): Extra arguments are passed to Pandas.DataFrame.describe() method.
+        https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.core.groupby.DataFrameGroupBy.describe.html
+
+    Returns:
+        pd.DataFrame: A DataFrame with statistics for each cluster and column.
+    """
+    if len(columns) > 0 and key not in columns:
+        columns.append(key)
+    __df = df[columns] if len(columns) > 0 else df
+
+    return __df.groupby(by=key).describe(**kwargs)
