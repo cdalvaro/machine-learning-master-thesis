@@ -11,6 +11,7 @@
 \usepackage{minted}
 \usepackage{picture}
 \usepackage{subcaption}
+\usepackage{tablefootnote}
 \usepackage[nottoc]{tocbibind}
 
 \hypersetup{
@@ -390,7 +391,7 @@ In this sense, Clusterix also claims to be a non-parametric method, but it criti
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{../figures/clusterix/selection.pdf}
-  \caption{Typical Clusterix 2.0 control panel.}
+  \caption{Typical Clusterix 2.0 region selection panel.}
   \label{fig:clusterix_control_panel}
 \end{figure}
 
@@ -443,6 +444,7 @@ single step. This method should not require further refinements with other tools
 The result of Clusterix + TOPCAT, applied to the same clusters, will be used only for comparing and validating our results.
 
 \chapter{Method}
+\label{chap:method}
 
 In this chapter we address the different steps followed to perform the creation of the unsupervised clustering model for open cluster characterization.
 
@@ -494,6 +496,7 @@ The figure on the left shows a resonance at $\approx 7.3mas$ belonging the OC. W
 to determine the age of these stars.
 
 \section{Data Mining}
+\label{sec:data_mining}
 
 Before being able to develop and test our clustering model, the first step is to download the required data from Gaia repository
 and store it in a custom database for later access.
@@ -502,8 +505,9 @@ Due to the large amount of data available at Gaia, a complete download is not vi
 In order to reduce the size of the dataset to be downloaded, the OpenClust catalogue \cite{dias2002new} (Figure \ref{fig:OpenClustComplete})
 has been used to restrict the sky regions to be explored.
 
-This download is not limited to the size registered in the catalogue. Instead, a wider region is downloaded for each cluster to include
-stars outside the cluster. The idea is that the unsupervised model must be able to clusterize the stars that belongs to the OC and to discard
+This download is not limited to the size registered in the catalogue.
+Instead, a wider region (1.5 times the size of the cluster) is downloaded for each cluster to include stars outside the cluster.
+The idea is that the unsupervised model must be able to clusterize the stars that belongs to the OC and to discard
 those outsiders when characterizing the open cluster.
 
 \begin{figure}[htbp]
@@ -860,8 +864,8 @@ powerful that would incur in overfitting issues unable to make right predictions
   \label{fig:dec_model_setup}
 \end{figure}
 
-Once the model is ready, we can test it by applying it to the Melotte 22 dataset. Notebook \verb|cluster_characterization.ipynb| illustrates how DEC model
-processes a region of stars trying to characterize the open cluster hidden within that region.
+Once the model is ready, we can test it by applying it to the Melotte 22 dataset.
+Notebook \verb|cluster_characterization.ipynb| illustrates how DEC model processes a region of stars trying to characterize the open cluster hidden within that region.
 
 As shown in Figure \ref{fig:dec_melotte_22}, the DEC model is able to move stars from one group to another removing some clusters and improving the OC characterization.
 This is exactly what we are looking for.
@@ -889,6 +893,9 @@ This is exactly what we are looking for.
 The H-R diagram has been improved as well, and the isochrone curve of the open cluster is sharper than the one obtained with the K-Means algorithm
 (Figure \ref{fig:kmeans_hr_diagram_melotte_22}).
 
+Figure \ref{fig:hr_diagram_comparison} shows a comparison between the H-R diagram obtained by DEC clustering and the one obtained
+using the Clusterix + TOPCAT method.
+
 \begin{figure}[htbp]
   \centering
   \begin{subfigure}{0.9\textwidth}
@@ -909,8 +916,50 @@ The H-R diagram has been improved as well, and the isochrone curve of the open c
   \label{fig:hr_diagram_comparison}
 \end{figure}
 
-Finally, Figure \ref{fig:hr_diagram_comparison} shows a comparison between the H-R diagram obtained by DEC clustering and the one obtained
-using the Clusterix + TOPCAT method.
+Finally, we can refine this selection by filtering those stars which are bellow and above the 0.25 and 0.75 quantiles for each group, respectively.
+That way we remove the most doubtful values from the selection.
+Figure \ref{fig:melotte_22_filtered} shows the result after filtering DEC clustering selection.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_hr_diagram_filtered_melotte_22.png}
+      \caption{H-R diagram}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_parallax_filtered_melotte_22.png}
+      \caption{Parallax}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{Melotte 22 H-R diagram and parallax histogram with stars outside 0.25 and 0.75 quantiles filtered.}
+  \label{fig:melotte_22_filtered}
+\end{figure}
+
+Table \ref{tab:results_melotte_22} shows a summary of Melotte 22 with values taken from different sources and methods: SIMBAD Astronomical Database - CDS (Strasbourg),
+Clusterix+TOPCAT method, and the results obtained for each step of this method (KMeans, DEC and DEC filtered).
+
+% TODO: Fix table if figures changes
+\begin{table}[h!]
+  \begin{center}
+    \begin{tabular}{l|c|c|c|c}
+      \textbf{Source / method} & \textbf{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \textbf{$\mu_{\delta}$ $(mas/yr^{-1})$} & \textbf{$\varpi$ $(mas)$} & \emph{\# stars} \\
+      \hline
+      Simbad.u-strasbg.fr\tablefootnote{Results have been taken from \protect\citeA[p.~25. Table A.3. Pleiades]{babusiaux2018gaia}} &
+        19.997 $\pm$ 0.127 & -45.548 $\pm$ 0.101 & 7.364 $\pm$ 0.005 & 1326 \\
+      Clusterix+TOPCAT & 19.98 $\pm$ 1.25 & -45.47 $\pm$ 1.48 & 7.33 $\pm$ 0.21 & 168 \\
+      KMeans & 20.25 $\pm$ 35.16 & -38.01 $\pm$ 40.16 & 7.23 $\pm$ 2.35 & 1378 \\
+      DEC & 23.67 $\pm$ 38.33 & -46.23 $\pm$ 44.54 & 8.04 $\pm$ 2.59 & 878 \\
+      DEC (filtered) & 19.50 $\pm$ 8.59 & -44.23 $\pm$ 8.17 & 7.42 $\pm$ 0.1 & 438 \\
+    \end{tabular}
+    \caption{Melotte 22. The parameters shown are proper motion in right ascension and declination, parallax and number of stars with their respective deviations.}
+    \label{tab:results_melotte_22}
+  \end{center}
+\end{table}
 
 \chapter{Results}
 
