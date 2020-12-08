@@ -6,7 +6,7 @@
 [![gaia-downloader image][gaia_downloader_badge]][gaia_downlaoder_image]
 [![latex-document][latex_document_badge]][latex_document_workflow]
 
-# Open Clusters Characterization in Gaia DR2 Using ML Algorithms
+# Using ML Tools for Open Cluster Characterization with Gaia DR2 Data
 
 <div align=center>
   <a href="https://www.unir.net"><img src="https://github.com/cdalvaro/machine-learning-master-thesis/raw/main/figures/unir-logo.png" alt="UNIR" title="UNIR" hspace="30" height="96px" /></a>
