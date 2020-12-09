@@ -1055,8 +1055,8 @@ After having set all these parameters, Clusterix performs the proper motion freq
 associated to each star of the whole region (see Figure \ref{fig:clusterix_probability_melotte_22}).
 
 This step can be repeated over and over again, varying radii and other parameters, until finally reach a valid probability that works.
-The last step presents a table with candidates objects and allows to export this dataset to TOPCAT, Aladin and VOSA to perform a deeper
-filtering and analysis based on the results given by Clusterix.
+The last step presents a table with candidates objects and allows to export this dataset to TOPCAT,
+Aladin and VOSA to perform a deeper filtering and analysis based on the results given by Clusterix.
 
 \begin{figure}[htbp]
   \centering
@@ -1072,7 +1072,7 @@ filtering and analysis based on the results given by Clusterix.
 Once data is available in TOPCAT, we have to carefully analyze the imported data.
 From there, we can perform a first stars selection by excluding those stars with probability value lower than 0.8.
 This first result can be taken as a good staring point, but we still need to make some fine tunning.
-As we can see in Figure \ref{fig:topcat_prob_selection_melotte_22}, the selection is too restrictive and we have lost too much stars.
+As we can see in Figure \ref{fig:topcat_prob_selection_melotte_22}, the selection is too restrictive and we have lost too many stars.
 
 Looking at Figure \ref{fig:topcat_prob_parallax_melotte_22}, we can assume that cluster members are around $7.3mas$ in the parallax histogram.
 Also, Figure \ref{fig:topcat_prob_pm_melotte_22} reveals that cluster stars have low scattering rate in the proper motion configuration space.
@@ -1171,7 +1171,8 @@ Finally, we filter the second selection by discarding those stars whose parallax
   \label{fig:clusterix_final_selection_melotte_22}
 \end{figure}
 
-For the sake of completeness, Table \ref{tab:results_melotte_22} is shown again, in order to compare the results obtained with the validation method and our method.
+For the sake of completeness, Table \ref{tab:results_melotte_22} is shown again,
+in order to compare the results obtained with the validation method and our method.
 
 \begin{table}[h!]
   \begin{center}
@@ -1189,8 +1190,124 @@ For the sake of completeness, Table \ref{tab:results_melotte_22} is shown again,
 
 \section{Comparison}
 
-Until now, we have focused our study in Melotte 22 OC. Since our main aim is to get a model that fits well for a wide range of clusters,
-we present now the results obtained for a selection of clusters with different topologies.
+Until now, we have focused our study in the open cluster Melotte 22.
+Since our aim is to get a model that fits well for a wide range of clusters,
+we present now some results obtained for a selection of clusters with different topologies.
+
+\pagebreak
+
+
+\subsection{NGC 2632}
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/pm_ngc_2632.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/parallax_ngc_2632.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/hr_diagram_ngc_2632.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2632 Clusterix+TOPCAT characterization.}
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/kmeans_pm_ngc_2632.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/kmeans_parallax_ngc_2632.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/kmeans_hr_diagram_ngc_2632.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2632 KMeans characterization.}
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_pm_ngc_2632.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_parallax_ngc_2632.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_hr_diagram_ngc_2632.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2632 DEC characterization.}
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_pm_filtered_ngc_2632.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_parallax_filtered_ngc_2632.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_hr_diagram_filtered_ngc_2632.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2632 DEC (filtered) characterization.}
+\end{figure}
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{l|c}
+      \textbf{Hyperparameter} & \textbf{Value} \\
+      \hline
+      \# Clusters & 10 \\
+      Clustering Layer & $\left[ 50, 50, 40 \right]$ \\
+      Kernel Initializer Seed & 10 \\
+      Quantil Threshold & 0.1 \\
+    \end{tabular}
+    \caption{NGC 2632 DEC model hyperparameters.}
+    \label{tab:hyperparameters_ngc_2632}
+  \end{center}
+\end{table}
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{l|c|c|c|c}
+      \textbf{Source / method} & \textbf{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \textbf{$\mu_{\delta}$ $(mas/yr^{-1})$} & \textbf{$\varpi$ $(mas)$} & \emph{\# stars} \\
+      \hline
+      \textbf{Simbad.u-strasbg.fr} & -36.047 $\pm$ 0.110 & -12.917 $\pm$ 0.066 & 5.371 $\pm$ 0.003 & - \\
+      Clusterix+TOPCAT & -36.154 $\pm$ 1.001 & -12.909 $\pm$ 0.806 & 5.327 $\pm$ 0.187 & 371 \\
+      KMeans & -26.352 $\pm$ 20.562 & -15.828 $\pm$ 19.152 & 5.394 $\pm$ 0.696 & 629 \\
+      DEC & -20.012 $\pm$ 20.657 & -14.742 $\pm$ 17.330 & 4.686 $\pm$ 0.855 & 894 \\
+      \textbf{DEC (filtered)} & -21.571 $\pm$ 19.825 & -14.234 $\pm$ 16.388 & 4.719 $\pm$ 0.706 & 714 \\
+    \end{tabular}
+    \caption{NGC 2632 results.}
+    \label{tab:results_ngc_2632}
+  \end{center}
+\end{table}
 
 % TODO: Exposición de resultados y comentarios
 % Es una exposición objetiva, sin valorar los resultados ni justificarlos.
