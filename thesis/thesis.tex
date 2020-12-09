@@ -676,7 +676,7 @@ That way, we relate both features and therefore force our model to keep them tig
   \label{fig:features_melotte_22}
 \end{figure}
 
-\pagebreak
+\newpage
 
 In summary, these are the features we are going to use as sources for our clustering models:
 
@@ -692,8 +692,6 @@ The final selection is the one with best \emph{silhouette score} \cite{rousseeuw
 
 The silhouette score is a metric used to determine how good a cluster is based on intra-cluster distances and nearest-cluster distances.
 The best possible value is 1, and the worst is -1. Negative values mean that some samples have been assigned to the wrong cluster.
-
-This process is explained in more detail in Appendix \ref{chap:feature_selection}.
 
 \section{Soft Clustering with K-Means}
 
@@ -943,7 +941,6 @@ Figure \ref{fig:melotte_22_filtered} shows the result after filtering DEC cluste
 Table \ref{tab:results_melotte_22} shows a summary of Melotte 22 with values taken from different sources and methods: SIMBAD Astronomical Database - CDS (Strasbourg),
 Clusterix+TOPCAT method, and the results obtained for each step of this method (KMeans, DEC and DEC filtered).
 
-% TODO: Fix table if figures changes
 \begin{table}[h!]
   \begin{center}
     \begin{tabular}{l|c|c|c|c}
@@ -1194,12 +1191,132 @@ Until now, we have focused our study in the open cluster Melotte 22.
 Since our aim is to get a model that fits well for a wide range of clusters,
 we present now some results obtained for a selection of clusters with different topologies.
 
-\pagebreak
+\newpage
 
+\subsection{NGC 2516}
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/pm_ngc_2516.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/parallax_ngc_2516.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/hr_diagram_ngc_2516.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2516 Clusterix+TOPCAT characterization.}
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/kmeans_pm_ngc_2516.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/kmeans_parallax_ngc_2516.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/kmeans_hr_diagram_ngc_2516.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2516 KMeans characterization.}
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_pm_ngc_2516.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_parallax_ngc_2516.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_hr_diagram_ngc_2516.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2516 DEC characterization.}
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_pm_filtered_ngc_2516.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_parallax_filtered_ngc_2516.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_hr_diagram_filtered_ngc_2516.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2516 DEC (filtered) characterization.}
+\end{figure}
+
+\newpage
+
+\vfill
+
+\begin{table}[h!]
+  \begin{center}
+    \begin{tabular}{l|c}
+      \textbf{Hyperparameter} & \textbf{Value} \\
+      \hline
+      Number of Clusters & 8 \\
+      Clustering Layer & $\left[ 50, 50, 60 \right]$ \\
+      Kernel Initializer Seed & 2 \\
+      Quantil Threshold & 0.15 \\
+    \end{tabular}
+    \caption{NGC 2516 DEC model hyperparameters.}
+    \label{tab:hyperparameters_ngc_2516}
+  \end{center}
+\end{table}
+
+\begin{table}[h!]
+  \begin{center}
+    \begin{tabular}{l|c|c|c|c}
+      \textbf{Source / method} & \textbf{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \textbf{$\mu_{\delta}$ $(mas/yr^{-1})$} & \textbf{$\varpi$ $(mas)$} & \emph{\# stars} \\
+      \hline
+      \textbf{Simbad.u-strasbg.fr} & -4.6579 $\pm$ 0.0075 & 11.1517 $\pm$ 0.0075 & 2.4118 $\pm$ 0.0006 & 1727 \\
+      Clusterix+TOPCAT & -4.652 $\pm$ 0.523 & 11.203 $\pm$ 0.454 & 2.409 $\pm$ 0.127 & 638 \\
+      KMeans & -4.344 $\pm$ 5.670 & 9.507 $\pm$ 7.546 & 2.268 $\pm$ 0.288 & 1542 \\
+      DEC & -4.426 $\pm$ 6.529 & 9.952 $\pm$ 8.018 & 2.436 $\pm$ 0.358 & 1532 \\
+      \textbf{DEC (filtered)} & -4.502 $\pm$ 4.46 & 10.114 $\pm$ 5.719 & 2.392 $\pm$ 0.135 & 1072 \\
+    \end{tabular}
+    \caption{NGC 2516 results.}
+    \label{tab:results_ngc_2516}
+  \end{center}
+\end{table}
+
+\vfill
+
+\newpage
 
 \subsection{NGC 2632}
 
 \begin{figure}[H]
+  \vfil
   \centering
   \begin{subfigure}{0.9\textwidth}
     \centering
@@ -1278,12 +1395,16 @@ we present now some results obtained for a selection of clusters with different 
   \caption{NGC 2632 DEC (filtered) characterization.}
 \end{figure}
 
-\begin{table}[H]
+\newpage
+
+\vfill
+
+\begin{table}[h!]
   \begin{center}
     \begin{tabular}{l|c}
       \textbf{Hyperparameter} & \textbf{Value} \\
       \hline
-      \# Clusters & 10 \\
+      Number of Clusters & 10 \\
       Clustering Layer & $\left[ 50, 50, 40 \right]$ \\
       Kernel Initializer Seed & 10 \\
       Quantil Threshold & 0.1 \\
@@ -1293,7 +1414,7 @@ we present now some results obtained for a selection of clusters with different 
   \end{center}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[h!]
   \begin{center}
     \begin{tabular}{l|c|c|c|c}
       \textbf{Source / method} & \textbf{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \textbf{$\mu_{\delta}$ $(mas/yr^{-1})$} & \textbf{$\varpi$ $(mas)$} & \emph{\# stars} \\
@@ -1308,6 +1429,10 @@ we present now some results obtained for a selection of clusters with different 
     \label{tab:results_ngc_2632}
   \end{center}
 \end{table}
+
+\vfill
+
+\newpage
 
 % TODO: Exposición de resultados y comentarios
 % Es una exposición objetiva, sin valorar los resultados ni justificarlos.
