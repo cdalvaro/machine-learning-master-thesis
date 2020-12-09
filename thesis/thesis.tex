@@ -1434,6 +1434,127 @@ we present now some results obtained for a selection of clusters with different 
 
 \newpage
 
+\subsection{NGC 2682}
+
+\begin{figure}[H]
+  \vfil
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/pm_ngc_2682.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/parallax_ngc_2682.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/hr_diagram_ngc_2682.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2682 Clusterix+TOPCAT characterization.}
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/kmeans_pm_ngc_2682.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/kmeans_parallax_ngc_2682.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/kmeans_hr_diagram_ngc_2682.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2682 KMeans characterization.}
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_pm_ngc_2682.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_parallax_ngc_2682.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_hr_diagram_ngc_2682.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2682 DEC characterization.}
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_pm_filtered_ngc_2682.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_parallax_filtered_ngc_2682.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_hr_diagram_filtered_ngc_2682.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2682 DEC (filtered) characterization.}
+\end{figure}
+
+\newpage
+
+\vfill
+
+\begin{table}[h!]
+  \begin{center}
+    \begin{tabular}{l|c}
+      \textbf{Hyperparameter} & \textbf{Value} \\
+      \hline
+      Number of Clusters & 10 \\
+      Clustering Layer & $\left[ 50, 50, 40 \right]$ \\
+      Kernel Initializer Seed & 0 \\
+      Quantil Threshold & 0.1 \\
+    \end{tabular}
+    \caption{NGC 2682 DEC model hyperparameters.}
+    \label{tab:hyperparameters_ngc_2682}
+  \end{center}
+\end{table}
+
+\begin{table}[h!]
+  \begin{center}
+    \begin{tabular}{l|c|c|c|c}
+      \textbf{Source / method} & \textbf{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \textbf{$\mu_{\delta}$ $(mas/yr^{-1})$} & \textbf{$\varpi$ $(mas)$} & \emph{\# stars} \\
+      \hline
+      \textbf{Simbad.u-strasbg.fr} & -10.9737 $\pm$ 0.0064 & -2.9396 $\pm$ 0.0063 & 1.1325 $\pm$ 0.0011 & 1194 \\
+      Clusterix+TOPCAT & -10.970 $\pm$ 0.322 & -2.958 $\pm$ 0.327 & 1.142 $\pm$ 0.080 & 649 \\
+      KMeans & -8.616 $\pm$ 5.591 & -3.710 $\pm$ 6.067 & 1.196 $\pm$ 0.226 & 1374 \\
+      DEC & -8.926 $\pm$ 5.278 & -3.550 $\pm$ 5.425 & 1.144 $\pm$ 0.159 & 1238 \\
+      \textbf{DEC (filtered)} & -9.619 $\pm$ 4.112 & -3.317 $\pm$ 3.976 & 1.140 $\pm$ 0.089 & 990 \\
+    \end{tabular}
+    \caption{NGC 2682 results.}
+    \label{tab:results_ngc_2682}
+  \end{center}
+\end{table}
+
+\vfill
+
+\newpage
+
 % TODO: Exposición de resultados y comentarios
 % Es una exposición objetiva, sin valorar los resultados ni justificarlos.
 
