@@ -277,8 +277,6 @@ To achieve the general goal, we will follow the following milestones:
 
 \chapter{State of the Art}
 
-% TODO: Hablar de KMedias y DEC
-
 An initial approach for finding OCs is the search of overdensities along the galactic disk. In general, this is the starting point but,
 although it seems simple, it presents a fundamental problem already discussed. The near field around the OC is filled with two types of
 distinct stars populations: those who belong to the OC (tens or hundreds to a few thousand) and a background made up of thousands or
@@ -442,6 +440,30 @@ in the machine learning environment, that allows the characterization of open cl
 single step. This method should not require further refinements with other tools.
 
 The result of Clusterix + TOPCAT, applied to the same clusters, will be used only for comparing and validating our results.
+
+\section{Clustering Algorithms}
+
+As we will explain later, what we need to accomplish our aim is an algorithm that manages to make data groups based on the dynamic properties of the stars.
+
+There are several clustering algorithms: KMeans, Mean-Shift Clustering, DBSCAN \cite{ester1996density} among other.
+While each one behaves better according ot the distribution of the objects to clusterize, we have choosen KMeans by its simplicity and good results.
+
+KMeans requires a single parameter, the number of clusters to build (N).
+The algorithm looks for N center points which are vectors of the same dimension as the number of selected features.
+KMeans starts by making an initial groups configuration and then, it reassigns objects to other groups iteratively by minimizing
+the distance among points inside the new group and maximizing the distance with the centers of the other groups.
+
+The algorithm stops once a maximum number of iterations is reached, or when changes between iterations is lower than a minimum.
+
+This algorithm works well and gives good results at first approach.
+However, we need to set a large number of clusters to find the open cluster we are looking for.
+This fact complicates the identification of the OC and many times the OC contains to many outliers.
+For that reason, we have search for a KMeans refinement based on an Artificial Neural Network (ANN).
+
+The \emph{Unsupervised Deep Embedding for Clustering Analysis} model or \emph{DEC} \cite{xie2016unsupervised} takes KMeans as its starting point,
+but then, it trains an autoencoder to reduce the feature space and pass this transformed data through a Clustering Layer which refines the previous selection.
+
+The mechanism of this model is explained in Section \ref{sec:deep_embedding_clustering} and its implementation is available in \verb|cdalvaro.ml.dec| package.
 
 \chapter{Method}
 \label{chap:method}
