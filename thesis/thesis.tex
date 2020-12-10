@@ -1577,8 +1577,126 @@ we present now some results obtained for a selection of clusters with different 
 
 \newpage
 
-% TODO: Exposición de resultados y comentarios
-% Es una exposición objetiva, sin valorar los resultados ni justificarlos.
+\subsection{Melotte 25}
+
+\begin{figure}[H]
+  \vfil
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_25/pm_melotte_25.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_25/parallax_melotte_25.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_25/hr_diagram_melotte_25.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{Melotte 25 Clusterix+TOPCAT characterization.}
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_25/kmeans_pm_melotte_25.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_25/kmeans_parallax_melotte_25.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_25/kmeans_hr_diagram_melotte_25.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{Melotte 25 KMeans characterization.}
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_25/dec_pm_melotte_25.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_25/dec_parallax_melotte_25.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_25/dec_hr_diagram_melotte_25.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{Melotte 25 DEC characterization.}
+  \centering
+  \begin{subfigure}{0.9\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_25/dec_pm_filtered_melotte_25.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_25/dec_parallax_filtered_melotte_25.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_25/dec_hr_diagram_filtered_melotte_25.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{Melotte 25 DEC (filtered) characterization.}
+\end{figure}
+
+\newpage
+
+\vfill
+
+\begin{table}[h!]
+  \begin{center}
+    \begin{tabular}{l|c}
+      \textbf{Hyperparameter} & \textbf{Value} \\
+      \hline
+      Number of Clusters & 11 \\
+      Clustering Layer & $\left[ 50, 50, 80 \right]$ \\
+      Kernel Initializer Seed & 11 \\
+      Quantil Threshold & 0.1 \\
+    \end{tabular}
+    \caption{Melotte 25 DEC model hyperparameters.}
+    \label{tab:hyperparameters_melotte_25}
+  \end{center}
+\end{table}
+
+\begin{table}[h!]
+  \begin{center}
+    \begin{tabular}{l|c|c|c|c}
+      \textbf{Source / method} & \textbf{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \textbf{$\mu_{\delta}$ $(mas/yr^{-1})$} & \textbf{$\varpi$ $(mas)$} & \emph{\# stars} \\
+      \hline
+      \textbf{Simbad.u-strasbg.fr} & 104.92 $\pm$ 0.12 & -28.00 $\pm$ 0.09 & 21.052 $\pm$ 0.065 & - \\
+      Clusterix+TOPCAT & 106.796 $\pm$ 6.229 & -24.870 $\pm$ 5.417 & 21.210 $\pm$ 1.115 & 109 \\
+      KMeans & 81.410 $\pm$ 71.475 & -45.309 $\pm$ 73.945 & 21.056 $\pm$ 6.018 & 365 \\
+      DEC & x $\pm$ x & x $\pm$ x & x $\pm$ x & x \\
+      \textbf{DEC (filtered)} & x $\pm$ x & x $\pm$ x & x $\pm$ x & x \\
+    \end{tabular}
+    \caption{Melotte 25 results.}
+    \label{tab:results_melotte_25}
+  \end{center}
+\end{table}
+
+\vfill
+
+\newpage
 
 \section{Discussion}
 
