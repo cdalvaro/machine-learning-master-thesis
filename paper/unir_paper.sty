@@ -1,0 +1,156 @@
+%
+%Comandos y paquetes que se introducen
+%
+%
+%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{unir_paper}
+%
+%---paquetes---------------------
+%
+%idioma i codificación
+\usepackage{babel}
+\usepackage[utf8]{inputenc} %descomentar esta línea si se trabaja en linux
+
+%simbolos
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathabx}
+\usepackage{amsfonts}
+
+\usepackage{fontspec}
+
+\usepackage{titling}
+
+%imagenes
+\usepackage[dvips]{epsfig}
+\usepackage{graphicx}
+\usepackage{color}
+
+%colores en tablas
+\usepackage{colortbl}
+
+
+%para insertar pdf's
+\usepackage{pdfpages}
+
+%cabeceras y pies de página
+%\usepackage{vmargin}
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+%\fancyhfoffset{20pt}
+%\renewcommand{\headrulewidth}{0.0pt}
+
+\renewcommand{\maketitle}{\creaportada}
+
+%\renewcommand{\baselinestretch}{1.5}
+
+
+\usepackage{xcolor}
+\usepackage{sectsty}
+\usepackage{etoolbox}
+\usepackage{titlesec}
+%\usepackage[explicit]{titlesec}
+%\patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{\if@openright\clearpage\else\clearpage\fi}{}{}
+
+%creamos secciones y subsecciones:
+%\titleformat{\section}{\bfseries\Large}{\Roman{section} \titcon{#1}}{6pt}{}
+\renewcommand\thesection{{\color{azulunir}\Roman{section}}}
+\renewcommand\thesubsection{{\color{azulunir}\Alph{subsection}}}
+\sectionfont{\color{azulunir}}
+\subsectionfont{\color{azulunir}}
+\titleformat{\section}{\color{azulunir}\normalfont\center\Large\bfseries}{\thesection.}{1em}{}[{\titlerule[0.8pt]}]
+\usepackage{fullpage}
+
+%hiper-referencias
+\usepackage{hyperref}
+
+
+%
+%
+%
+\definecolor{azulunir}{rgb}{0.26,0.46,0.70}
+
+\newcommand{\director}[1]{\gdef\@director{#1}}
+\newcommand{\resumen}[1]{\gdef\@resumen{#1}}
+\newcommand{\nombreciudad}[1]{\gdef\@nombreciudad{#1}}
+\newcommand{\palabrasclave}[1]{\gdef\@palabrasclave{#1}}
+\director{}
+\nombreciudad{}
+\resumen{}
+\palabrasclave{}
+
+
+%Entornos de teoremas
+\newtheorem{teo}{Teorema}[section]
+\newtheorem{prop}{Proposición}
+\newtheorem{coro}{Corolario}
+\newtheorem{lema}{Lema}
+\newtheorem{defi}{Definición}
+%aquests entorns no estan en italica
+\theoremstyle{definition}
+\newtheorem{obs}{Observación}
+\newtheorem{ex}{Ejemplo}
+
+%
+%shortcuts
+%
+%lletres dobles
+\newcommand{\RR}{\mathbb{R}}
+%\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\F}{\mathbb{F}}
+%cals
+\newcommand{\CC}{\mathcal{C}}
+%gregues
+\newcommand{\al}{\alpha}
+\newcommand{\g}{\gamma}
+\renewcommand{\d}{\delta}
+\newcommand{\s}{\sigma}
+\newcommand{\la}{\lambda}
+\newcommand{\e}{\varepsilon}
+\newcommand{\om}{\omega}
+\newcommand{\vp}{\varphi}
+%derivada parcial
+\newcommand{\p}{\partial}
+%dispstyle
+\newcommand{\ds}{\displaystyle}
+%mathrm's
+\newcommand{\rank}{\mathrm{rank}}
+\newcommand{\Id}{\mathrm{Id}}
+\newcommand{\diag}{\mathrm{diag}}
+
+
+
+
+
+
+
+
+%creamos el nuevo título
+\newcommand{\creaportada}{\begingroup
+\begin{tabular}{ll}
+\begin{tabular}{p{0.8\textwidth}}
+	{\Huge {\bf {\thetitle} }  } \\\vspace{0.3cm}
+	{\color{azulunir}\theauthor }\\\vspace{0.3cm}
+	Universidad Internacional de la Rioja, Logroño (España)\\\vspace{0.3cm}
+	\begin{tabular}{p{5cm}}
+		\arrayrulecolor{azulunir}\hline
+		\thedate\\\arrayrulecolor{azulunir}\hline
+	\end{tabular}\\
+	{\color{azulunir}\MakeUppercase{Resumen}}\\\arrayrulecolor{azulunir}\hline
+	\@resumen
+	\@director
+\end{tabular}&
+\begin{tabular}{p{0.2\textwidth}}
+\includegraphics[width= 0.2\textwidth]{logo_unirv}\\
+{\color{azulunir}\MakeUppercase{\bf Palabras Clave}}\\\arrayrulecolor{azulunir}\hline
+\@palabrasclave\\
+\end{tabular}\\
+
+\end{tabular}
+\vspace{1cm}
+\endgroup}

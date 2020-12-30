@@ -1,0 +1,95 @@
+\documentclass[11pt,a4paper,english,twocolumn]{article}
+\usepackage{unir_paper}
+
+
+
+%---------------------------
+%título del trabajo y autor
+%---------------------------
+\title{Título}
+\author{Nombre y Apellidos del estudiante}
+\date{fecha}
+
+
+%---------------------------
+%marges
+%---------------------------
+%\usepackage[margin=1.9cm]{geometry}
+%---------------------------
+%---------------------------
+%---------------------------
+%---------------------------
+
+\resumen{Breve resumen del trabajo realizado (extensión máxima: 150 palabras). Este resumen debe incluir el objetivo o propósito de la investigación, la metodología, los resultados y las conclusiones.}
+\palabrasclave{tres a cinco palabras clave por orden alfabético y separadas por comas}
+
+\begin{document}
+\twocolumn[
+\begin{@twocolumnfalse}
+\maketitle
+\end{@twocolumnfalse}
+]
+
+%\renewcommand{\listfigurename}{Índice de Ilustraciones}
+%\renewcommand{\listtablename}{Índice de Tablas}
+%\renewcommand{\contentsname}{Índice de Contenidos}
+%\renewcommand{\figurename}{Figura}
+%\renewcommand{\tablename}{Tabla}
+%\twocolumn
+
+
+%\frontmatter
+%\tableofcontents
+%\listoffigures
+%\listoftables
+
+\section{INTRODUCCIÓN}
+Introducción en la que debes resumir de forma esquemática pero suficientemente clara lo esencial de cada una de las partes del trabajo.
+La lectura de esta introducción ha de dar una primera idea clara de lo que se pretendía, las conclusiones a las que se ha llegado y del procedimiento seguido.
+
+\section{ESTADO DEL ARTE}
+Estudio a fondo el dominio de aplicación, citando numerosas referencias.
+Debe aportar un buen resumen del conocimiento que ya existe en el campo de los problemas habituales identificados.
+Numerar las citas de forma consecutiva entre corchetes \cite{Chen} y \cite{young}.
+\section{OBJETIVOS Y METODOLOGÍA}
+Objetivo general, objetivos específicos y metodología de trabajo aplicada.
+
+\section{CONTRIBUCIÓN}
+Desarrollar la descripción de tu contribución.
+
+\section{RESULTADOS O EVALUACIÓN }
+Descripción de los resultados (Tipo 1. Piloto Experimental o Tipo 4. Comparativa de soluciones) o descripción de la evaluación y los resultados obtenidos (Tipo 2. Desarrollo de Software o Tipo 3. Metodología).
+\subsection{Evaluación 1}
+
+\subsection{Evaluación 2 }
+En la Tabla \ref{tab_1}
+\begin{table}\label{tab_1}
+\caption{Unidades de las propiedades magnéticas:}
+
+\begin{tabular}{ccc}\hline\hline
+Símbolo & Cantidad & Conversión\\
+\hline
+$\Phi$ & flujo magnético & $1$Mx $\rightarrow 10^{-8}V\cdot s$\\
+... &...&...\\
+\hline\hline
+\end{tabular}
+\end{table}
+
+\section{DISCUSIÓN O ANÁLISIS DE RESULTADOS}
+Tras la presentación objetiva de los resultados, querrás aportar una discusión de los mismos.
+
+\section{CONCLUSIONES}
+Resumen de las contribuciones del trabajo, en el que relaciones las contribuciones y los resultados obtenidos con los objetivos que habías planteado para el trabajo, discutiendo hasta qué punto has conseguido resolver los objetivos planteados.
+Finalmente, hablar de líneas de trabajo futuro que podrían aportar valor añadido al TFM realizado. La sección debería señalar las perspectivas de futuro que abre el trabajo desarrollado para el campo de estudio definido. En el fondo, debes justificar de qué modo puede emplearse la aportación que has desarrollado y en qué campos.
+
+\appendix
+\section{APÉNDICES}
+Apéndices, en caso de ser necesario.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+
+
+
+\end{document}
