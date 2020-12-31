@@ -29,10 +29,10 @@
 %---------------------------
 % Título del trabajo y autor
 %---------------------------
-\title{Using Machine Learning Tools for Open Cluster Characterization with Gaia DR2 Data}
+\title{Machine Learning Tools for Open Cluster Characterization with Gaia DR2 Data}
 \author{Carlos David Álvaro Yunta}
-\date{12th of November, 2020}
-\director{César Augusto Guzmán Álvarez}
+\date{31st of December, 2020}
+\director{Dr. César Augusto Guzmán Álvarez}
 \nombreciudad{Madrid, Spain}
 
 %---------------------------
@@ -57,22 +57,23 @@
 
 \chapter{Abstract}
 
-The characterization and knowledge of \emph{Open Clusters} allows us to better understand properties and mechanisms about the Universe
-such as stellar formation and the regions where those events occur. They also provide information about stellar processes and the
-evolution of the galactic disk.
+The characterization and knowledge of \emph{Open Clusters} allow us to better understand properties and mechanisms about the Universe
+such as stellar formation and the regions where those events occur.
+They also provide information about stellar processes and the evolution of the galactic disk.
 
-In this work, we develope a method to characterize those clusters by using \emph{artificial intelligence} tools like clustering
-by \emph{K-Means}, or clustering based on \emph{Artificial Neural Networks} by implementing the \emph{Deep Embedded Clustering}
-model. We are using \emph{Gaia DR2 database} as data source for testing our models.
+In this work, we develop a method to characterize open clusters by using \emph{artificial intelligence} tools,
+such as clustering by \emph{K-Means} and clustering based on \emph{Artificial Neural Networks} by implementing the \emph{Deep Embedded Clustering} model.
+We are using \emph{Gaia DR2 database} as data source for testing our models.
 
-The developed method aims to improve the existing ones both in terms of \emph{computational efficiency}, with lower computational requirements,
-and \emph{ease of use}, by reducing the number of hyperparameters to configure in order to obtain a good characterization of the analyzed clusters.
+The developed method aims to improve current techniques of the state of the art.
+We achieve improvements not only in terms of \emph{computational efficiency}, with lower computational requirements, but in \emph{usability},
+reducing the number of hyperparameters to obtain a good characterization of the analyzed clusters.
 
-As detailed below, our method achieves good results, becoming even better in some cases when the results are compared with other current methods.
+Our method achieves good results, becoming even better in some cases when the results are compared with current techniques.
 
 \medskip
 
-{\bf Key words.} open clusters characterization --- machine learning --- gaia dr2 --- data analysis --- deep embedded clustering
+{\bf Key words.} open clusters characterization, machine learning, gaia, data analysis, deep embedded clustering
 
 \chapter{Resumen}
 
@@ -92,7 +93,7 @@ los resultados con otros métodos actuales.
 
 \medskip
 
-{\bf Palabras Clave:} caracterización de cúmulos abiertos --- inteligencia artificial --- gaia dr2 --- análisis de datos
+{\bf Palabras Clave:} caracterización de cúmulos abiertos, inteligencia artificial, gaia, análisis de datos
 
 \chapter{Acknowledgement}
 
@@ -119,17 +120,16 @@ The original description of the VizieR service was published in 2000, \cite[A\&A
 \chapter{Introduction}
 
 Stellar open clusters (OCs) \cite{janes1982open} are groups of stars gravitationally bound originated from a single molecular gas cloud.
-Thus they share the same chemical composition and age, and they have similar relative positions and proper motion.
-These astronomical objects are of fundamental importance to understand the spiral structure,
-the dynamics and the chemical evolution of our galaxy.
+They share the same chemical composition and age. Moreover, they have similar relative positions and proper motion.
+Those astronomical objects are relevant to understand the spiral structure, the dynamics and the chemical evolution of our galaxy.
 
 Although most stars in the Milky Way are presented isolated, it is considered that most of them (or even all)
 are formed in clustered environments and spend a period of time gravitationally bound with their siblings embedded
 in their original molecular cloud \cite{clarke2000theformationofstellarclusters} \cite{portegies2010young}.
-The evolution of these systems tends to sparse them in a few million years by interacting gravitationally with other systems.
+The evolution of those systems tends to sparse them in a few million years by interacting gravitationally with other systems.
 Galactic tidal forces and mechanisms that involves gas loss driven by stellar feedback are other causes of disruption
 \cite{brinkmann2017bound}.
-Nevertheless, a small fraction of these systems will survive in the initial state and persist bound in bigger timescales.
+Nevertheless, a small fraction of those systems will survive in the initial state and persist bound in bigger timescales.
 
 Young OCs allow us to research stars formation regions and improve our understanding about the mechanisms that create those stars.
 On the other hand, older open clusters give us information about stellar processes and how the galactic disk evolves.
@@ -140,8 +140,8 @@ The study of OCs has been pushed forward thanks to the huge and precise dataset 
 \cite{collaboration2016description} Gaia DR2 \cite{gaia2018gaia}, available since 2018.
 This dataset has helped to review already known open clusters and to find new ones.
 
-Stars that belong to a same OC share relative positions, inherited from their original gas cloud.
-So their distance to the Earth is similar for all of them and, therefore, they have a narrow dispersion in their parallax value.
+Stars that belong to the same OC share relative positions, inherited from their original gas cloud.
+Which means that their distances to the Earth are similar for all of them and, therefore, they have a narrow dispersion in their parallax value.
 They also share similar values of proper motion, both in right ascension and declination.
 Another property they share is their chemical composition.
 Thus, their metallicity must be uniform, since these stars were born from the same gas cloud and at the same time stage.
@@ -256,9 +256,8 @@ Finally, we extract some conclusions based on the obtained results and present f
 \section{General}
 
 The main aim of this thesis is to \emph{build an unsupervised clustering model for open cluster characterization}.
-
-We want this model to be \emph{non-supervised non-parameterized} in order to fit a wide range of clusters without
-the need of fine tunning hyperparameters regarding the topology or size of the studied clusters.
+The model will be \emph{non-supervised and non-parameterized} to fit a wide range of clusters without
+the need for fine-tuning a high number of hyperparameters.
 
 \section{Specific}
 
@@ -1208,7 +1207,7 @@ in order to compare the results obtained with the validation method and our meth
   \end{center}
 \end{table}
 
-\section{Comparison}
+\section{Comparing and Validating}
 
 Until now, we have focused our study in the open cluster Melotte 22.
 Since our aim is to get a model that fits well for a wide range of clusters,
