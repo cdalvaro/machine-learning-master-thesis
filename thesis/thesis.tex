@@ -377,7 +377,7 @@ and determines empirically the frequency functions.
 Clusterix uses normal Gaussian kernel functions, defined as:
 
 \begin{equation}
-  K(a, b) = \frac{1}{2 \pi h^{2}} \exp{ \left[ -\frac{1}{2}\frac{\left( a - a_{i} \right)^{2} + \left( b - b_{i} \right)^{2}}{ h^{2}} \right]}
+  K(a, b) = \frac{1}{2 \pi h^{2}} \exp{ \left[ - \frac{1}{2}\frac{\left( a - a_{i} \right)^{2} + \left( b - b_{i} \right)^{2}}{ h^{2}} \right]}
 \end{equation}
 
 $(a, b)$ are referred to the proper motion configuration space, while a point located in the center of the cell $(i, j)$ provides the maximum
@@ -642,6 +642,7 @@ We only need to know the \verb|id| for the desired region and query for its star
 
 PostgreSQL knows that all stars we want are located inside \verb|gaiadr2.region_302| so it does not need to query any other table.
 This allows us to download data for as many regions as we want without loosing efficiency when accessing for that data.
+% TODO: Revisar corrección de Imanol
 
 \verb|gaiadr2_source| and its partitions contain all fields available at the Gaia DR2 database.
 A complete list of these fields and their description can be found at the following link:
@@ -985,7 +986,8 @@ Figure \ref{fig:melotte_22_filtered} shows the result after filtering DEC cluste
   \label{fig:melotte_22_filtered}
 \end{figure}
 
-Table \ref{tab:results_melotte_22} shows a summary of Melotte 22 with values taken from different sources and methods: SIMBAD Astronomical Database - CDS (Strasbourg),
+Table \ref{tab:results_melotte_22} shows a summary of Melotte 22 with values taken from different sources and methods:
+SIMBAD Astronomical Database - CDS (Strasbourg),
 Clusterix+TOPCAT method, and the results obtained for each step of this method (KMeans, DEC and DEC filtered).
 
 \begin{table}[h!]
@@ -1007,8 +1009,8 @@ Clusterix+TOPCAT method, and the results obtained for each step of this method (
 
 \chapter{Results}
 
-We have seen in the previous chapter that the DEC model is capable of refining the clustering selection made by K-Means.
-This allows us to obtain a more precise characterization of the cluster.
+We have seen in the previous chapter that the DEC model is capable of refining the clustering selection made by K-Means
+hence helping us have a more precise characterization of the cluster.
 Now, in order to validate our model and be able to estimate how good or bad it is,
 we need a different method to characterize the studied clusters and compare our results with the validation method.
 
