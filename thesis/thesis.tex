@@ -132,7 +132,7 @@ in their original molecular cloud \cite{clarke2000theformationofstellarclusters}
 The evolution of those systems tends to sparse them in a few million years by interacting gravitationally with other systems.
 Galactic tidal forces and mechanisms that involve gas loss driven by stellar feedback are other causes of disruption
 \cite{brinkmann2017bound}.
-Nevertheless, a small fraction of those systems will survive in the initial state and persist bounded in bigger timescales.
+Nevertheless, a small fraction of those systems will survive in the initial state and persist bounded in larger timescales.
 
 Young OCs allow us to research star formation regions and improve our understanding about the mechanisms that create those stars.
 On the other hand, older open clusters give us information about stellar processes and how the galactic disk evolves.
@@ -144,17 +144,17 @@ The study of OCs has been pushed forward thanks to the huge and precise dataset 
 This dataset has helped to review already known open clusters and to find new ones.
 
 Stars that belong to the same OC share relative positions, inherited from their original gas cloud.
-Which means that their distances to the Earth are similar for all of them and, therefore, they have a narrow dispersion in their parallax value.
+This means that their distances to the Earth are similar for all of them and, therefore, they have a narrow dispersion in their parallax value.
 They also share similar values of proper motion, both in right ascension and declination.
 Another property they share is their chemical composition.
 Thus, their metallicity must be uniform, since these stars were born from the same gas cloud and at the same time stage.
 However, to take this last property into account, we are faced with the drawback that this parameter is poorly reported in Gaia DR2 database.
 
-We will avoid this issue by looking at $E(b-r) / G_{mag}$ diagrams that reflect their connection with the isochrone curves,
-typical of their temporal evolution \cite{bressan2012parsec}.
+We will avoid this issue by looking at $E(b-r) / G_{mag}$ diagrams that show their connection with the isochrone curves.
+These curves are a tool used to determine how stars evolve in time \cite{bressan2012parsec}.
 The isochrones are derived from theoretical models.
 These models are mainly based on metallicity and mass/brightness ratio of stars.
-They also have a direct correspondence with that presented by the Hertzsprung–Russell (H-R) diagram of the stars belonging to the cluster.
+They also have a direct relation with that presented by the Hertzsprung–Russell (H-R) diagram of the stars belonging to the cluster.
 Examples of these curves are shown in Figure \ref{fig:examples_of_isochrones}.
 
 \begin{figure}[htbp]
@@ -164,7 +164,8 @@ Examples of these curves are shown in Figure \ref{fig:examples_of_isochrones}.
   \label{fig:examples_of_isochrones}
 \end{figure}
 
-Since these stars were born close in time, they should have a sharp, well-defined profile with little scattering through the main sequence in the H-R diagram.
+Since these stars were born close in time, they should have a sharp and well-defined profile,
+with low scattering through the main sequence in the H-R diagram.
 Examples for this kind of diagrams are presented in Figure \ref{fig:examples_of_hr_diagrams}.
 
 \begin{figure}[htbp]
@@ -193,7 +194,7 @@ Although the members of a cluster appear in the observational visual field as an
 as shown in Figure \ref{fig:pos_ngc_2682},
 these coordinates are not useful to separate those stars that belong to the cluster from the other that do not.
 However, if we look for overdensities in the proper motion configuration spaces, it is possible, at least at first instance,
-to assume a possible membership delimitation (see Figure \ref{fig:pm_ngc_2682}.
+to assume a possible membership cut (see Figure \ref{fig:pm_ngc_2682}.
 
 \begin{figure}[htbp]
   \centering
@@ -217,7 +218,8 @@ to assume a possible membership delimitation (see Figure \ref{fig:pm_ngc_2682}.
 \end{figure}
 
 Overdensities in proper motion are not always so evident.
-Additionally, we will consider the parallax distribution to improve our cluster characterization.
+In order to improve the characterization capabilities of our model,
+we will consider the parallax distribution as well.
 
 \begin{figure}[htbp]
   \centering
@@ -236,23 +238,27 @@ Additionally, we will consider the parallax distribution to improve our cluster 
       \caption{Melotte 22 H-R diagram}
     \end{subfigure}
   \end{subfigure}
-  \caption{Melotte 22 Parallax histogram, clearly differentiated around the value $\approx 7.3mas$ and the corresponding diagram from the photometric magnitudes.}
+  \caption{Melotte 22 Parallax histogram, clearly differentiated around the value $\approx 7.3mas$
+           and the corresponding diagram from the photometric magnitudes.}
   \label{fig:melotte_22_pm_parallax}
 \end{figure}
 
 In many other cases things are not so simple,
-and the characterization process can turn very difficult and tedious using tools such as the available ones at the Virtual Observatory (VO),
-and frequently it requires parametrization based on prior knowledge about the studied region.
+and the characterization process can turn very difficult and tedious using tools such as the available ones at the Virtual Observatory (VO).
+Furthermore, it frequently requires a parametrization based on prior knowledge regarding the studied region.
 The aim of this work is to test an unsupervised and non-parametrized model based on Machine Learning (ML) tools.
 
-We start enumerating the aims we try to achieve with this work.
+We start by enumerating the aims we try to achieve with this work.
 Then, we expose the current \emph{state of the art}, mentioning the \emph{Gaia Mission} used as data source in this work and
 describing other related works that try to solve this problem.
-As a last point of the state of the art, we make a brief summary of some of the today available clustering algorithms.
-After the state of the art, we explain our method to improve open cluster characterization.
-Next, we show an alternative method based on current procedures. We have used this alternative method as a validation method to test ours.
-Then, a comparison between a set of results obtained with our method and the results obtained for the same clusters with the validation method is presented.
-Finally, we extract some conclusions based on the obtained results and present further researches that can be done in light of the results.
+The state of the art ends with a brief summary for some of the clustering algorithms available today.
+In the \emph{Method} chapter, we explain our model to improve open cluster characterization.
+Also, we show an alternative method based on current procedures.
+We have used this alternative technique as a validation method to test ours.
+Then, a comparison between a set of results obtained with our method and the results obtained
+for the same clusters with the validation method is presented.
+Finally, we extract some conclusions based on the obtained results and present
+further researches that can be done in light of the results.
 
 \chapter{Aims}
 
