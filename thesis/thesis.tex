@@ -285,15 +285,18 @@ To achieve the general goal, we will set the following milestones:
 
 \chapter{State of the Art}
 
-An initial approach for finding OCs is the search of overdensities along the galactic disk. In general, this is the starting point but,
-although it seems simple, it presents a fundamental problem already discussed. The near field around the OC is filled with two types of
-distinct star populations: those who belong to the OC (tens or hundreds to a few thousand) and a background made up of thousands or
-millions of stars that are not. Finding out which stars belong to the first group is the problem faced in this work.
+An initial approach for finding OCs is the search for overdensities along the galactic disk.
+In general, this is a good starting point but, although it seems simple,
+it presents a fundamental problem already discussed.
+The near field around the OC is filled with two types of distinct star populations:
+those who belong to the OC (tens or hundreds to a few thousand)
+and a background made up of thousands or millions of stars that are not.
+Finding out which stars belong to the first group is the problem faced in this work.
 This selection is crucial to properly characterize the fundamental properties of the cluster
 (dynamics, total mass, age, chemical composition, etc.).
 
-Sometimes, the problem is easy to solve, as we have seen, by studying astrometric parameters and looking for overdensities in the proper
-motion configuration space as well as in the parallax space.
+Sometimes, the problem is easy to solve, as we have seen, by studying astrometric parameters
+and looking for overdensities in the proper motion configuration space as well as in the parallax space.
 
 \begin{figure}[htbp]
   \centering
@@ -321,9 +324,10 @@ It is easy to see that a subgroup can be located at [20, -45].
 Figure \ref{fig:pm_vec_melotte_22} shows the parallax distribution and confirms an overdensity at
 $\approx 7.3 mas$ corresponding to Mellote 22 OC (See also Figure \ref{fig:melotte_22_parallax_zoom}).
 
-However, as shown in Figures \ref{fig:pm_ngc_6494} and \ref{fig:parallax_ngc_6494}, in general it is not as easy and
-becomes necessary to consider other parameters such as distances, or even metallicity and age (derived from isochrone curves)
-and requires photometric data for the stars within the studied field.
+However, as shown in Figures \ref{fig:pm_ngc_6494} and \ref{fig:parallax_ngc_6494},
+in general it is not as easy and becomes necessary to consider other parameters such as distances,
+or even metallicity and age (derived from isochrone curves).
+Sometimes even, photometric data may be required for the stars within the studied field.
 
 \begin{figure}[htbp]
   \centering
@@ -347,37 +351,41 @@ and requires photometric data for the stars within the studied field.
 \end{figure}
 
 At this point, it seems reasonable that the study of each individual group requires its own parametrization and technique
-to identify it. With Gaia DR2, which contains great high-quality astrometric and photometric data for a huge number of stars,
+to identify it. With Gaia DR2, which contains high-quality astrometric and photometric data for a huge number of stars,
 a new opportunity arises to simplify and optimize these processes. In this context, new approaches are being developed
 to improve current detection methods and automate OC characterization.
 
 \section{Gaia Mission}
 
-In this work we make use of Gaia DR2 since, although Release 3 (Gaia DR3) is imminent, it has not been available in time for us.
+In this work we make use of Gaia DR2 since DR3 has not been released in time for us to include it.
 Gaia DR2 is a multidimensional dataset obtained by ESA's Gaia mission (located at L2, 1.5 million kilometers from Earth) and
 operational since 2014. The catalogue has high precision and accuracy astrometric data for more than 1.7 billion stellar sources,
 and magnitudes in three photometric filters (G, BP and RP) for more than 1,300 million sources.
-80\% of Gaia DR2 sources are weaker than $G_{mag} \approx 18$. For magnitudes $G \approx 21$ nominal uncertainties reach
-$2 mas$ for parallaxes and $5 mas \cdot years^{-1}$ in proper motions. But for closer sources, (at the bright end, $G < 14$),
-the precision is of the order of $0.02 mas$ and $0.05 mas \cdot year^{-1}$ respectively \cite{cantat2018gaia}. In general,
-open clusters, which is the main subject of this work, are at optimal data thresholds.
+80\% of Gaia DR2 sources are weaker than $G_{mag} \approx 18$.
+For magnitudes $G \approx 21$ nominal uncertainties reach $2 mas$ for parallaxes and $5 mas \cdot years^{-1}$ in proper motions.
+But for closer sources, (at the bright end, $G < 14$), the precision is of the order of $0.02 mas$
+and $0.05 mas \cdot year^{-1}$ respectively \cite{cantat2018gaia}.
+In general, open clusters, which are the main subject of this work, are at optimal data thresholds.
 
-In this context, and taking advantage of the opportunity provided by Gaia DR2, new approaches are being developed to improve current
-detection methods and automating OC characterization as much as possible. This is the case of tools such as Clusterix 2.0
-\cite{balaguer2020clusterix}, TOPCAT \cite{taylor2005topcat}, and VOSA \cite{bayo2008vosa}, (all of them developed by the Virtual Observatory).
-These tools work together and offer good results, although it is not possible to use them in an unsupervised process and free of certain
-different parametrization in each case.
+In this context, and taking advantage of the opportunity provided by Gaia DR2,
+new approaches are being developed to improve current detection methods and automating OC characterization as much as possible.
+This is the case of tools such as Clusterix 2.0 \cite{balaguer2020clusterix}, TOPCAT \cite{taylor2005topcat}
+and VOSA \cite{bayo2008vosa}, (all of them developed by the Virtual Observatory).
+These tools work together and offer good results,
+although it is not possible to use them in an unsupervised process and they require different parameterizations for each study case.
 
 \section{Current Methods}
 
-TOPCAT alone does not offer an independent discrimination mechanisms to researchers.
-They should try an initial selection, starting from the map of proper motions,
-by delimiting the area where the cluster presumably appears. When this is not possible, it is necessary to have a
-certain knowledge about the cluster profile and to parametrize some approximated values.
-In both cases, the definition of the selected set must then be optimized step by step until reaching a result that can be considered reasonable.
+TOPCAT by itself does not offer an independent discrimination mechanisms to researchers.
+They have to try an initial selection, starting from the representation of proper motions,
+by delimiting the area where the cluster most probably appears.
+When this is not possible, it is necessary to have a previous knowledge about the cluster profile
+and to parametrize some approximated values.
+In both cases, the obtained selection must then be optimized step by step
+until a result that meets the confidence levels is achieved.
 
 Another tool is Clusterix 2.0, which is an interactive web-based tool \cite{balaguer2020clusterix}.
-It takes the proper motion diagram without making any prior assumptions about the membership of the candidate star
+It takes the proper motion diagram without making any prior assumption about the membership of the candidate star
 and determines empirically the frequency functions.
 
 Clusterix uses normal Gaussian kernel functions, defined as:
@@ -386,15 +394,18 @@ Clusterix uses normal Gaussian kernel functions, defined as:
   K(a, b) = \frac{1}{2 \pi h^{2}} \exp{ \left[ - \frac{1}{2}\frac{\left( a - a_{i} \right)^{2} + \left( b - b_{i} \right)^{2}}{ h^{2}} \right]}
 \end{equation}
 
-$(a, b)$ are referred to the proper motion configuration space, while a point located in the center of the cell $(i, j)$ provides the maximum
-contribution for calculating the local density. In this context, the number $h$ is called the \emph{smoothing} parameter and it is measured in
-the same units as proper motion.
+$\left( a, b \right)$ are referred to the proper motion configuration space,
+while a point located in the center of the cell $\left( i, j \right)$ provides the maximum
+contribution for calculating the local density.
+Number $h$ is called the \emph{smoothing} parameter and it is measured in the same units as proper motion.
 
-With this same purpose of applying non-parametric methods, various clustering algorithms have been applied in the past, UPMASK \cite{krone2014upmask}
-was developed to only use photometry and positions, and then it was adapted to the Gaia data \cite{cantat2018gaia} based only on proper motion and
-parallax. A similar approach has been carried out using DBSCAN and machine learning algorithms to discover new clusters.
+Various clustering algorithms have been studied in the past with the purpose of finding a valid non-parameterized method.
+UPMASK \cite{krone2014upmask} was developed to only use photometry and positions,
+and then it was adapted to the Gaia data \cite{cantat2018gaia} based only on proper motion and parallax.
+A similar approach has been carried out using DBSCAN and machine learning algorithms to discover new clusters.
 
-In this sense, Clusterix also claims to be a non-parametric method, but it critically depends on the initial selection for the field sizes to be analyzed.
+In this sense, Clusterix also claims to be a non-parameterized method,
+but it critically depends on the initial selection for the field sizes to be analyzed.
 
 \begin{figure}[htbp]
   \centering
@@ -406,23 +417,32 @@ In this sense, Clusterix also claims to be a non-parametric method, but it criti
 Clusterix relies on several assumptions, among other:
 
 \begin{displayquote}
-The non-field population does not occupy the entire workspace, but is spatially concentrated, which makes it possible to distinguish two regions
-in the workspace: the only field region (label 'f'), dominated by star fields, and the cluster + field region (label 'c+f'),
-which includes both star fields and not star fields. \cite{balaguer2020clusterix}
+The non-field population does not occupy the entire workspace, but is spatially concentrated,
+which makes it possible to distinguish two regions in the workspace:
+the only field region (label 'f'), dominated by star fields,
+and the cluster + field region (label 'c+f'), which includes both star fields and not star fields.
+\cite{balaguer2020clusterix}
 \end{displayquote}
 
-This fact implies defining three areas or regions with different radius. The first 'c+f' corresponds to the one in which the cluster members are
-presumed to be contained together with other star fields that are not part of the cluster. The second, broader, assumes that it only contains
-stars in an extended visual field without components of the cluster, and a third intermediate region, which is out of analysis (void area), which
-would correspond to a possible transition zone between the other two.
+This fact implies defining three areas or regions with different radius.
+The first 'c+f' corresponds to the one in which the cluster members are
+presumed to be contained together with other star fields that are not part of the cluster.
+The second region is the broadest and assumes that it only contains stars
+in an extended visual field without components of the cluster.
+The third region is the intermediate one and is out of analysis (void area),
+since it would correspond to a possible transition zone between the other two.
 
-The correct choice of these radii, even having a previous estimation for the 'c+f' region, significantly affects the execution of the algorithm and,
-in general, requires a generously wide field 'f'. There is no general rule that defines relative proportions of these areas.
+The right choice of these radii, even having a previous estimation for the 'c+f' region,
+highly affects the execution of the algorithm and, in general, requires a considerable wide field 'f'.
+There is no rule of thumb that defines relative proportions of these areas.
 
-Finally, when an acceptable result is obtained, what Clusterix provides is a probability field associated with the set of stars under study.
-The dataset, with an extra column for the probability value of each object to belong to the open cluster, can be exported to TOPCAT
-for further optimization and final processing. Figure \ref{fig:clusterix_probability} shows an example of the probability distribution in the proper
-motion space for NGC 2682.
+Finally, when an acceptable result is obtained,
+what Clusterix provides is a probability field associated to the set of stars under study.
+The recovered dataset contains all fields from Gaia database
+and an extra column with the probability value of each object to belong to the open cluster.
+This new dataset can be exported to TOPCAT for further optimization and final processing.
+Figure \ref{fig:clusterix_probability} shows an example of the probability distribution
+in the proper motion space for NGC 2682.
 
 \begin{figure}[htbp]
   \centering
@@ -431,51 +451,65 @@ motion space for NGC 2682.
   \label{fig:clusterix_probability}
 \end{figure}
 
-Finally, it is necessary to refer to the work of \cite{castro2020hunting}, which presents a method based on machine learning techniques to make
-a systematic search for overdensities in the astrometric space of the galactic disk and a subsequent identification of OC using photometric
-information, also from Gaia DR2.
+Finally, it is necessary to refer to the work developed on \cite{castro2020hunting}.
+It presents a method based on machine learning techniques to make a systematic search
+for overdensities in the astrometric space of the galactic disk
+and a later identification of OC using photometric information, also from Gaia DR2.
 
-The method includes two phases: the first one uses an unsupervised clustering algorithm, DBSCAN, to search for overdensities
-$(l, b \pi, \mu_{\alpha} *, \mu_{\delta})$, ans subsequently applies a deep learning ANN trained with magnitude diagrams to identify isochrone
-patterns within the detected overdensities and thus proceed to confirm them as OC.
+The method includes two phases: the first one uses an unsupervised clustering algorithm, DBSCAN,
+to search for overdensities $(l, b \pi, \mu_{\alpha} *, \mu_{\delta})$,
+and then applies a deep learning Artificial Neural Network (ANN),
+previously trained with magnitude diagrams,
+to identify isochrone patterns within the detected overdensities and thus proceed to confirm them as OC.
 
-It should be noted that for the execution of this method, MareNostrum 42 (Barcelona Supercomputing Center) was used.
-So the neural network could handle the image recognition process with isochrone patterns and not applying theoretical models
-derived from values such as metallicity, masses, among other.
+It should be noted that for the execution of this method,
+MareNostrum 42 (Barcelona Supercomputing Center) was used.
+So the neural network could handle the image recognition process with isochrone patterns
+and not applying theoretical models derived from values such as metallicity or masses, among other.
 
-The result of this work is the recognition of 582 new open clusters distributed along the galactic disk for a galactic declination $b < 20^{\circ}$,
+The result of this work is the recognition of 582 new open clusters
+distributed along the galactic disk for a galactic declination $b < 20^{\circ}$,
 which has meant an increase of 45\% over previously ones.
 
-Our aim in this work, linked to computational limitations compared to MareNostrum, is not to do a blind search for clusters,
-but to obtain a method, within the machine learning environment,
+Our aim in this work, linked to computational limitations compared to MareNostrum,
+is not to do a blind search for clusters, but to obtain a method,
+within the machine learning environment,
 that allows the characterization of open clusters through unsupervised and non-parametrized procedures in a single step.
 This method should not require further refinements with other tools.
 
-The result of Clusterix + TOPCAT, applied to the same clusters, will be used only for comparing and validating our results.
+The result of Clusterix + TOPCAT, applied to the same clusters,
+will be used only for comparing and validating our results.
 
 \section{Clustering Algorithms}
 
-As we will explain later, what we need to accomplish our aim is an algorithm that manages to make data groups based on the dynamic properties of the stars.
+As we will explain later, what we need to accomplish our aim is an algorithm
+that manages to make data groups based on the dynamic properties of the stars.
 
 There are several clustering algorithms: KMeans, Mean-Shift Clustering, DBSCAN \cite{ester1996density} among other.
-While each one behaves better according ot the distribution of the objects to clusterize, we have choosen KMeans by its simplicity and good results.
+While each one behaves better according to the distribution of the objects to clusterize,
+we have chosen KMeans by its simplicity and good results.
 
 KMeans requires a single parameter, the number of clusters to build (N).
 The algorithm looks for N center points which are vectors of the same dimension as the number of selected features.
-KMeans starts by making an initial groups configuration and then, it reassigns objects to other groups iteratively by minimizing
-the distance among points inside the new group and maximizing the distance with the centers of the other groups.
+KMeans starts by making an initial groups configuration and then,
+it reassigns objects to other groups iteratively by minimizing the distance among points
+inside the new group and maximizing the distance with the centers of the other groups.
 
-The algorithm stops once a maximum number of iterations is reached, or when changes between iterations is lower than a minimum.
+The algorithm stops once a maximum number of iterations is reached,
+or when changes between iterations is lower than a minimum.
 
 This algorithm works well and gives good results at first approach.
 However, we need to set a large number of clusters to find the open cluster we are looking for.
-This fact complicates the identification of the OC and many times the OC contains to many outliers.
-For that reason, we have search for a KMeans refinement based on an Artificial Neural Network (ANN).
+This fact complicates the identification of the OC and many times the found cluster contains to many outliers.
+For that reason, we have search for a KMeans refinement based on an artificial neural network.
 
-The \emph{Unsupervised Deep Embedding for Clustering Analysis} model or \emph{DEC} \cite{xie2016unsupervised} takes KMeans as its starting point,
-but then, it trains an autoencoder to reduce the feature space and pass this transformed data through a Clustering Layer which refines the previous selection.
+The \emph{Unsupervised Deep Embedding for Clustering Analysis} model
+or \emph{DEC} \cite{xie2016unsupervised} takes KMeans as its starting point,
+but then, it trains an autoencoder to reduce the feature space
+and pass this transformed data through a Clustering Layer which refines the previous selection.
 
-The mechanism of this model is explained in Section \ref{sec:deep_embedding_clustering} and its implementation is available in \verb|cdalvaro.ml.dec| package.
+The mechanism of this model is explained in Section \ref{sec:deep_embedding_clustering}
+and its implementation is available in \verb|cdalvaro.ml.dec| package.
 
 \chapter{Method}
 \label{chap:method}
