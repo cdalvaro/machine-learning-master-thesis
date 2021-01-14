@@ -765,12 +765,17 @@ We use it to relate both features and therefore, to force our model to keep them
     \centering
     \includegraphics[width=\textwidth]{../figures/melotte_22/features_melotte_22.png}
   \end{subfigure}
-  \caption{Melotte 22 feature pairplot}
-  % TODO: Ampliar la descripción de la figura
+  \caption{Pairwise relationships among variables using Melotte 22 data}
   \label{fig:features_melotte_22}
 \end{figure}
 
 \newpage
+
+Figure \ref{fig:features_melotte_22} shows a pairwise relationship among some features available
+in the dataset for Melotte 22 data.
+The diagonal of the grid shows the marginal distribution of the data in each column.
+This plot can be useful to find correlations between pairs of variables or
+to identify resonances in certain variables such as those in the parallax feature.
 
 In summary, these are the features we are going to use as sources for our clustering models:
 
@@ -866,7 +871,6 @@ It shows how to estimate the best number of clusters for Melotte 22 by using \ve
 \begin{minted}{python}
   n_clusters, kmeans = estimate_n_clusters(melotte22_df,
                                            min_clusters=3, max_clusters=7)
-  # Output
   # Silhouette score for 3 clusters: 0.5420
   # Silhouette score for 4 clusters: 0.5393
   # Silhouette score for 5 clusters: 0.5608
@@ -1071,7 +1075,7 @@ Clusterix+TOPCAT method, and the results obtained for each step of this method (
 \begin{table}[h!]
   \begin{center}
     \begin{tabular}{l|c|c|c|c}
-      \textbf{Source / method} & \textbf{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \textbf{$\mu_{\delta}$ $(mas/yr^{-1})$} & \textbf{$\varpi$ $(mas)$} & \emph{\# stars} \\
+      \textbf{Source / method} & \emph{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas/yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
       \hline
       \textbf{Simbad.u-strasbg.fr}\tablefootnote{Results have been taken from \protect\citeA[p.~25. Table A.3. Pleiades]{babusiaux2018gaia}} &
         19.997 $\pm$ 0.127 & -45.548 $\pm$ 0.101 & 7.364 $\pm$ 0.005 & 1326 \\
@@ -1080,30 +1084,34 @@ Clusterix+TOPCAT method, and the results obtained for each step of this method (
       DEC & 23.67 $\pm$ 38.33 & -46.23 $\pm$ 44.54 & 8.04 $\pm$ 2.59 & 878 \\
       \textbf{DEC (filtered)} & 19.50 $\pm$ 8.59 & -44.23 $\pm$ 8.17 & 7.42 $\pm$ 0.1 & 438 \\
     \end{tabular}
-    \caption{Melotte 22. The parameters shown are proper motion in right ascension and declination, parallax and number of stars with their respective deviations.}
+    \caption{Parameters shown are proper motion in right ascension and declination, parallax
+             with their respective deviations and number of stars corresponding to Melotte 22 data.}
     \label{tab:results_melotte_22}
   \end{center}
 \end{table}
 
 \chapter{Results}
 
-We have seen in the previous chapter that the DEC model is capable of refining the clustering selection made by K-Means
+We have seen in the previous chapter that DEC model is capable
+of refining the clustering selection made by K-Means
 hence helping us have a more precise characterization of the cluster.
-Now, in order to validate our model and be able to estimate how good or bad it is,
-we need a different method to characterize the studied clusters and compare our results with the validation method.
+Now, in order to validate our model and to be able to estimate how good or bad it is,
+we need a different technique to characterize the studied clusters and compare our results
+with those obtained with the validation method.
 
-For that purpose, we have used an alternative method based on Virtual Observatory (VO) tools such as Clusterix and TOPCAT,
-to characterize the studied clusters.
+For that purpose, we have used an alternative method based on Virtual Observatory (VO) tools
+such as Clusterix and TOPCAT, to characterize the studied clusters.
 
 \section{Cluster Characterization with VO Tools}
 
-The aim of this section is to highlight the procedure differences between our method and this new one,
-as well as using the results provided by this method to validate ours results.
-This validation method uses a combination of VO tools: Clusterix 2.0 + TOPCAT.
-We take Melotte 22 again as our study case to make easier comparisons between the method presented in Chapter \ref{chap:method}
-and this alternative one.
+The aim of this section is to highlight the procedure differences between our method and the validation one,
+as well as using the results provided by the second technique to validate ours results.
+This validation method uses a combination of VO tools: \emph{Clusterix 2.0 + TOPCAT}.
+We take Melotte 22 again as our study case to make easier the comparison process between
+the method presented in Chapter \ref{chap:method} and the alternative one.
 
-The initial point is taking advantage of Clusterix in order to avoid a subjective and manual selection for the cluster members.
+The initial point is taking advantage of Clusterix in order to avoid a subjective
+and manual selection for the cluster members.
 Figure \ref{fig:clusterix_selection} shows a screenshot of the Clusterix 2.0 selection panel.
 
 \begin{figure}[htbp]
@@ -1113,21 +1121,24 @@ Figure \ref{fig:clusterix_selection} shows a screenshot of the Clusterix 2.0 sel
     \includegraphics[width=\textwidth]{../figures/clusterix/clusterix_selection_panel_melotte_22.png}
   \end{subfigure}
   \caption{Clusterix 2.0 selection panel with Melotte 22 settings.
-           The coordinates correspond to the center of Melotte 22 cluster,
+           Coordinates correspond to the center of Melotte 22 cluster,
            while the radius is the value registered for this cluster in the
            OpenClust catalogue multiplied by 1.5 (as explained in \ref{sec:data_mining})}
   \label{fig:clusterix_selection}
 \end{figure}
 
-This panel allows us to select a region by its coordinates or by searching a cluster by its name in the Gaia DR2 catalogue,
-as well as specify the size of the region by introducing its radius.
-We can also set limit values in magnitude (for both minimum and maximum) to discard stars outside these limits.
+This panel allows us to select a region by its coordinates
+or by searching a cluster by its name in the Gaia DR2 catalogue,
+as well as to specify the size of the region by introducing its radius.
+We can also set limit values in magnitude (for both minimum and maximum)
+to discard stars outside these limits.
 Another setting is the flag to enable or disable the \emph{Q-Filter}.
 This filter discards those stars with \emph{null} values in relevant fields.
 
-Clusterix returns a position map for the downloaded stars from Gaia DR2 database using Aladin \cite{bonnarel2000aladin} as an atlas of the sky
-(See Figure \ref{fig:aladin_melotte_22}).
-At this point, we can choose sending the recovered data to TOPCAT or Aladin, or continue to the next step of this assistant.
+Clusterix returns a position map for the downloaded stars from Gaia DR2 database
+using Aladin \cite{bonnarel2000aladin} as an atlas of the sky (See Figure \ref{fig:aladin_melotte_22}).
+At this point, we can choose sending the recovered data to TOPCAT or Aladin,
+or continue to the next step of the assistant.
 
 We select the second choice and proceed with the proper motion frequency space analysis.
 
@@ -1146,24 +1157,33 @@ In this step, we define three regions that will be used for the frequency analys
 \begin{itemize}
   \item \textbf{Inner region} (\emph{c+f}), with stars that belong to the OC and field stars.
   \item \textbf{External region} or field region (\emph{f}), with stars that do not belong the open cluster.
-  \item \textbf{Void region}. This region is excluded from the analysis since it is supposed to be a transition region with stars that could belong the OC.
+  \item \textbf{Void region}. This region is excluded from the analysis since it is supposed
+                to be a transition region with stars that could belong the OC.
 \end{itemize}
 
-It is necessary to remark the importance of this step, since the selection of these regions is critical to get a good result.
-However, despite how crucial is this selection, there is no general rule to define these regions.
-We only have two references: the radius of the downloaded region and the estimated size for the open cluster that sets the \emph{inner radius}.
-The other two radius must be set by trial and error. In general, they should be large enough to be sure we are not taking polluted regions.
-This is a tedious process that requires several tries before achieving good enough probability values.
+It is necessary to remark the importance of this step,
+since the selection of these regions is critical to get a good result.
+However, despite how crucial this step is, there is no general rule to define these regions.
+We only have two references:
+the radius of the downloaded region and the estimated size for the OC that sets the \emph{inner radius}.
+The other two radius must be set by trial and error.
+In general, they should be large enough to be sure that we are not taking polluted regions.
+This is a tedious process and requires several tries before achieving good enough probability values.
 
-Furthermore, it is necessary to know in advance some additional profiles of the cluster, in addition to the estimated size.
-For example, in the case of Melotte 22, the proper motion in declination direction of the membership stars around $-45 mas \cdot year^{-1}$,
+Furthermore, it is necessary to know in advance some additional profiles of the cluster,
+in addition to the estimated size.
+For example, in the case of Melotte 22, the proper motion in declination direction
+of the membership stars around $-45 mas \cdot year^{-1}$,
 so it is necessary to open the $\mu$ range above the estimated values (in absolute value).
-If we do not do that we lose the possibility of detection, since Clusterix sets this value to $30 mas \cdot year^{-1}$ by default.
-But even in this case, it is necessary to set a threshold for magnitude values, $G \leq 14$, to help getting the right result.
+If we do not do that we lose the possibility of detection,
+since Clusterix sets this value to $30 mas \cdot year^{-1}$ by default.
+But even in this case, it is necessary to set a threshold for magnitude values,
+$G \leq 14$, to help getting the right result.
 Figure \ref{fig:clusterix_step2_melotte_22} shows the region selection panel on Clusterix 2.0.
 
-This makes the selection process an art rather than a science, not to mention the required previous knowledge on certain profiles of the
-objects to characterize. This puts into question the non-parametric character of the method.
+This makes the selection process an art rather than a science,
+not to mention the required previous knowledge on certain profiles of the objects to characterize.
+This puts into question the \emph{non-parameterized} character of the validation method.
 
 \begin{figure}[htbp]
   \centering
@@ -1175,10 +1195,12 @@ objects to characterize. This puts into question the non-parametric character of
   \label{fig:clusterix_step2_melotte_22}
 \end{figure}
 
-After having set all these parameters, Clusterix performs the proper motion frequency analysis and returns the probability field
+After having set all these parameters,
+Clusterix performs the proper motion frequency analysis and returns the probability field
 associated to each star of the whole region (see Figure \ref{fig:clusterix_probability_melotte_22}).
 
-This step can be repeated over and over again, varying radii and other parameters, until finally reach a valid probability that works.
+This step can be repeated over and over again, varying radii and other parameters,
+until finally reach a valid probability that works.
 The last step presents a table with candidate objects and allows to export this dataset to TOPCAT,
 Aladin and VOSA to perform a deeper filtering and analysis based on the results provided by Clusterix.
 
@@ -1194,12 +1216,15 @@ Aladin and VOSA to perform a deeper filtering and analysis based on the results 
 \end{figure}
 
 Once data is available in TOPCAT, we have to carefully analyze the imported data.
-From there, we can perform a first star selection by excluding those stars with probability value lower than 0.8.
+At this point, we can perform a first stars selection by excluding those stars with probability value lower than 0.8.
 This first result can be taken as a good starting point, but we still need to make some fine tunning.
-As we can see in Figure \ref{fig:topcat_prob_selection_melotte_22}, the selection is too restrictive and we have lost too many stars.
+As we can see in Figure \ref{fig:topcat_prob_selection_melotte_22},
+the selection is too restrictive and we have lost too many stars.
 
-Looking at Figure \ref{fig:topcat_prob_parallax_melotte_22}, we can assume that cluster members are around $7.3mas$ in the parallax histogram.
-Also, Figure \ref{fig:topcat_prob_pm_melotte_22} reveals that cluster stars have low scattering rate in the proper motion configuration space.
+Looking at Figure \ref{fig:topcat_prob_parallax_melotte_22},
+we can assume that cluster members are around $7.3mas$ in the parallax histogram.
+Also, Figure \ref{fig:topcat_prob_pm_melotte_22} reveals that cluster stars
+have low scattering rate in the proper motion configuration space.
 
 \begin{figure}[htbp]
   \centering
@@ -1223,9 +1248,11 @@ Also, Figure \ref{fig:topcat_prob_pm_melotte_22} reveals that cluster stars have
   \label{fig:topcat_prob_selection_melotte_22}
 \end{figure}
 
-Taken these observations into account, we can proceed to make a new selection based on parallax properties.
-Our second selection makes use of the values obtained with the previous selection for parallax and its standard deviation and
-selects those stars from the whole set which fall inside the limits $7.304mas \pm 0.797$ (see Figure \ref{fig:topcat_parallax_melotte_22}).
+Taking these observations into account,
+we can proceed to make a new selection based on parallax properties.
+Our second selection makes use of the values obtained with the previous selection
+for parallax and its standard deviation and selects those stars from the whole set
+which fall inside the limits $7.304mas \pm 0.797$ (see Figure \ref{fig:topcat_parallax_melotte_22}).
 
 \begin{figure}[htbp]
   \centering
@@ -1250,7 +1277,8 @@ selects those stars from the whole set which fall inside the limits $7.304mas \p
 \end{figure}
 
 Looking at the H-R diagrams (Figure \ref{fig:clusterix_selection_hr_diagrams_melotte_22}),
-we can compare both selections and see how we have extended the selection without getting too much noise around the isochrone curve.
+we can compare both selections and see how we have extended the selection without
+getting too much noise around the isochrone curve.
 
 \begin{figure}[htbp]
   \centering
@@ -1272,8 +1300,8 @@ we can compare both selections and see how we have extended the selection withou
   \label{fig:clusterix_selection_hr_diagrams_melotte_22}
 \end{figure}
 
-Finally, we filter the second selection by discarding those stars whose parallax relative error in absolute value is behind 0.05
-(see Figure \ref{fig:clusterix_final_selection_melotte_22}).
+Finally, we filter the second selection by discarding those stars whose parallax relative error in absolute value
+is behind 0.05 (see Figure \ref{fig:clusterix_final_selection_melotte_22}).
 
 \begin{figure}[htbp]
   \centering
@@ -1295,13 +1323,13 @@ Finally, we filter the second selection by discarding those stars whose parallax
   \label{fig:clusterix_final_selection_melotte_22}
 \end{figure}
 
-For the sake of completeness, Table \ref{tab:results_melotte_22} is shown again,
-in order to compare the results obtained with the validation method and our method.
+For the sake of completeness, Table \ref{tab:results_melotte_22} is shown again.
+This table summarizes the results obtained with the validation technique and our method.
 
 \begin{table}[h!]
   \begin{center}
     \begin{tabular}{l|c|c|c|c}
-      \textbf{Source / method} & \textbf{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \textbf{$\mu_{\delta}$ $(mas/yr^{-1})$} & \textbf{$\varpi$ $(mas)$} & \emph{\# stars} \\
+      \textbf{Source / method} & \emph{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas/yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
       \hline
       \textbf{Simbad.u-strasbg.fr} & 19.997 $\pm$ 0.127 & -45.548 $\pm$ 0.101 & 7.364 $\pm$ 0.005 & 1326 \\
       \textbf{Clusterix+TOPCAT} & 19.98 $\pm$ 1.25 & -45.47 $\pm$ 1.48 & 7.33 $\pm$ 0.21 & 634 \\
@@ -1318,12 +1346,14 @@ Until now, we have focused our study in the open cluster Melotte 22.
 Since our aim is to get a model that fits well for a wide range of clusters,
 we will now proceed to show some results obtained for a selection of clusters with different topologies.
 
-All results have been computed with an Apple Mac Pro Late 2013, 2.7 GHz 12-Core Intel Xeon E5 with two AMD FirePro D700 6GB and 64 GB
+All results have been computed with an Apple Mac Pro Late 2013,
+2.7 GHz 12-Core Intel Xeon E5 with two AMD FirePro D700 6GB and 64 GB
 of memory, running macOS BigSur 11.1, Keras 2.2 and PlaidML 0.7.
 
-The majority of the runnings have taken a few minutes, while big clusters such as Melotte 25, have taken around an hour to perform
-the computations. This contrasts with \citeA{castro2020hunting} work, that used the power of the MareNostrum 42 supercomputer in order
-to perform its calculations.
+The majority of the runnings have taken a few minutes, while big clusters such as Melotte 25,
+have taken around an hour to perform the computations.
+This contrasts with \citeA{castro2020hunting} work,
+that used the power of the MareNostrum 42 supercomputer in order to perform its computations.
 
 \newpage
 
@@ -1430,7 +1460,7 @@ to perform its calculations.
 \begin{table}[h!]
   \begin{center}
     \begin{tabular}{l|c|c|c|c}
-      \textbf{Source / method} & \textbf{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \textbf{$\mu_{\delta}$ $(mas/yr^{-1})$} & \textbf{$\varpi$ $(mas)$} & \emph{\# stars} \\
+      \textbf{Source / method} & \emph{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas/yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
       \hline
       \textbf{Simbad.u-strasbg.fr} & -4.6579 $\pm$ 0.0075 & 11.1517 $\pm$ 0.0075 & 2.4118 $\pm$ 0.0006 & 1727 \\
       Clusterix+TOPCAT & -4.652 $\pm$ 0.523 & 11.203 $\pm$ 0.454 & 2.409 $\pm$ 0.127 & 638 \\
@@ -1551,7 +1581,7 @@ to perform its calculations.
 \begin{table}[h!]
   \begin{center}
     \begin{tabular}{l|c|c|c|c}
-      \textbf{Source / method} & \textbf{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \textbf{$\mu_{\delta}$ $(mas/yr^{-1})$} & \textbf{$\varpi$ $(mas)$} & \emph{\# stars} \\
+      \textbf{Source / method} & \emph{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas/yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
       \hline
       \textbf{Simbad.u-strasbg.fr} & -36.047 $\pm$ 0.110 & -12.917 $\pm$ 0.066 & 5.371 $\pm$ 0.003 & - \\
       Clusterix+TOPCAT & -36.154 $\pm$ 1.001 & -12.909 $\pm$ 0.806 & 5.327 $\pm$ 0.187 & 371 \\
@@ -1672,7 +1702,7 @@ to perform its calculations.
 \begin{table}[h!]
   \begin{center}
     \begin{tabular}{l|c|c|c|c}
-      \textbf{Source / method} & \textbf{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \textbf{$\mu_{\delta}$ $(mas/yr^{-1})$} & \textbf{$\varpi$ $(mas)$} & \emph{\# stars} \\
+      \textbf{Source / method} & \emph{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas/yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
       \hline
       \textbf{Simbad.u-strasbg.fr} & -10.9737 $\pm$ 0.0064 & -2.9396 $\pm$ 0.0063 & 1.1325 $\pm$ 0.0011 & 1194 \\
       Clusterix+TOPCAT & -10.970 $\pm$ 0.322 & -2.958 $\pm$ 0.327 & 1.142 $\pm$ 0.080 & 649 \\
@@ -1780,7 +1810,7 @@ to perform its calculations.
     \begin{tabular}{l|c}
       \textbf{Hyperparameter} & \textbf{Value} \\
       \hline
-      Number of Clusters & 11 \\
+      Number of Clusters & 9 \\
       Clustering Layer & $\left[ 50, 50, 80 \right]$ \\
       Kernel Initializer Seed & 11 \\
       Quantil Threshold & 0.1 \\
@@ -1793,13 +1823,13 @@ to perform its calculations.
 \begin{table}[h!]
   \begin{center}
     \begin{tabular}{l|c|c|c|c}
-      \textbf{Source / method} & \textbf{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \textbf{$\mu_{\delta}$ $(mas/yr^{-1})$} & \textbf{$\varpi$ $(mas)$} & \emph{\# stars} \\
+      \textbf{Source / method} & \emph{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas/yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
       \hline
       \textbf{Simbad.u-strasbg.fr} & 104.92 $\pm$ 0.12 & -28.00 $\pm$ 0.09 & 21.052 $\pm$ 0.065 & - \\
       Clusterix+TOPCAT & 106.796 $\pm$ 6.229 & -24.870 $\pm$ 5.417 & 21.210 $\pm$ 1.115 & 109 \\
-      KMeans & 81.410 $\pm$ 71.475 & -45.309 $\pm$ 73.945 & 21.056 $\pm$ 6.018 & 365 \\
-      DEC & x $\pm$ x & x $\pm$ x & x $\pm$ x & x \\
-      \textbf{DEC (filtered)} & x $\pm$ x & x $\pm$ x & x $\pm$ x & x \\
+      KMeans & 79.380 $\pm$ 71.691 & -45.314 $\pm$ 73.366 & 20.866 $\pm$ 6.029 & 376 \\
+      DEC & 76.463 $\pm$ 72.023 & -43.941 $\pm$ 72.556 & 20.489 $\pm$ 6.138 & 396 \\
+      \textbf{DEC (filtered)} & 81.795 $\pm$ 65.626 & -40.049 $\pm$ 55.112 & 19.888 $\pm$ 2.251 & 316 \\
     \end{tabular}
     \caption{Melotte 25 results.}
     \label{tab:results_melotte_25}
@@ -1815,34 +1845,60 @@ to perform its calculations.
 We have applied the our proposed method to clusters with different topologies:
 
 \begin{itemize}
-  \item NGC 2516 has it proper motion center deviated from the origin but it is embedded inside a big cloud of stars with similar proper motions.
-  \item NGC 2632 (in addition to Melotte 22) ia s cluster whose proper motion center is not located at the origin and has a well separated parallax center.
+  \item NGC 2516 has it proper motion center deviated from the origin but
+        it is embedded inside a big cloud of stars with similar proper motions.
+  \item NGC 2632 (in addition to Melotte 22) ia s cluster whose proper motion center
+        is not located at the origin and has a well separated parallax center.
   \item NGC 2682, on the other hand, has its parallax centered within the region's gaussian,
         which complicates its detection although its proper motion center is deviated from the origin.
   \item Melotte 25 (as well as Melotte 22) is a cluster closer to us than the other.
         That makes its memebership stars to be more scattered than previous clusters which are more compact.
 \end{itemize}
 
-All of these clusters have a wide variety of diameters, from 25 to 330 arcmin, as well as the number of stars that belong to them.
+All of these clusters have a wide variety of diameters, from 25 to 330 arcmin,
+as well as the number of stars that belong to them.
 NGC 2682 has 3,000 stars while Melotte 25 is composed by more than 400,000 stars.
+More information about the studied clusters is available in Table \ref{tab:clusters_summary}.
 
-% TODO: Meter una tabla con los parámetros de los clusters mencionados
+\begin{table}[h!]
+  \begin{center}
+    \begin{tabular}{l|c|c|c|c}
+      \textbf{Open Cluster} & \emph{$\alpha$ J2000 $(degrees)$} & \emph{$\delta$ J2000 $(degrees)$} & \emph{Radius $(arcmin)$} & \emph{\# stars} \\
+      \hline
+      NGC 2516 & 119.517 & -60.753 & 15 & 12,869 \\
+      NGC 2632 & 130.1 & 19.667 & 35 & 13,167 \\
+      NGC 2682 & 132.825 & 11.8 & 12.5 & 2,839 \\
+      Melotte 22 & 56.75 & 24.117 & 60 & 61,552 \\
+      Melotte 25 & 66.725 & 15.867 & 165 & 433,996 \\
+    \end{tabular}
+    \caption{Righ ascension, declination, radius and number of stars of studied clusters.
+             The number of stars corresponds to those stars contained within a cone of center
+             $(\alpha, \delta)$ and raius the cluster's radius multiplied by a factor of 1.5.}
+    \label{tab:clusters_summary}
+  \end{center}
+\end{table}
 
-% TODO: Determinar correctamente los errores en las medidas y mencionarlos
+In all cases, the model has resolved properly the identity of the cluster
+and has characterized the membership stars,
+giving compatible results with the ones obtained with classic procedures and VO tools.
 
-In all cases, the model has resolved properly the identity of the cluster and has characterized the membership stars,
-giving results compatible with the ones obtained with classic procedures and VO tools.
+Compared with the mentioned tools, our model can be fully calified as a non-parameterized model
+since it does not depend on parameters referred to the cluster itself
+but only hyperparameters such as the initial number of clusters to be found,
+or the structure of the Clustering Layer used by DEC model.
 
-Compared with the mentioned tools, our model can be fully calified as a non-parameterized model since it does not depend on parameters referred
-to the clusters itself but only hyperparameters such as the initial number of clusters to find, or the structure of the Clustering Layer used by DEC model.
+Our model is also non-supervised since we do not need to tell the model
+which stars belong to the cluster or assit it while its training stage.
 
-Our model is also non-supervised since we do not need to tell the model which stars belong to the cluster or assit it while is training.
-
-Only at the end of the characterization, a fine tunning driven by the user, can be applied in orther to improve the selection by discarding those
+Only at the end of the characterization, a fine tuning driven by the user,
+can be applied in order to improve the selection by discarding those
 stars which fall outside the given quantiles.
 
-In any case we make assumptions about the cluster profile, something that we have to take into account when using VO tools.
+In any case, we do not make assumptions about the cluster profile,
+something that we have to take into account when using VO tools.
 This is another evidence that our model is non-parameterized.
+
+% TODO: Add references to figures and tables
 
 \chapter{Conclusions and Future Work}
 
