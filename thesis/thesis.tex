@@ -1071,6 +1071,8 @@ Figure \ref{fig:melotte_22_filtered} shows the result after filtering DEC cluste
 Table \ref{tab:results_melotte_22} shows a summary of Melotte 22 with values taken from different sources and methods:
 SIMBAD Astronomical Database - CDS (Strasbourg),
 Clusterix+TOPCAT method, and the results obtained for each step of this method (KMeans, DEC and DEC filtered).
+The errors associated to KMeans and DEC predictions are calculated as the Standard Error $SE = \sigma / \sqrt{N}$,
+where $N$ is the number of samples in the selected group.
 
 \begin{table}[h!]
   \begin{center}
@@ -1080,9 +1082,9 @@ Clusterix+TOPCAT method, and the results obtained for each step of this method (
       \textbf{Simbad.u-strasbg.fr}\tablefootnote{Results have been taken from \protect\citeA[p.~25. Table A.3. Pleiades]{babusiaux2018gaia}} &
         19.997 $\pm$ 0.127 & -45.548 $\pm$ 0.101 & 7.364 $\pm$ 0.005 & 1326 \\
       Clusterix+TOPCAT & 19.98 $\pm$ 1.25 & -45.47 $\pm$ 1.48 & 7.33 $\pm$ 0.21 & 634 \\
-      KMeans & 20.25 $\pm$ 35.16 & -38.01 $\pm$ 40.16 & 7.23 $\pm$ 2.35 & 1378 \\
-      DEC & 23.67 $\pm$ 38.33 & -46.23 $\pm$ 44.54 & 8.04 $\pm$ 2.59 & 878 \\
-      \textbf{DEC (filtered)} & 19.50 $\pm$ 8.59 & -44.23 $\pm$ 8.17 & 7.42 $\pm$ 0.1 & 438 \\
+      KMeans & 20.25 $\pm$ 0.95 & -38.01 $\pm$ 1.08 & 7.23 $\pm$ 0.06 & 1378 \\
+      DEC & 23.67 $\pm$ 1.29 & -46.23 $\pm$ 1.50 & 8.04 $\pm$ 0.09 & 878 \\
+      \textbf{DEC (filtered)} & 19.50 $\pm$ 0.41 & -44.23 $\pm$ 0.39 & 7.42 $\pm$ 0.005 & 438 \\
     \end{tabular}
     \caption{Parameters shown are proper motion in right ascension and declination, parallax
              with their respective deviations and number of stars corresponding to Melotte 22 data.}
@@ -1333,9 +1335,9 @@ This table summarizes the results obtained with the validation technique and our
       \hline
       \textbf{Simbad.u-strasbg.fr} & 19.997 $\pm$ 0.127 & -45.548 $\pm$ 0.101 & 7.364 $\pm$ 0.005 & 1326 \\
       \textbf{Clusterix+TOPCAT} & 19.98 $\pm$ 1.25 & -45.47 $\pm$ 1.48 & 7.33 $\pm$ 0.21 & 634 \\
-      KMeans & 20.25 $\pm$ 35.16 & -38.01 $\pm$ 40.16 & 7.23 $\pm$ 2.35 & 1378 \\
-      DEC & 23.67 $\pm$ 38.33 & -46.23 $\pm$ 44.54 & 8.04 $\pm$ 2.59 & 878 \\
-      DEC (filtered) & 19.50 $\pm$ 8.59 & -44.23 $\pm$ 8.17 & 7.42 $\pm$ 0.1 & 438 \\
+      KMeans & 20.25 $\pm$ 0.95 & -38.01 $\pm$ 1.08 & 7.23 $\pm$ 0.06 & 1378 \\
+      DEC & 23.67 $\pm$ 1.29 & -46.23 $\pm$ 1.50 & 8.04 $\pm$ 0.09 & 878 \\
+      DEC (filtered) & 19.50 $\pm$ 0.41 & -44.23 $\pm$ 0.39 & 7.42 $\pm$ 0.005 & 438 \\
     \end{tabular}
   \end{center}
 \end{table}
@@ -1465,9 +1467,9 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
       \hline
       \textbf{Simbad.u-strasbg.fr} & -4.6579 $\pm$ 0.0075 & 11.1517 $\pm$ 0.0075 & 2.4118 $\pm$ 0.0006 & 1727 \\
       Clusterix+TOPCAT & -4.652 $\pm$ 0.523 & 11.203 $\pm$ 0.454 & 2.409 $\pm$ 0.127 & 638 \\
-      KMeans & -4.344 $\pm$ 5.670 & 9.507 $\pm$ 7.546 & 2.268 $\pm$ 0.288 & 1542 \\
-      DEC & -4.426 $\pm$ 6.529 & 9.952 $\pm$ 8.018 & 2.436 $\pm$ 0.358 & 1532 \\
-      \textbf{DEC (filtered)} & -4.502 $\pm$ 4.46 & 10.114 $\pm$ 5.719 & 2.392 $\pm$ 0.135 & 1072 \\
+      KMeans & -4.344 $\pm$ 0.14 & 9.507 $\pm$ 0.19 & 2.268 $\pm$ 0.01 & 1542 \\
+      DEC & -4.426 $\pm$ 0.17 & 9.952 $\pm$ 0.20 & 2.436 $\pm$ 0.01 & 1532 \\
+      \textbf{DEC (filtered)} & -4.502 $\pm$ 0.14 & 10.114 $\pm$ 0.17 & 2.392 $\pm$ 0.004 & 1072 \\
     \end{tabular}
     \caption{NGC 2516 results.}
     \label{tab:results_ngc_2516}
@@ -1586,9 +1588,9 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
       \hline
       \textbf{Simbad.u-strasbg.fr} & -36.047 $\pm$ 0.110 & -12.917 $\pm$ 0.066 & 5.371 $\pm$ 0.003 & - \\
       Clusterix+TOPCAT & -36.154 $\pm$ 1.001 & -12.909 $\pm$ 0.806 & 5.327 $\pm$ 0.187 & 371 \\
-      KMeans & -26.352 $\pm$ 20.562 & -15.828 $\pm$ 19.152 & 5.394 $\pm$ 0.696 & 629 \\
-      DEC & -20.012 $\pm$ 20.657 & -14.742 $\pm$ 17.330 & 4.686 $\pm$ 0.855 & 894 \\
-      \textbf{DEC (filtered)} & -21.571 $\pm$ 19.825 & -14.234 $\pm$ 16.388 & 4.719 $\pm$ 0.706 & 714 \\
+      KMeans & -26.352 $\pm$ 0.82 & -15.828 $\pm$ 0.76 & 5.394 $\pm$ 0.03 & 629 \\
+      DEC & -20.012 $\pm$ 0.69 & -14.742 $\pm$ 0.58 & 4.686 $\pm$ 0.03 & 894 \\
+      \textbf{DEC (filtered)} & -21.571 $\pm$ 0.74 & -14.234 $\pm$ 0.61 & 4.719 $\pm$ 0.03 & 714 \\
     \end{tabular}
     \caption{NGC 2632 results.}
     \label{tab:results_ngc_2632}
@@ -1707,9 +1709,9 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
       \hline
       \textbf{Simbad.u-strasbg.fr} & -10.9737 $\pm$ 0.0064 & -2.9396 $\pm$ 0.0063 & 1.1325 $\pm$ 0.0011 & 1194 \\
       Clusterix+TOPCAT & -10.970 $\pm$ 0.322 & -2.958 $\pm$ 0.327 & 1.142 $\pm$ 0.080 & 649 \\
-      KMeans & -8.616 $\pm$ 5.591 & -3.710 $\pm$ 6.067 & 1.196 $\pm$ 0.226 & 1374 \\
-      DEC & -8.926 $\pm$ 5.278 & -3.550 $\pm$ 5.425 & 1.144 $\pm$ 0.159 & 1238 \\
-      \textbf{DEC (filtered)} & -9.619 $\pm$ 4.112 & -3.317 $\pm$ 3.976 & 1.140 $\pm$ 0.089 & 990 \\
+      KMeans & -8.616 $\pm$ 0.15 & -3.710 $\pm$ 0.16 & 1.196 $\pm$ 0.01 & 1374 \\
+      DEC & -8.926 $\pm$ 0.15 & -3.550 $\pm$ 0.15 & 1.144 $\pm$ 0.005 & 1238 \\
+      \textbf{DEC (filtered)} & -9.619 $\pm$ 0.13 & -3.317 $\pm$ 0.13 & 1.140 $\pm$ 0.003 & 990 \\
     \end{tabular}
     \caption{NGC 2682 results.}
     \label{tab:results_ngc_2682}
@@ -1828,9 +1830,9 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
       \hline
       \textbf{Simbad.u-strasbg.fr} & 104.92 $\pm$ 0.12 & -28.00 $\pm$ 0.09 & 21.052 $\pm$ 0.065 & - \\
       Clusterix+TOPCAT & 106.796 $\pm$ 6.229 & -24.870 $\pm$ 5.417 & 21.210 $\pm$ 1.115 & 109 \\
-      KMeans & 79.380 $\pm$ 71.691 & -45.314 $\pm$ 73.366 & 20.866 $\pm$ 6.029 & 376 \\
-      DEC & 76.463 $\pm$ 72.023 & -43.941 $\pm$ 72.556 & 20.489 $\pm$ 6.138 & 396 \\
-      \textbf{DEC (filtered)} & 81.795 $\pm$ 65.626 & -40.049 $\pm$ 55.112 & 19.888 $\pm$ 2.251 & 316 \\
+      KMeans & 79.380 $\pm$ 3.7 & -45.314 $\pm$ 3.8 & 20.866 $\pm$ 0.31 & 376 \\
+      DEC & 76.463 $\pm$ 3.6 & -43.941 $\pm$ 3.6 & 20.489 $\pm$ 0.31 & 396 \\
+      \textbf{DEC (filtered)} & 81.795 $\pm$ 3.7 & -40.049 $\pm$ 3.1 & 19.888 $\pm$ 0.13 & 316 \\
     \end{tabular}
     \caption{Melotte 25 results.}
     \label{tab:results_melotte_25}
