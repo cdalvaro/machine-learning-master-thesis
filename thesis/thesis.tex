@@ -1058,7 +1058,7 @@ by DEC clustering and the one obtained using the Clusterix + TOPCAT method.
 \end{figure}
 
 Finally, we can refine this selection by filtering those stars which are bellow and above
-the 0.25 and 0.75 quantiles for each group, respectively.
+the 0.10 and 0.90 quantiles for each group, respectively.
 That way we remove the most doubtful values from the selection.
 Figure \ref{fig:melotte_22_filtered} shows the result after filtering DEC clustering selection.
 
@@ -1085,10 +1085,11 @@ Figure \ref{fig:melotte_22_filtered} shows the result after filtering DEC cluste
 Table \ref{tab:results_melotte_22} shows a summary of Melotte 22 with values taken from different sources and methods:
 SIMBAD Astronomical Database - CDS (Strasbourg),
 Clusterix+TOPCAT method, and the results obtained for each step of this method (KMeans, DEC and DEC filtered).
-The errors associated to KMeans and DEC predictions are calculated as the Standard Error $SE = \sigma / \sqrt{N}$,
-where $N$ is the number of samples in the selected group.
+Errors associated to KMeans and DEC predictions have been calculated as the \emph{Standard Error},
+$SE = \sigma / \sqrt{N}$, where $N$ is the number of samples in the selected group.
 
-\begin{table}[h!]
+\vfill
+\begin{table}[h]
   \begin{center}
     \begin{tabular}{l|c|c|c|c}
       \textbf{Source / method} & \emph{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas/yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
@@ -1105,6 +1106,7 @@ where $N$ is the number of samples in the selected group.
     \label{tab:results_melotte_22}
   \end{center}
 \end{table}
+\vfill
 
 \chapter{Results}
 
@@ -1396,6 +1398,7 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
     \end{subfigure}
   \end{subfigure}
   \caption{NGC 2516 Clusterix+TOPCAT characterization.}
+  \label{fig:result_ngc_2516_clusterix}
   \centering
   \begin{subfigure}{0.9\textwidth}
     \centering
@@ -1414,7 +1417,8 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
       \includegraphics[width=\textwidth]{../figures/ngc_2516/kmeans_hr_diagram_ngc_2516.png}
     \end{subfigure}
   \end{subfigure}
-  \caption{NGC 2516 KMeans characterization.}
+  \caption{NGC 2516 KMeans characterization. Identified as cluster \emph{g3}.}
+  \label{fig:result_ngc_2516_kmeans}
   \centering
   \begin{subfigure}{0.9\textwidth}
     \centering
@@ -1433,7 +1437,8 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
       \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_hr_diagram_ngc_2516.png}
     \end{subfigure}
   \end{subfigure}
-  \caption{NGC 2516 DEC characterization.}
+  \caption{NGC 2516 DEC characterization. Identified as cluster \emph{g3}.}
+  \label{fig:result_ngc_2516_dec}
   \centering
   \begin{subfigure}{0.9\textwidth}
     \centering
@@ -1452,14 +1457,26 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
       \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_hr_diagram_filtered_ngc_2516.png}
     \end{subfigure}
   \end{subfigure}
-  \caption{NGC 2516 DEC (filtered) characterization.}
+  \caption{NGC 2516 DEC (filtered) characterization. Identified as cluster \emph{g3}.}
+  \label{fig:result_ngc_2516_dec_filtered}
 \end{figure}
 
 \newpage
 
+Figure \ref{fig:result_ngc_2516_clusterix} shows NGC 2516 characterized using Clusterix+TOPCAT tools.
+Figure \ref{fig:result_ngc_2516_kmeans} shows eigth clusters identified by KMeans.
+In this case, cluster \emph{g3} is the one we are looking for.
+Figures \ref{fig:result_ngc_2516_dec} and \ref{fig:result_ngc_2516_dec_filtered}
+show the groups found using the DEC model and the DEC model filtered, respectively.
+Again, the cluster of interest is the group \emph{g3}.
+Although in general, groups between KMeans model and DEC models may not match.
+
+Table \ref{tab:hyperparameters_ngc_2516} shows the hyperparameters used for characterizing NGC 2516
+with the DEC model. Table \ref{tab:results_ngc_2516} shows a results summary for NGC 2516.
+
 \vfill
 
-\begin{table}[h!]
+\begin{table}[h]
   \begin{center}
     \begin{tabular}{l|c}
       \textbf{Hyperparameter} & \textbf{Value} \\
@@ -1474,7 +1491,9 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
   \end{center}
 \end{table}
 
-\begin{table}[h!]
+\vfill
+
+\begin{table}[h]
   \begin{center}
     \begin{tabular}{l|c|c|c|c}
       \textbf{Source / method} & \emph{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas/yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
@@ -1517,6 +1536,7 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
     \end{subfigure}
   \end{subfigure}
   \caption{NGC 2632 Clusterix+TOPCAT characterization.}
+  \label{fig:result_ngc_2632_clusterix}
   \centering
   \begin{subfigure}{0.9\textwidth}
     \centering
@@ -1535,7 +1555,8 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
       \includegraphics[width=\textwidth]{../figures/ngc_2632/kmeans_hr_diagram_ngc_2632.png}
     \end{subfigure}
   \end{subfigure}
-  \caption{NGC 2632 KMeans characterization.}
+  \caption{NGC 2632 KMeans characterization. Identified as cluster \emph{g1}.}
+  \label{fig:result_ngc_2632_kmeans}
   \centering
   \begin{subfigure}{0.9\textwidth}
     \centering
@@ -1554,7 +1575,8 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
       \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_hr_diagram_ngc_2632.png}
     \end{subfigure}
   \end{subfigure}
-  \caption{NGC 2632 DEC characterization.}
+  \caption{NGC 2632 DEC characterization. Identified as cluster \emph{g1}.}
+  \label{fig:result_ngc_2632_dec}
   \centering
   \begin{subfigure}{0.9\textwidth}
     \centering
@@ -1573,14 +1595,25 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
       \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_hr_diagram_filtered_ngc_2632.png}
     \end{subfigure}
   \end{subfigure}
-  \caption{NGC 2632 DEC (filtered) characterization.}
+  \caption{NGC 2632 DEC (filtered) characterization. Identified as cluster \emph{g1}.}
+  \label{fig:result_ngc_2632_dec_filtered}
 \end{figure}
 
 \newpage
 
+Figure \ref{fig:result_ngc_2632_clusterix} shows NGC 2632 characterized by the validation method.
+Figure \ref{fig:result_ngc_2632_kmeans} shows ten clusters identified by KMeans.
+Cluster \emph{g1} is the open cluster we are looking for.
+Figures \ref{fig:result_ngc_2632_dec} and \ref{fig:result_ngc_2632_dec_filtered}
+show the groups found using the DEC model and the DEC model filtered, respectively.
+Open cluster NGC 2632 is labeled as group \emph{g1}.
+
+Table \ref{tab:hyperparameters_ngc_2632} shows the hyperparameters used for characterizing NGC 2632
+with our model. Table \ref{tab:results_ngc_2632} shows a results summary for NGC 2632 analysis.
+
 \vfill
 
-\begin{table}[h!]
+\begin{table}[h]
   \begin{center}
     \begin{tabular}{l|c}
       \textbf{Hyperparameter} & \textbf{Value} \\
@@ -1595,7 +1628,9 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
   \end{center}
 \end{table}
 
-\begin{table}[h!]
+\vfill
+
+\begin{table}[h]
   \begin{center}
     \begin{tabular}{l|c|c|c|c}
       \textbf{Source / method} & \emph{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas/yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
@@ -1638,6 +1673,7 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
     \end{subfigure}
   \end{subfigure}
   \caption{NGC 2682 Clusterix+TOPCAT characterization.}
+  \label{fig:result_ngc_2682_clusterix}
   \centering
   \begin{subfigure}{0.9\textwidth}
     \centering
@@ -1656,7 +1692,8 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
       \includegraphics[width=\textwidth]{../figures/ngc_2682/kmeans_hr_diagram_ngc_2682.png}
     \end{subfigure}
   \end{subfigure}
-  \caption{NGC 2682 KMeans characterization.}
+  \caption{NGC 2682 KMeans characterization. Identified as cluster \emph{g4}.}
+  \label{fig:result_ngc_2682_kmeans}
   \centering
   \begin{subfigure}{0.9\textwidth}
     \centering
@@ -1675,7 +1712,8 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
       \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_hr_diagram_ngc_2682.png}
     \end{subfigure}
   \end{subfigure}
-  \caption{NGC 2682 DEC characterization.}
+  \caption{NGC 2682 DEC characterization. Identified as cluster \emph{g2}.}
+  \label{fig:result_ngc_2682_dec}
   \centering
   \begin{subfigure}{0.9\textwidth}
     \centering
@@ -1694,14 +1732,25 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
       \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_hr_diagram_filtered_ngc_2682.png}
     \end{subfigure}
   \end{subfigure}
-  \caption{NGC 2682 DEC (filtered) characterization.}
+  \caption{NGC 2682 DEC (filtered) characterization. Identified as cluster \emph{g2}.}
+  \label{fig:result_ngc_2682_dec_filtered}
 \end{figure}
 
 \newpage
 
+Figure \ref{fig:result_ngc_2682_clusterix} shows NGC 2682 characterized using Clusterix+TOPCAT tools.
+Figure \ref{fig:result_ngc_2682_kmeans} shows ten clusters identified by KMeans.
+KMeans labels NGC 2682 as group \emph{g4}.
+Figures \ref{fig:result_ngc_2682_dec} and \ref{fig:result_ngc_2682_dec_filtered}
+show the groups found using the DEC model and the DEC model filtered, respectively.
+The cluster of interest is the group \emph{g2}.
+
+Table \ref{tab:hyperparameters_ngc_2682} shows the hyperparameters used for characterizing NGC 2682
+with the DEC model. Table \ref{tab:results_ngc_2682} shows a results summary for NGC 2682.
+
 \vfill
 
-\begin{table}[h!]
+\begin{table}[h]
   \begin{center}
     \begin{tabular}{l|c}
       \textbf{Hyperparameter} & \textbf{Value} \\
@@ -1716,7 +1765,9 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
   \end{center}
 \end{table}
 
-\begin{table}[h!]
+\vfill
+
+\begin{table}[h]
   \begin{center}
     \begin{tabular}{l|c|c|c|c}
       \textbf{Source / method} & \emph{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas/yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
@@ -1759,6 +1810,7 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
     \end{subfigure}
   \end{subfigure}
   \caption{Melotte 25 Clusterix+TOPCAT characterization.}
+  \label{fig:result_melotte_25_clusterix}
   \centering
   \begin{subfigure}{0.9\textwidth}
     \centering
@@ -1777,7 +1829,8 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
       \includegraphics[width=\textwidth]{../figures/melotte_25/kmeans_hr_diagram_melotte_25.png}
     \end{subfigure}
   \end{subfigure}
-  \caption{Melotte 25 KMeans characterization.}
+  \caption{Melotte 25 KMeans characterization. Identified as cluster \emph{g3}.}
+  \label{fig:result_melotte_25_kmeans}
   \centering
   \begin{subfigure}{0.9\textwidth}
     \centering
@@ -1796,7 +1849,8 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
       \includegraphics[width=\textwidth]{../figures/melotte_25/dec_hr_diagram_melotte_25.png}
     \end{subfigure}
   \end{subfigure}
-  \caption{Melotte 25 DEC characterization.}
+  \caption{Melotte 25 DEC characterization. Identified as cluster \emph{g5}.}
+  \label{fig:result_melotte_25_dec}
   \centering
   \begin{subfigure}{0.9\textwidth}
     \centering
@@ -1815,14 +1869,25 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
       \includegraphics[width=\textwidth]{../figures/melotte_25/dec_hr_diagram_filtered_melotte_25.png}
     \end{subfigure}
   \end{subfigure}
-  \caption{Melotte 25 DEC (filtered) characterization.}
+  \caption{Melotte 25 DEC (filtered) characterization. Identified as cluster \emph{g5}.}
+  \label{fig:result_melotte_25_dec_filtered}
 \end{figure}
 
 \newpage
 
+Figure \ref{fig:result_melotte_25_clusterix} shows Melotte 25 characterized using Clusterix+TOPCAT tools.
+Figure \ref{fig:result_melotte_25_kmeans} shows nine clusters identified by KMeans.
+KMeans labels Melotte 25 as group \emph{g3}.
+Figures \ref{fig:result_melotte_25_dec} and \ref{fig:result_melotte_25_dec_filtered}
+show the groups found using the DEC model and the DEC model filtered, respectively.
+Melotte 25 is labeled as group \emph{g5} by DEC model.
+
+Table \ref{tab:hyperparameters_melotte_25} shows the hyperparameters used for characterizing Melotte 25
+with the DEC model. Table \ref{tab:results_melotte_25} shows a results summary for Melotte 25.
+
 \vfill
 
-\begin{table}[h!]
+\begin{table}[h]
   \begin{center}
     \begin{tabular}{l|c}
       \textbf{Hyperparameter} & \textbf{Value} \\
@@ -1837,7 +1902,9 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
   \end{center}
 \end{table}
 
-\begin{table}[h!]
+\vfill
+
+\begin{table}[h]
   \begin{center}
     \begin{tabular}{l|c|c|c|c}
       \textbf{Source / method} & \emph{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas/yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
@@ -1899,7 +1966,7 @@ In all cases, the model has resolved properly the identity of the cluster
 and has characterized the membership stars,
 giving compatible results with the ones obtained with classic procedures and VO tools.
 
-Compared with the mentioned tools, our model can be fully calified as a non-parameterized model
+Compared with the mentioned tools, our model can be classified as a non-parameterized model
 since it does not depend on parameters referred to the cluster itself
 but only hyperparameters such as the initial number of clusters to be found,
 or the structure of the Clustering Layer used by DEC model.
@@ -1914,8 +1981,6 @@ stars which fall outside the given quantiles.
 In any case, we do not make assumptions about the cluster profile,
 something that we have to take into account when using VO tools.
 This is another evidence that our model is non-parameterized.
-
-% TODO: Add references to figures and tables
 
 \chapter{Conclusions and Future Work}
 
