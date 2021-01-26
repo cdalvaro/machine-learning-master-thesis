@@ -71,6 +71,78 @@ becoming even better in some cases when the results are compared with current te
 
 \section{INTRODUCTION}
 
+Stellar open clusters (OCs) \cite{janes1982open} are groups of stars
+gravitationally bounded originated from a single molecular gas cloud.
+They share the same chemical composition and age. Moreover,
+they have similar relative positions and proper motion.
+Those astronomical objects are relevant to understand the spiral structure,
+the dynamics and the chemical evolution of our galaxy.
+
+The study of OCs has been pushed forward thanks to the huge and precise dataset
+from the Gaia mission Gaia DR2 available since 2018
+\cite{collaboration2016description} and \cite{gaia2018gaia}.
+This dataset has helped to review already known open clusters and to find new ones.
+
+Stars that belong to the same OC share relative positions,
+inherited from their original gas cloud.
+This means that their distances to the Earth are similar for all of them and,
+therefore, they have a narrow dispersion in their parallax value.
+They also share similar values of proper motion, both in right ascension and declination.
+Another property they share is their chemical composition.
+Thus, their metallicity must be uniform,
+since these stars were born from the same gas cloud and at the same time stage.
+However, to take this last property into account, we are faced with the drawback
+that this parameter is poorly reported in Gaia DR2 database.
+
+Normally, the characterization process takes into account astrometric features
+such as proper motion in right ascension and declination, and parallax.
+And photometric features like $E(b-r) / G_{mag}$.
+Photometric variables are used for generating the H-R diagram of the OC candidate stars.
+This stars should present a sharp profile corresponding to an isochrone curve derived
+from a theoretical model.
+This model does consider metallicity, mass and brightness of the stars involved.
+At the moment, a set of tools have been used for this purpose, as explained later,
+but in general, these tools require supervised and parameterized models.
+So a previous knowledge of the cluster is necessary or the process must be repeated
+iteratively in order to achieve valid results.
+
+Our aim is to build a machine learning model capable of characterizing open
+clusters inside a stellar region without previous knowledge of that region.
+This model will take advantage of these features to train an Artificial Neural
+Network (ANN) that will clusterize all stars within the given region.
+One of these groups will be the open cluster that interests us.
+With that purpose we have adapted the Unsupervised Deep Embedding for Clustering
+Analysis \cite{xie2016unsupervised} to our problem.
+
+This model fulfills one of our main requirements.
+It has to be \emph{non-supervised} and \emph{non-parameterized} in order to make easier
+the automation process of analyzing a wide range of regions with different topologies.
+Another important requirement for our model is that it must be computationally efficient
+in order to run in common workstations.
+The model has been developed with Python using the Keras framework which takes
+advantage of modern GPUs to make its computations.
+That increases significantly the computational capacity of our model making possible
+to run it on regular workstations with one of those GPUs.
+
+Since the aim of this work is not to find new OCs but to improve the characterization
+of the already known ones, we have taken the approach of analyzing known regions.
+These regions have been taken from the OpenClust catalogue \cite{dias2002new}
+(see Figure \ref{fig:openclust_catalogue}) and downloaded from Gaia DR2 database
+increasing the radius of each region by a factor $1.5$.
+
+\begin{figure}
+    \includegraphics[width=\columnwidth]{../figures/openclust_catalogue.png}
+    \caption{OpenClust Catalogue Distribution}
+    \label{fig:openclust_catalogue}
+\end{figure}
+
+Finally, we have compared the results obtained with the model we purposed with another
+method that involves tools from the Virtual Observatory such as Clusterix \cite{balaguer2020clusterix}.
+
+As shown in Section \ref{sec:results}, the results obtained are promising.
+Although some improvements must be done in order to consider it as valid tool
+that could be part of the standard set of tools for open clusters characterization.
+
 \section{STATE OF THE ART}
 
 Estudio a fondo el dominio de aplicación, citando numerosas referencias.
@@ -82,6 +154,8 @@ Objetivo general, objetivos específicos y metodología de trabajo aplicada.
 \section{CONTRIBUTION}
 
 \section{RESULTS}
+\label{sec:results}
+
 \subsection{Evaluación 1}
 
 \subsection{Evaluación 2 }
