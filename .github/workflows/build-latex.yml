@@ -24,6 +24,7 @@ jobs:
         with:
           root_file: paper.tex
           working_directory: paper
+          latexmk_use_xelatex: true
           latexmk_shell_escape: true
 
       - name: Upload paper PDF
