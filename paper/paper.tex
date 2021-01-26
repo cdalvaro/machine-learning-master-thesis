@@ -1,14 +1,13 @@
-\documentclass[11pt,a4paper,english,twocolumn]{article}
+\documentclass[11pt,a4paper,USenglish,twocolumn]{article}
 \usepackage{unir_paper}
-
 
 
 %---------------------------
 %título del trabajo y autor
 %---------------------------
-\title{Título}
-\author{Nombre y Apellidos del estudiante}
-\date{fecha}
+\title{Machine Learning Tools for Open Cluster Characterization with Gaia DR2 Data}
+\author{Carlos David Álvaro Yunta}
+\date{24th of January, 2021}
 
 
 %---------------------------
@@ -20,8 +19,35 @@
 %---------------------------
 %---------------------------
 
-\resumen{Breve resumen del trabajo realizado (extensión máxima: 150 palabras). Este resumen debe incluir el objetivo o propósito de la investigación, la metodología, los resultados y las conclusiones.}
-\palabrasclave{tres a cinco palabras clave por orden alfabético y separadas por comas}
+\resumen{
+The characterization and understanding of \emph{Open Clusters}
+allow us to better understand properties and mechanisms about the Universe
+such as stellar formation and the kind of regions where these events occur.
+They also provide information about stellar processes and the evolution of the galactic disk.
+
+In this paper, we develop a method to characterize open clusters by using
+\emph{artificial intelligence} tools, such as clustering by \emph{K-Means}
+and clustering based on \emph{Artificial Neural Networks} by implementing
+the \emph{Deep Embedded Clustering} model.
+We are using \emph{Gaia DR2 database} as data source for testing our models.
+
+The developed method aims to improve current techniques of the state of the art.
+We achieve improvements not only in terms of \emph{computational efficiency},
+with lower computational requirements, but in \emph{usability},
+reducing the number of hyperparameters to obtain a good characterization of the analyzed clusters.
+
+Our method achieves good results,
+becoming even better in some cases when the results are compared with current techniques.
+}
+
+\palabrasclave{
+    characterization,
+    data analysis,
+    deep embedded clustering,
+    gaia,
+    machine learning,
+    open cluster
+}
 
 \begin{document}
 \twocolumn[
