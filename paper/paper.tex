@@ -1,5 +1,6 @@
 \documentclass[11pt,a4paper,USenglish,twocolumn]{article}
 \usepackage{unir_paper}
+\usepackage{subcaption}
 
 
 %---------------------------
@@ -253,7 +254,185 @@ and pass this transformed data through a Clustering Layer which refines the prev
 
 \section{AIMS AND METHOD}
 
-Objetivo general, objetivos específicos y metodología de trabajo aplicada.
+Our aim is to \emph{build an unsupervised clustering model for open cluster characterization}.
+The model will be \emph{non-supervised and non-parameterized} in order to fit a wide range
+of clusters without the need for fine-tuning a high number of hyperparameters.
+
+\subsection{DOWNLOAD}
+
+We start by selecting a region from the OpenClust catalogue and downloading it from
+Gaia DR2 database into a docker database. This allows us to repeat the analysis without
+having to download the data every time. The radius of the downloaded region from Gaia
+is 1.5 times larger than the one registered in OpenClust. This way we ensure to include
+several stars that do not belong to the open cluster.
+
+\subsection{FEATURE SELECTION}
+\label{sec:feature_selection}
+
+As mentioned before, we want our model to characterize open clusters by looking at
+their dynamic properties. Also, we want to maintain as simple as possible our
+clustering model in order to save computing resources.
+
+Proper motion in right ascension and declination seems like a natural choice since,
+as we know, stars belonging to the same OC share a common motion vector.
+
+Parallax is another important feature. It lets us know how far stars are from us.
+In addition, since all stars within an open cluster were born from the same dust cloud,
+they must all have similar parallax.
+
+However, we are not going to use these raw features.
+Instead, we are taking a combination of them.
+
+First, we correct proper motion in right ascension and declination by dividing them by
+the parallax. That way, we normalize these quantities and help our clustering models
+to improve their performance.
+
+The modulus of the proper motion is another computed property that we are considering.
+We use it to relate both features and therefore, to force our model to keep them tight.
+
+\begin{figure}
+  \includegraphics[width=\columnwidth]{../figures/melotte_22/features_melotte_22.png}
+  \caption{Pairwise relationships among variables using Melotte 22 data}
+  \label{fig:features_melotte_22}
+\end{figure}
+
+Figure \ref{fig:features_melotte_22} shows a pairwise relationship among some features
+available in the dataset for Melotte 22 data.
+
+\subsection{SOFT CLUSTERING}
+
+Our first approach to find the open cluster is using the K-Means algorithm.
+Since we are looking for a single cluster, it seems reasonable to use a clustering
+algorithm and set it to find two clusters. One for the desired OC and another which
+contains stars that do not belong to the open cluster.
+However, this idea is not completely right.
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/kmeans/kmeans_n2_pm_melotte_22.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/kmeans/kmeans_n5_pm_melotte_22.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/kmeans/kmeans_n8_pm_melotte_22.png}
+    \end{subfigure}
+  \end{subfigure}
+  \medskip
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/kmeans/kmeans_n2_parallax_melotte_22.png}
+      \caption{N = 2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/kmeans/kmeans_n5_parallax_melotte_22.png}
+      \caption{N = 5}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/kmeans/kmeans_n8_parallax_melotte_22.png}
+      \caption{N = 8}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{K-Means comparisons with Melotte 22}
+  \label{fig:kmeans_comparisons_melotte_22}
+\end{figure}
+
+This is due to the fact that OC's stars are surrounded by other stars with possibly similar
+properties. So, setting the number of clusters to two is too low to separate them properly.
+
+As shown in Figure \ref{fig:kmeans_comparisons_melotte_22}, larger values for the number of
+clusters allow us to isolate more accurately the resonance in parallax at $\approx 7.3mas$.
+However, we have the disadvantage that more groups are formed.
+
+This effect complicates our task of finding the desired open cluster, since we would like
+to get just two groups, one for the OC and another with the remaining stars.
+Therefore, we have to find a way to set the right value for the number of clusters
+to isolate the searched cluster without creating too many groups.
+
+To solve this issue, we will try to estimate the best number of clusters by using the
+\emph{silhouette score} \cite{rousseeuw1987silhouettes}.
+
+K-Means does a good job making an initial clustering. However, too many clusters arise
+from this characterization and the OC is still polluted with stars that do not belong to it.
+Moreover, we would like to reduce the amount of clusters too.
+
+Therefore, we would like to find a better model that improves this initial characterization
+by reducing the amount of clusters and also that removes outsiders from the OC.
+
+\subsection{DEC MODEL}
+
+Since we do not have a labeled dataset to train a supervised model,
+we have no choice but to use an unsupervised self-trained model.
+
+For that reason we have adapted the \emph{Unsupervised Deep Embedding for Clustering Analysis}
+to our work.
+
+The model is composed by a \emph{deep autoencoder}, a \emph{deep encoder} and
+a \emph{clustering layer}.
+
+Encoders are used to transform the input data into a latent space
+using a non-linear mapping function $f_{\theta} : X \rightarrow Z$.
+
+Although, as explained in section \ref{sec:feature_selection},
+the number of features we are managing is not too large,
+this latent space helps us reduce the number of features
+and avoids the \emph{"curse of dimensionality"} \cite{bellman1961curse}.
+
+These encoders are pretrained before fitting the model to generate predictions. Then,
+the encoder is used with the aim of transforming input data to the latent space $Z$. Once the
+data has been transformed, a K-Means clusterer is used in order to make an initial clustering.
+
+With that initial configuration, the model iterates alternating between computing an auxiliary
+target distribution (Soft Assignment) and minimizing the Kullback-Leiber (KL) divergence
+\cite{kullback1951information} to it. This unsupervised algorithm allows us to improve the clustering.
+
+\begin{equation}
+  p_{ij} = \frac{q^{2}_{ij} / f_{j}}{\sum_{j'}q^{2}_{ij'}/f_{j'}}
+  \label{eq:student_tdistribution}
+\end{equation}
+
+In the soft assignment stage,
+the \emph{Student's t-distribution} is used as a kernel to measure the similarity
+between the embedded points and the cluster centroid.
+While in the KL divergence minimization the algorithm iteratively refines clusters by learning
+from their high confidence assignments with the help of an auxiliary target distribution.
+The model is trained by matching the soft assignment to the target distribution.
+The choice of this target distribution is crucial for DEC's performance.
+In this work we have taken the target distribution from DEC's original paper \cite{xie2016unsupervised},
+which is defined in Equation \ref{eq:student_tdistribution}.
+
+Figure \ref{fig:dec_model_setup} shows the layer setup of our DEC model.
+It is simpler than the one tested on the original paper \cite{xie2016unsupervised},
+since the number of selected features in our work is smaller than in the original one.
+Therefore, using the same configuration would result in a model so
+powerful that would incur in overfitting issues unable to make right predictions.
+
+\begin{figure}
+  \includegraphics[width=\columnwidth]{../figures/dec_diagram.pdf}
+  \caption{DEC model layer setup}
+  \label{fig:dec_model_setup}
+\end{figure}
+
+Finally, we can refine this selection by filtering those stars which are bellow and above
+the 0.10 and 0.90 quantiles for each group, respectively.
+That way we remove the most doubtful values from the selection.
+
+All developed resources are available at:
+\href{github.com/cdalvaro/machine-learning-master-thesis}{github.com/cdalvaro/machine-learning-master-thesis}
 
 \section{CONTRIBUTION}
 
