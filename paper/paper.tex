@@ -96,8 +96,8 @@ that this parameter is poorly reported in Gaia DR2 database.
 
 Normally, the characterization process takes into account astrometric features
 such as proper motion in right ascension and declination, and parallax.
-And photometric features like $E(b-r) / G_{mag}$.
-Photometric variables are used for generating the H-R diagram of the OC candidate stars.
+Photometric features like $E(b-r) / G_{mag}$ are considered too.
+These last variables are used for generating the H-R diagram of the OC candidate stars.
 This stars should present a sharp profile corresponding to an isochrone curve derived
 from a theoretical model.
 This model does consider metallicity, mass and brightness of the stars involved.
@@ -106,8 +106,8 @@ but in general, these tools require supervised and parameterized models.
 So a previous knowledge of the cluster is necessary or the process must be repeated
 iteratively in order to achieve valid results.
 
-Our aim is to build a machine learning model capable of characterizing open
-clusters inside a stellar region without previous knowledge of that region.
+Our aim is to build a machine learning model capable of characterizing an open
+cluster inside a stellar region with knowing nothing about the region.
 This model will take advantage of these features to train an Artificial Neural
 Network (ANN) that will clusterize all stars within the given region.
 One of these groups will be the open cluster that interests us.
@@ -116,7 +116,7 @@ Analysis \cite{xie2016unsupervised} to our problem.
 
 This model fulfills one of our main requirements.
 It has to be \emph{non-supervised} and \emph{non-parameterized} in order to make easier
-the automation process of analyzing a wide range of regions with different topologies.
+the automation process of analyzing a wide range of regions with different typologies.
 Another important requirement for our model is that it must be computationally efficient
 in order to run in common workstations.
 The model has been developed with Python using the Keras framework which takes
@@ -140,13 +140,117 @@ Finally, we have compared the results obtained with the model we purposed with a
 method that involves tools from the Virtual Observatory such as Clusterix \cite{balaguer2020clusterix}.
 
 As shown in Section \ref{sec:results}, the results obtained are promising.
-Although some improvements must be done in order to consider it as valid tool
-that could be part of the standard set of tools for open clusters characterization.
+This allows us to consider our model as a valid tool that could be part
+of the standard set of tools for open clusters characterization.
 
 \section{STATE OF THE ART}
 
-Estudio a fondo el dominio de aplicación, citando numerosas referencias.
-Debe aportar un buen resumen del conocimiento que ya existe en el campo de los problemas habituales identificados.
+The initial approach to find open clusters is by searching for overdensities
+in the astrometric space of the galactic disk and a later identification of
+possible OCs using photometric information \cite{castro2020hunting}.
+However, although it looks simple, it is not. Here we face the problem that the
+near field around the OC is composed of two kind of populations.
+The first kind belongs to the membership stars of the OC (from tens or hundreds
+to a few thousand) while the second one is composed by a background of stars
+that do not belong to the OC (from tens to hundreds of thousands).
+To find out which stars do belong to the OC is the problem we try to solve in
+this work as this selection is critical to properly characterize the
+fundamental properties of the cluster (total mass, age, chemical composition, etc.).
+
+Since the components of the open cluster are born from the same gas cloud and they
+share both dynamic properties and relative distance, as well as age and chemical
+composition, the first step is to analyze the proper motion configuration space of
+the region of interest. This approach is the one used by many tools from the Virtual
+Observatory such as TOPCAT \cite{taylor2005topcat}, Clusterix 2.0 \cite{balaguer2020clusterix},
+Aladin \cite{bonnarel2000aladin} or VOSA \cite{bayo2008vosa}.
+
+TOPCAT by itself cannot find members of the open cluster. It requires to parameterize
+some of the properties of the cluster, what requires a previous knowledge of the cluster.
+Or to make a supervised and manual selection of groups based on overdensities
+in the proper motion configuration space. Clusterix 2.0, an interactive web-based tool,
+can help to this process. It takes the proper motion diagram without making any prior
+assumption about the membership of the candidate star and determines empirically
+the frequency functions. Clusterix uses normal Gaussian kernel functions, defined as:
+
+\begin{equation*}
+  K(a, b) = \frac{1}{2 \pi h^{2}} \exp{ \left[ - \frac{1}{2}\frac{\left( a - a_{i} \right)^{2} + \left( b - b_{i} \right)^{2}}{ h^{2}} \right]}
+\end{equation*}
+
+$\left( a, b \right)$ are referred to the proper motion configuration space,
+while a point located in the center of the cell $\left( i, j \right)$
+provides the maximum contribution for calculating the local density.
+Number $h$ is called the \emph{smoothing} parameter and it is measured
+in the same units as proper motion.
+
+Clusterix is defined as an unsupervised and non-parameterized tool, but it
+critically depends on the selection of three radii.
+
+\begin{itemize}
+  \item \textbf{Inner radius} which defines a region with stars that belong to the OC and field stars.
+  \item \textbf{Void region}. This region is excluded from the analysis since it is supposed
+                to be a transition region with stars that could belong the OC.
+  \item \textbf{External region} or field region.
+                This is the outer region with stars that do not belong the open cluster.
+\end{itemize}
+
+If the analysis performed by Clusterix is successful, it returns the probability
+associated to each star in the dataset to belong to the open cluster.
+These results can be imported then into TOPCAT to continue the refining process to
+get a valid characterization.
+
+Another recent approach to solve this problem based on machine learning techniques
+makes a systematic search for overdensities in the astrometric space of the galactic
+disk and a subsequent identification of open clusters using photometric information
+\cite{castro2020hunting}.
+
+This last method includes two phases: the first one uses an unsupervised clustering
+algorithm, DBSCAN, to search for overdensities $(l, b \pi, \mu_{\alpha} *, \mu_{\delta})$,
+and then applies a deep learning ANN, previously trained with magnitude diagrams,
+to identify isochrone patterns within the detected overdensities and thus proceed
+to confirm them as OC.
+
+It should be noted that for the execution of this method, MareNostrum 42
+(Barcelona Supercomputing Center) was used.
+So the neural network could handle the image recognition process with
+isochrone patterns and not applying theoretical models derived from
+values such as metallicity or masses, among other.
+
+This work concludes with the identification of 582 new open clusters
+distributed along the galactic disk for a galactic declination bellow 20 degrees.
+This result increases the number of known open clusters by 45\%.
+
+As told before, our aim in this work, linked to computational limitations compared
+to MareNostrum, is not to do a blind search for clusters, but to obtain a method,
+in the machine learning environment, that allows the characterization of open clusters.
+We require our method to be unsupervised and non-parameterized making it suitable for
+automated processes.
+
+We use the Clusterix+TOPCAT method applied to the same clusters that we have analyzed
+with our method to validate our results.
+
+In this work we make use of Gaia DR2 since DR3 has not been released in time for us to include it.
+Gaia DR2 is a multidimensional dataset obtained by ESA's Gaia mission
+(located at L2, 1.5 million kilometers from Earth) and operational since 2014.
+The catalogue has high precision and accuracy astrometric data for more than 1.7 billion stellar sources,
+and magnitudes in three photometric filters (G, BP and RP) for more than 1,300 million sources.
+
+As we will explain later, what we need to accomplish our aim is an algorithm
+that manages to make data groups based on the dynamic properties of the stars.
+
+There are several clustering algorithms: KMeans, Mean-Shift Clustering, DBSCAN \cite{ester1996density}
+among other. While each one behaves better according to the distribution of the objects
+to clusterize, we have chosen KMeans by its simplicity and good results.
+
+This algorithm works well and gives good results at first approach.
+However, we need to set a large number of clusters to find the open cluster we are looking for.
+This fact complicates the identification of the OC and many times the found cluster contains to many outliers.
+For that reason, we have search for a KMeans refinement based on an artificial neural network.
+
+The \emph{Unsupervised Deep Embedding for Clustering Analysis} model
+or \emph{DEC} \cite{xie2016unsupervised} takes KMeans as its starting point,
+but then, it trains an autoencoder to reduce the feature space
+and pass this transformed data through a Clustering Layer which refines the previous selection.
+
 \section{AIMS AND METHOD}
 
 Objetivo general, objetivos específicos y metodología de trabajo aplicada.
