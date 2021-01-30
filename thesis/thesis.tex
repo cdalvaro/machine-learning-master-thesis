@@ -1926,7 +1926,7 @@ with the DEC model. Table \ref{tab:results_melotte_25} shows a results summary f
 
 \section{Discussion}
 
-We have applied the our proposed method to clusters with different topologies:
+We have applied our proposed method to clusters with different topologies:
 
 \begin{itemize}
   \item NGC 2516 has it proper motion center deviated from the origin but
@@ -1966,13 +1966,13 @@ In all cases, the model has resolved properly the identity of the cluster
 and has characterized the membership stars,
 giving compatible results with the ones obtained with classic procedures and VO tools.
 
-Compared with the mentioned tools, our model can be classified as a non-parameterized model
-since it does not depend on parameters referred to the cluster itself
+Compared with the mentioned tools, our model can be cathegorizeed as a non-parameterized
+model since it does not depend on parameters referred to the cluster itself
 but only hyperparameters such as the initial number of clusters to be found,
 or the structure of the Clustering Layer used by DEC model.
 
 Our model is also non-supervised since we do not need to tell the model
-which stars belong to the cluster or assit it while its training stage.
+which stars belong to the cluster or assist it while its training stage.
 
 Only at the end of the characterization, a fine tuning driven by the user,
 can be applied in order to improve the selection by discarding those
@@ -1988,13 +1988,13 @@ This is another evidence that our model is non-parameterized.
 
 From the results shown in Chapter \ref{sec:comparing_and_validating},
 we can say that, in general, our model works fine identifying and characterizing open clusters.
-So we have succedded building a model non-parameterized and non-supervised for open cluster characterization.
+So we have succeeded building a model non-parameterized and non-supervised for open cluster characterization.
 However, some improvements should be done in order to improve its accuracy and precision.
 
 We have built a non-parameterized model since the user does not provide any information
 about the cluster profile or its properties.
-Although some tweaks can be done regarding the cluster,
-like changing the initial number of clusters or modifying the Clustering Layer structure,
+Nevertheless some tweaks can be done regarding the cluster,
+like changing the initial number of clusters or modifying the clustering layer structure
 in order to improve the final characterization.
 
 Another key point in our model is the initializer kernel.
@@ -2004,9 +2004,9 @@ For example, simply varying the kernel seed can make a huge difference on the re
 This is something to avoid, so an improvement to solve this issue is necessary in order
 to have a reliable model which does not depend on the dataset order.
 
-Even so, comparing our method with Clusterix,
+Despite that, comparing our method with Clusterix,
 we can still say that the number of parameters (or hyperparameters) in our model is smaller
-and we do not need previous knowledge about the studied cluster.
+and that we do not need previous knowledge about the studied cluster.
 That makes easier to test different configurations and automate the process.
 
 With all of these points in mind and once the mentioned issues have been solved,
@@ -2018,19 +2018,19 @@ And thus, it could even be included as part of the Virtual Observatory toolset.
 The first aim after finishing this work is testing the model with a wider range of clusters.
 In general we could think of applying it to the whole VizieR catalogue.
 That way we could have a better idea about the current limits of our model and we could make adjustments to improve it.
-We could determine with better accuracy the topologies that our model works well with,
+We could determine with higher accuracy the typologies that our model works well with,
 and which ones the model does not resolve properly.
-Even, we could stablish different sets of hyperparameters regarding the topology of the cluster.
+Furthermore, we could stablish different sets of hyperparameters regarding the typology of the cluster.
 
 With our model, new secondary clusters arise from the data apart of the main ones.
-So, it is also interesting the individual study of these new clusters.
+Hence, it is also interesting the individual study of these new clusters.
 
 Another possible change in our model would be using DBSCAN instead of KMeans as our initial clustering algorithm.
 Maybe this algorithm gives us a better starting point for the DEC model which could improve the results.
 
-At last, we have used the Gaia DR2 database as our data source for this work,
+Finally, we have used the Gaia DR2 database as our data source for this work,
 but recently the DR3 dataset has been released.
-So it is evident the interest on testing our model with this new data.
+Therefore it is evident the interest on testing our model with this new data.
 
 \newpage
 
