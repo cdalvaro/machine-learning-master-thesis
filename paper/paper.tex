@@ -2,7 +2,6 @@
 \usepackage{unir_paper}
 \usepackage{subcaption}
 
-
 %---------------------------
 %título del trabajo y autor
 %---------------------------
@@ -269,6 +268,12 @@ several stars that do not belong to the open cluster.
 \subsection{FEATURE SELECTION}
 \label{sec:feature_selection}
 
+\begin{figure}[htbp]
+  \includegraphics[width=\columnwidth]{../figures/melotte_22/features_melotte_22.png}
+  \caption{Pairwise relationships among variables using Melotte 22 data}
+  \label{fig:features_melotte_22}
+\end{figure}
+
 As mentioned before, we want our model to characterize open clusters by looking at
 their dynamic properties. Also, we want to maintain as simple as possible our
 clustering model in order to save computing resources.
@@ -290,24 +295,12 @@ to improve their performance.
 The modulus of the proper motion is another computed property that we are considering.
 We use it to relate both features and therefore, to force our model to keep them tight.
 
-\begin{figure}
-  \includegraphics[width=\columnwidth]{../figures/melotte_22/features_melotte_22.png}
-  \caption{Pairwise relationships among variables using Melotte 22 data}
-  \label{fig:features_melotte_22}
-\end{figure}
-
 Figure \ref{fig:features_melotte_22} shows a pairwise relationship among some features
 available in the dataset for Melotte 22 data.
 
 \subsection{SOFT CLUSTERING}
 
-Our first approach to find the open cluster is using the K-Means algorithm.
-Since we are looking for a single cluster, it seems reasonable to use a clustering
-algorithm and set it to find two clusters. One for the desired OC and another which
-contains stars that do not belong to the open cluster.
-However, this idea is not completely right.
-
-\begin{figure}
+\begin{figure}[htbp]
   \centering
   \begin{subfigure}{\columnwidth}
     \centering
@@ -350,6 +343,12 @@ However, this idea is not completely right.
   \caption{K-Means comparisons with Melotte 22}
   \label{fig:kmeans_comparisons_melotte_22}
 \end{figure}
+
+Our first approach to find the open cluster is using the K-Means algorithm.
+Since we are looking for a single cluster, it seems reasonable to use a clustering
+algorithm and set it to find two clusters. One for the desired OC and another which
+contains stars that do not belong to the open cluster.
+However, this idea is not completely right.
 
 This is due to the fact that OC's stars are surrounded by other stars with possibly similar
 properties. So, setting the number of clusters to two is too low to separate them properly.
@@ -431,8 +430,11 @@ Finally, we can refine this selection by filtering those stars which are bellow 
 the 0.10 and 0.90 quantiles for each group, respectively.
 That way we remove the most doubtful values from the selection.
 
-All developed resources are available at:
-\href{github.com/cdalvaro/machine-learning-master-thesis}{github.com/cdalvaro/machine-learning-master-thesis}
+All resources developed for this project are available at the GitHub repository:
+\href{https://github.com/cdalvaro/machine-learning-master-thesis}{cdalvaro/machine-learning-master-thesis}
+
+It includes the DEC model developed in Python using the Keras framework
+and Jupyter Notebooks \cite{Kluyver2016jupyter} with examples.
 
 \section{CONTRIBUTION}
 
