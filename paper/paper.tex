@@ -101,10 +101,10 @@ These last variables are used for generating the H-R diagram of the OC candidate
 This stars should present a sharp profile corresponding to an isochrone curve derived
 from a theoretical model.
 This model does consider metallicity, mass and brightness of the stars involved.
-At the moment, a set of tools have been used for this purpose, as explained later,
-but in general, these tools require supervised and parameterized models.
-So a previous knowledge of the cluster is necessary or the process must be repeated
-iteratively in order to achieve valid results.
+At the moment, a set of tools have been used for this purpose, as explained later.
+But in general, these tools require supervised and parameterized models.
+Therefore, a previous knowledge of the cluster is necessary or the process must be
+repeated iteratively in order to achieve valid results.
 
 Our aim is to build a machine learning model capable of characterizing an open
 cluster inside a stellar region with knowing nothing about the region.
@@ -300,7 +300,16 @@ available in the dataset for Melotte 22 data.
 
 \subsection{SOFT CLUSTERING}
 
-\begin{figure}[htbp]
+Our first approach to find the open cluster is using the K-Means algorithm.
+Since we are looking for a single cluster, it seems reasonable to use a clustering
+algorithm and set it to find two clusters. One for the desired OC and another which
+contains stars that do not belong to the open cluster.
+However, this idea is not completely right.
+
+This is due to the fact that OC's stars are surrounded by other stars with possibly similar
+properties. Therefore, setting the number of clusters to two is too low to separate them properly.
+
+\begin{figure}
   \centering
   \begin{subfigure}{\columnwidth}
     \centering
@@ -343,15 +352,6 @@ available in the dataset for Melotte 22 data.
   \caption{K-Means comparisons with Melotte 22}
   \label{fig:kmeans_comparisons_melotte_22}
 \end{figure}
-
-Our first approach to find the open cluster is using the K-Means algorithm.
-Since we are looking for a single cluster, it seems reasonable to use a clustering
-algorithm and set it to find two clusters. One for the desired OC and another which
-contains stars that do not belong to the open cluster.
-However, this idea is not completely right.
-
-This is due to the fact that OC's stars are surrounded by other stars with possibly similar
-properties. So, setting the number of clusters to two is too low to separate them properly.
 
 As shown in Figure \ref{fig:kmeans_comparisons_melotte_22}, larger values for the number of
 clusters allow us to isolate more accurately the resonance in parallax at $\approx 7.3mas$.
@@ -482,12 +482,49 @@ Tras la presentación objetiva de los resultados, querrás aportar una discusió
 
 \section{CONCLUSIONS}
 
-Resumen de las contribuciones del trabajo, en el que relaciones las contribuciones y los resultados obtenidos con los objetivos que habías planteado para el trabajo, discutiendo hasta qué punto has conseguido resolver los objetivos planteados.
-Finalmente, hablar de líneas de trabajo futuro que podrían aportar valor añadido al TFM realizado. La sección debería señalar las perspectivas de futuro que abre el trabajo desarrollado para el campo de estudio definido. En el fondo, debes justificar de qué modo puede emplearse la aportación que has desarrollado y en qué campos.
+From the results shown in Section \ref{sec:results}, we can say that, in general,
+our model works fine identifying and characterizing open clusters.
+So we have succeeded building a model non-parameterized and non-supervised
+for open cluster characterization. However, some improvements should be done
+in order to improve its accuracy and precision.
 
-\appendix
-\section{APPENDIX}
-Apéndices, en caso de ser necesario.
+We have built a non-parameterized model since the user is not required to provide
+any information about the cluster profile or its properties.
+Nevertheless some tweaks can be done regarding the cluster, like changing the initial
+number of clusters or modifying the clustering layer structure in order to improve
+the final characterization.
+
+Another key point in our model is the initializer kernel.
+This kernel prepares data before passing it to the ANN
+and the results may vary significantly depending on this kernel.
+This is something to avoid, so an improvement to solve this issue is necessary
+in order to have a reliable model which does not depend on the dataset order.
+
+Despite that, comparing our method with Clusterix, we can still say that the
+number of parameters (or hyperparameters) in our model is smaller and that
+we do not need previous knowledge about the studied cluster.
+That makes easier to test different configurations and automate the process.
+
+\subsection{FURTHER RESEARCH}
+
+One open point to do from now is testing the model with a wider range of clusters.
+In general we could think of applying it to the whole VizieR catalogue.
+That way we could have a better idea about the current limitations of our model
+and we could make some adjustments to improve it. We could determine with higher
+accuracy the typologies that our model works well with, and which ones the model
+does not resolve properly. Furthermore, we could stablish different sets of
+hyperparameters regarding the typology of the cluster.
+
+With our model, new uncatalogued clusters arise from the data apart of the main ones.
+Hence, it is also interesting the individual study of these new clusters.
+
+Another possible change in our model would be using DBSCAN instead of KMeans
+as our initial clustering algorithm. Maybe this algorithm gives us a better starting
+point for the DEC model which could improve the results.
+
+Finally, we have used the Gaia DR2 database as our data source for this work,
+but recently the DR3 dataset has been released.
+Therefore, it is evident the interest on testing our model with this new data.
 
 \renewcommand{\refname}{REFERENCES}
 \bibliographystyle{unsrt}
