@@ -137,7 +137,7 @@ increasing the radius of each region by a factor $1.5$.
 \end{figure}
 
 Finally, we have compared the results obtained with the model we purposed with another
-method that involves tools from the Virtual Observatory such as Clusterix \cite{balaguer2020clusterix}.
+method that involves tools from the Virtual Observatory (VO) such as Clusterix \cite{balaguer2020clusterix}.
 
 As shown in Section \ref{sec:results}, the results obtained are promising.
 This allows us to consider our model as a valid tool that could be part
@@ -160,8 +160,8 @@ fundamental properties of the cluster (total mass, age, chemical composition, et
 Since the components of the open cluster are born from the same gas cloud and they
 share both dynamic properties and relative distance, as well as age and chemical
 composition, the first step is to analyze the proper motion configuration space of
-the region of interest. This approach is the one used by many tools from the Virtual
-Observatory such as TOPCAT \cite{taylor2005topcat}, Clusterix 2.0 \cite{balaguer2020clusterix},
+the region of interest. This approach is the one used by many tools from the VO
+such as TOPCAT \cite{taylor2005topcat}, Clusterix 2.0 \cite{balaguer2020clusterix},
 Aladin \cite{bonnarel2000aladin} or VOSA \cite{bayo2008vosa}.
 
 TOPCAT by itself cannot find members of the open cluster. It requires to parameterize
@@ -437,6 +437,25 @@ It includes the DEC model developed in Python using the Keras framework
 and Jupyter Notebooks \cite{Kluyver2016jupyter} with examples.
 
 \section{CONTRIBUTION}
+
+The developed method is successful since it meets all our established requirements:
+
+\begin{itemize}
+  \item Our method gives valid results compatible with current methods as described in Section \ref{sec:results}.
+  \item As required from the beginning, it is non-supervised and non-parameterized.
+  \item The model shows a great performance compared with current methods.
+  \item It is able to deal with large and dense regions. As an example,
+        it has succeeded characterizing Melotte 25 (Hiades) OC. This cluster is
+        really large and dense, and its relative proximity makes it difficult to
+        characterize. Clusterix fails characterizing this cluster. In this case,
+        our method proposes at least two more non-catalogued clusters. The analysis
+        of these new clusters brings out an interesting stellar dynamics in the studied
+        region. It could mean that there was a recent interaction among different molecular clouds.
+\end{itemize}
+
+For all this, we consider that the presented method is good enough to be included
+in the Virtual Observatory toolset. Only a few tweaks must be done in order to make
+our model compatible with other tools of the VO.
 
 \section{RESULTS}
 \label{sec:results}
