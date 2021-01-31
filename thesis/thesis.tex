@@ -1945,8 +1945,8 @@ We have applied our proposed method to clusters with different typologies:
 \end{itemize}
 
 All these clusters have a wide variety of diameters, from 25 to 330 arcmin,
-as well as the number of stars that belong to them.
-NGC 2682 has 3,000 stars while Melotte 25 is composed by more than 400,000 stars.
+as well as the number of stars that belong to them. NGC 2682 has 3,000 stars
+while Melotte 25 is located inside a region with more than 400,000 stars.
 More information about the studied clusters is available in Table \ref{tab:clusters_summary}.
 
 \begin{table}[h!]
@@ -2041,6 +2041,8 @@ Therefore it is evident the interest on testing our model with this new data.
 
 \bibliography{references}
 
-\includepdf[pages={-},noautoscale]{../paper/paper.pdf}
+\setboolean{@twoside}{false}
+\addtocontents{toc}{\protect\renewcommand{\protect\numberline}[1]{}}
+\includepdf[pages=-, offset=75 -75, addtotoc={1, chapter, 1, Paper, chap:paper}]{../paper/paper.pdf}
 
 \end{document}
