@@ -1,12 +1,13 @@
-\documentclass[11pt,a4paper,USenglish,twocolumn]{article}
+\documentclass[11pt,a4paper,english,twocolumn]{article}
 \usepackage{unir_paper}
 \usepackage{subcaption}
+\usepackage{tablefootnote}
 
 %---------------------------
 %título del trabajo y autor
 %---------------------------
 \title{Machine Learning Tools for Open Cluster Characterization with Gaia DR2 Data}
-\author{C. D. Álvaro, J. Álvaro, C. A. Guzmán}
+\author{CD. Álvaro, J. Álvaro, CAG. Guzmán}
 \date{24th of January, 2021}
 
 
@@ -31,7 +32,7 @@ and clustering based on \emph{Artificial Neural Networks} by adapting
 the \emph{Deep Embedded Clustering} model.
 We are using \emph{Gaia DR2 database} as data source.
 
-The developed method aims to improve current techniques of the state of the art.
+The developed method aims to improve classic techniques of the state of the art.
 We achieve improvements not only in terms of \emph{computational efficiency},
 with lower computational requirements, but in \emph{usability}, reducing the number
 of hyperparameters to get a good characterization of the analyzed clusters.
@@ -183,15 +184,12 @@ Number $h$ is called the \emph{smoothing} parameter and it is measured
 in the same units as proper motion.
 
 Clusterix is defined as an unsupervised and non-parameterized tool, but it
-critically depends on the selection of three radii.
-
-\begin{itemize}
-  \item \textbf{Inner radius} which defines a region with stars that belong to the OC and field stars.
-  \item \textbf{Void region}. This region is excluded from the analysis since it is supposed
-                to be a transition region with stars that could belong the OC.
-  \item \textbf{External region} or field region.
-                This is the outer region with stars that do not belong the open cluster.
-\end{itemize}
+critically depends on the selection of three radii in the studied region.
+The inner radius should contain stars belonging or not to the cluster.
+While the outermost radii define a ring which only contains stars that do
+not belong to the cluster. In addition, it is also sensitive to other
+parameters, such as the soften parameter \emph{h}, or other restrictions
+related with the searched proper motions.
 
 If the analysis performed by Clusterix is successful, it returns the probability
 associated to each star in the dataset to belong to the open cluster.
@@ -237,17 +235,17 @@ and magnitudes in three photometric filters (G, BP and RP) for more than 1,300 m
 As we will explain later, what we need to accomplish our aim is an algorithm
 that manages to make data groups based on the dynamic properties of the stars.
 
-There are several clustering algorithms: KMeans, Mean-Shift Clustering, DBSCAN \cite{ester1996density}
+There are several clustering algorithms: K-Means, Mean-Shift Clustering, DBSCAN \cite{ester1996density}
 among other. While each one behaves better according to the distribution of the objects
-to clusterize, we have chosen KMeans by its simplicity and good results.
+to clusterize, we have chosen K-Means by its simplicity and good results.
 
 This algorithm works well and gives good results at first approach.
 However, we need to set a large number of clusters to find the open cluster we are looking for.
 This fact complicates the identification of the OC and many times the found cluster contains to many outliers.
-For that reason, we have search for a KMeans refinement based on an artificial neural network.
+For that reason, we have search for a K-Means refinement based on an artificial neural network.
 
 The \emph{Unsupervised Deep Embedding for Clustering Analysis} model
-or \emph{DEC} \cite{xie2016unsupervised} takes KMeans as its starting point,
+or \emph{DEC} \cite{xie2016unsupervised} takes K-Means as its starting point,
 but then, it trains an autoencoder to reduce the feature space
 and pass this transformed data through a Clustering Layer which refines the previous selection.
 
@@ -429,6 +427,58 @@ powerful that would incur in overfitting issues unable to make right predictions
 Finally, we can refine this selection by filtering those stars which are bellow and above
 the 0.10 and 0.90 quantiles for each group, respectively.
 That way we remove the most doubtful values from the selection.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/kmeans_pm_melotte_22.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_pm_melotte_22.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_pm_filtered_melotte_22.png}
+    \end{subfigure}
+  \end{subfigure}
+  \medskip
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/kmeans_hr_diagram_melotte_22.png}
+      \caption{K-Means}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_hr_diagram_melotte_22.png}
+      \caption{DEC}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_hr_diagram_filtered_melotte_22.png}
+      \caption{DEC (filt.)}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{Evolution of Melotte 22 characterization}
+  \label{fig:melotte_22_characterization_evolution}
+\end{figure}
+
+Figure \ref{fig:melotte_22_characterization_evolution} shows the evolution
+of the characterization of Melotte 22. The first column corresponds to the
+characterization obtained by applying K-Means alone to the dataset. The middle
+column is the characterization made by the DEC model. And the column on the right
+shows the characterization made by the DEC and having filtered the quantiles
+lower than 0.10 and higher than 0.90. The top row shows the proper motion
+configuration space while the bottom one shows the Hertzsprung–Russell diagrams.
 
 All resources developed for this project are available at the GitHub repository:
 \href{https://github.com/cdalvaro/machine-learning-master-thesis}{cdalvaro/machine-learning-master-thesis}
