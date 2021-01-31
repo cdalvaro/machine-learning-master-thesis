@@ -1,5 +1,7 @@
 ### Custom
+paper/paper.pdf
 thesis/thesis.pdf
+results/
 
 ### Python
 # Byte-compiled / optimized / DLL files
@@ -412,8 +414,3 @@ TSWLatexianTemp*
 
 ### VisualStudioCode
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-*.code-workspace

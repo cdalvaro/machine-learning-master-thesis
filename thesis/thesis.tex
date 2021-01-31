@@ -76,7 +76,7 @@ Our method achieves good results, becoming even better in some cases when the re
 
 \medskip
 
-{\bf Key words.} open clusters characterization, machine learning, gaia, data analysis, deep embedded clustering
+{\bf Key words.} data analysis, deep embedded clustering, gaia, machine learning, open clusters characterization
 
 \chapter{Resumen}
 
@@ -96,7 +96,7 @@ los resultados con otras técnicas actuales.
 
 \medskip
 
-{\bf Palabras Clave:} caracterización de cúmulos abiertos, inteligencia artificial, gaia, análisis de datos
+{\bf Palabras Clave:} análisis de datos, caracterización de cúmulos abiertos, gaia, inteligencia artificial
 
 \chapter{Acknowledgements}
 
@@ -132,6 +132,11 @@ and Innovation Programme, under Grant Agreement nº 776403 (EXOPLANETS-A)
 
 This research has made use of the VizieR catalogue access tool, CDS, Strasbourg, France (DOI : 10.26093/cds/vizier).
 The original description of the VizieR service was published in 2000, \cite[A\&AS 143, 23]{ochsenbein2000vizier}
+
+\medskip
+
+This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France
+\cite[2000,A\&AS,143,9]{wenger2000simbad}, "The SIMBAD astronomical database", Wenger et al.
 
 \mainmatter
 \chapter{Introduction}
@@ -499,13 +504,13 @@ will be used only for comparing and validating our results.
 As we will explain later, what we need to accomplish our aim is an algorithm
 that manages to make data groups based on the dynamic properties of the stars.
 
-There are several clustering algorithms: KMeans, Mean-Shift Clustering, DBSCAN \cite{ester1996density} among other.
+There are several clustering algorithms: K-Means, Mean-Shift Clustering, DBSCAN \cite{ester1996density} among other.
 While each one behaves better according to the distribution of the objects to clusterize,
-we have chosen KMeans by its simplicity and good results.
+we have chosen K-Means by its simplicity and good results.
 
-KMeans requires a single parameter, the number of clusters to build (N).
+K-Means requires a single parameter, the number of clusters to build (N).
 The algorithm looks for N center points which are vectors of the same dimension as the number of selected features.
-KMeans starts by making an initial groups configuration and then,
+K-Means starts by making an initial groups configuration and then,
 it reassigns objects to other groups iteratively by minimizing the distance among points
 inside the new group and maximizing the distance with the centers of the other groups.
 
@@ -515,10 +520,10 @@ or when changes between iterations is lower than a minimum.
 This algorithm works well and gives good results at first approach.
 However, we need to set a large number of clusters to find the open cluster we are looking for.
 This fact complicates the identification of the OC and many times the found cluster contains to many outliers.
-For that reason, we have search for a KMeans refinement based on an artificial neural network.
+For that reason, we have search for a K-Means refinement based on an artificial neural network.
 
 The \emph{Unsupervised Deep Embedding for Clustering Analysis} model
-or \emph{DEC} \cite{xie2016unsupervised} takes KMeans as its starting point,
+or \emph{DEC} \cite{xie2016unsupervised} takes K-Means as its starting point,
 but then, it trains an autoencoder to reduce the feature space
 and pass this transformed data through a Clustering Layer which refines the previous selection.
 
@@ -1084,8 +1089,8 @@ Figure \ref{fig:melotte_22_filtered} shows the result after filtering DEC cluste
 
 Table \ref{tab:results_melotte_22} shows a summary of Melotte 22 with values taken from different sources and methods:
 SIMBAD Astronomical Database - CDS (Strasbourg),
-Clusterix+TOPCAT method, and the results obtained for each step of this method (KMeans, DEC and DEC filtered).
-Errors associated to KMeans and DEC predictions have been calculated as the \emph{Standard Error},
+Clusterix+TOPCAT method, and the results obtained for each step of this method (K-Means, DEC and DEC filtered).
+Errors associated to K-Means and DEC predictions have been calculated as the \emph{Standard Error},
 $SE = \sigma / \sqrt{N}$, where $N$ is the number of samples in the selected group.
 
 \vfill
@@ -1097,7 +1102,7 @@ $SE = \sigma / \sqrt{N}$, where $N$ is the number of samples in the selected gro
       \textbf{Simbad.u-strasbg.fr}\tablefootnote{Results have been taken from \protect\citeA[p.~25. Table A.3. Pleiades]{babusiaux2018gaia}} &
         19.997 $\pm$ 0.127 & -45.548 $\pm$ 0.101 & 7.364 $\pm$ 0.005 & 1326 \\
       Clusterix+TOPCAT & 19.98 $\pm$ 1.25 & -45.47 $\pm$ 1.48 & 7.33 $\pm$ 0.21 & 634 \\
-      KMeans & 20.25 $\pm$ 0.95 & -38.01 $\pm$ 1.08 & 7.23 $\pm$ 0.06 & 1378 \\
+      K-Means & 20.25 $\pm$ 0.95 & -38.01 $\pm$ 1.08 & 7.23 $\pm$ 0.06 & 1378 \\
       DEC & 23.67 $\pm$ 1.29 & -46.23 $\pm$ 1.50 & 8.04 $\pm$ 0.09 & 878 \\
       \textbf{DEC (filtered)} & 19.50 $\pm$ 0.41 & -44.23 $\pm$ 0.39 & 7.42 $\pm$ 0.005 & 438 \\
     \end{tabular}
@@ -1351,7 +1356,7 @@ This table summarizes the results obtained with the validation technique and our
       \hline
       \textbf{Simbad.u-strasbg.fr} & 19.997 $\pm$ 0.127 & -45.548 $\pm$ 0.101 & 7.364 $\pm$ 0.005 & 1326 \\
       \textbf{Clusterix+TOPCAT} & 19.98 $\pm$ 1.25 & -45.47 $\pm$ 1.48 & 7.33 $\pm$ 0.21 & 634 \\
-      KMeans & 20.25 $\pm$ 0.95 & -38.01 $\pm$ 1.08 & 7.23 $\pm$ 0.06 & 1378 \\
+      K-Means & 20.25 $\pm$ 0.95 & -38.01 $\pm$ 1.08 & 7.23 $\pm$ 0.06 & 1378 \\
       DEC & 23.67 $\pm$ 1.29 & -46.23 $\pm$ 1.50 & 8.04 $\pm$ 0.09 & 878 \\
       DEC (filtered) & 19.50 $\pm$ 0.41 & -44.23 $\pm$ 0.39 & 7.42 $\pm$ 0.005 & 438 \\
     \end{tabular}
@@ -1363,7 +1368,7 @@ This table summarizes the results obtained with the validation technique and our
 
 Until now, we have focused our study in the open cluster Melotte 22.
 Since our aim is to get a model that fits well for a wide range of clusters,
-we will now proceed to show some results obtained for a selection of clusters with different topologies.
+we will now proceed to show some results obtained for a selection of clusters with different typologies.
 
 All results have been computed with an Apple Mac Pro Late 2013,
 2.7 GHz 12-Core Intel Xeon E5 with two AMD FirePro D700 6GB and 64 GB
@@ -1417,7 +1422,7 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
       \includegraphics[width=\textwidth]{../figures/ngc_2516/kmeans_hr_diagram_ngc_2516.png}
     \end{subfigure}
   \end{subfigure}
-  \caption{NGC 2516 KMeans characterization. Identified as cluster \emph{g3}.}
+  \caption{NGC 2516 K-Means characterization. Identified as cluster \emph{g3}.}
   \label{fig:result_ngc_2516_kmeans}
   \centering
   \begin{subfigure}{0.9\textwidth}
@@ -1464,12 +1469,12 @@ that used the power of the MareNostrum 42 supercomputer in order to perform its 
 \newpage
 
 Figure \ref{fig:result_ngc_2516_clusterix} shows NGC 2516 characterized using Clusterix+TOPCAT tools.
-Figure \ref{fig:result_ngc_2516_kmeans} shows eigth clusters identified by KMeans.
+Figure \ref{fig:result_ngc_2516_kmeans} shows eight clusters identified by K-Means.
 In this case, cluster \emph{g3} is the one we are looking for.
 Figures \ref{fig:result_ngc_2516_dec} and \ref{fig:result_ngc_2516_dec_filtered}
 show the groups found using the DEC model and the DEC model filtered, respectively.
 Again, the cluster of interest is the group \emph{g3}.
-Although in general, groups between KMeans model and DEC models may not match.
+Although in general, groups between K-Means model and DEC models may not match.
 
 Table \ref{tab:hyperparameters_ngc_2516} shows the hyperparameters used for characterizing NGC 2516
 with the DEC model. Table \ref{tab:results_ngc_2516} shows a results summary for NGC 2516.
@@ -1500,7 +1505,7 @@ with the DEC model. Table \ref{tab:results_ngc_2516} shows a results summary for
       \hline
       \textbf{Simbad.u-strasbg.fr} & -4.6579 $\pm$ 0.0075 & 11.1517 $\pm$ 0.0075 & 2.4118 $\pm$ 0.0006 & 1727 \\
       Clusterix+TOPCAT & -4.652 $\pm$ 0.523 & 11.203 $\pm$ 0.454 & 2.409 $\pm$ 0.127 & 638 \\
-      KMeans & -4.344 $\pm$ 0.14 & 9.507 $\pm$ 0.19 & 2.268 $\pm$ 0.01 & 1542 \\
+      K-Means & -4.344 $\pm$ 0.14 & 9.507 $\pm$ 0.19 & 2.268 $\pm$ 0.01 & 1542 \\
       DEC & -4.426 $\pm$ 0.17 & 9.952 $\pm$ 0.20 & 2.436 $\pm$ 0.01 & 1532 \\
       \textbf{DEC (filtered)} & -4.502 $\pm$ 0.14 & 10.114 $\pm$ 0.17 & 2.392 $\pm$ 0.004 & 1072 \\
     \end{tabular}
@@ -1555,7 +1560,7 @@ with the DEC model. Table \ref{tab:results_ngc_2516} shows a results summary for
       \includegraphics[width=\textwidth]{../figures/ngc_2632/kmeans_hr_diagram_ngc_2632.png}
     \end{subfigure}
   \end{subfigure}
-  \caption{NGC 2632 KMeans characterization. Identified as cluster \emph{g1}.}
+  \caption{NGC 2632 K-Means characterization. Identified as cluster \emph{g1}.}
   \label{fig:result_ngc_2632_kmeans}
   \centering
   \begin{subfigure}{0.9\textwidth}
@@ -1602,7 +1607,7 @@ with the DEC model. Table \ref{tab:results_ngc_2516} shows a results summary for
 \newpage
 
 Figure \ref{fig:result_ngc_2632_clusterix} shows NGC 2632 characterized by the validation method.
-Figure \ref{fig:result_ngc_2632_kmeans} shows ten clusters identified by KMeans.
+Figure \ref{fig:result_ngc_2632_kmeans} shows ten clusters identified by K-Means.
 Cluster \emph{g1} is the open cluster we are looking for.
 Figures \ref{fig:result_ngc_2632_dec} and \ref{fig:result_ngc_2632_dec_filtered}
 show the groups found using the DEC model and the DEC model filtered, respectively.
@@ -1637,7 +1642,7 @@ with our model. Table \ref{tab:results_ngc_2632} shows a results summary for NGC
       \hline
       \textbf{Simbad.u-strasbg.fr} & -36.047 $\pm$ 0.110 & -12.917 $\pm$ 0.066 & 5.371 $\pm$ 0.003 & - \\
       Clusterix+TOPCAT & -36.154 $\pm$ 1.001 & -12.909 $\pm$ 0.806 & 5.327 $\pm$ 0.187 & 371 \\
-      KMeans & -26.352 $\pm$ 0.82 & -15.828 $\pm$ 0.76 & 5.394 $\pm$ 0.03 & 629 \\
+      K-Means & -26.352 $\pm$ 0.82 & -15.828 $\pm$ 0.76 & 5.394 $\pm$ 0.03 & 629 \\
       DEC & -20.012 $\pm$ 0.69 & -14.742 $\pm$ 0.58 & 4.686 $\pm$ 0.03 & 894 \\
       \textbf{DEC (filtered)} & -21.571 $\pm$ 0.74 & -14.234 $\pm$ 0.61 & 4.719 $\pm$ 0.03 & 714 \\
     \end{tabular}
@@ -1692,7 +1697,7 @@ with our model. Table \ref{tab:results_ngc_2632} shows a results summary for NGC
       \includegraphics[width=\textwidth]{../figures/ngc_2682/kmeans_hr_diagram_ngc_2682.png}
     \end{subfigure}
   \end{subfigure}
-  \caption{NGC 2682 KMeans characterization. Identified as cluster \emph{g4}.}
+  \caption{NGC 2682 K-Means characterization. Identified as cluster \emph{g4}.}
   \label{fig:result_ngc_2682_kmeans}
   \centering
   \begin{subfigure}{0.9\textwidth}
@@ -1739,8 +1744,8 @@ with our model. Table \ref{tab:results_ngc_2632} shows a results summary for NGC
 \newpage
 
 Figure \ref{fig:result_ngc_2682_clusterix} shows NGC 2682 characterized using Clusterix+TOPCAT tools.
-Figure \ref{fig:result_ngc_2682_kmeans} shows ten clusters identified by KMeans.
-KMeans labels NGC 2682 as group \emph{g4}.
+Figure \ref{fig:result_ngc_2682_kmeans} shows ten clusters identified by K-Means.
+K-Means labels NGC 2682 as group \emph{g4}.
 Figures \ref{fig:result_ngc_2682_dec} and \ref{fig:result_ngc_2682_dec_filtered}
 show the groups found using the DEC model and the DEC model filtered, respectively.
 The cluster of interest is the group \emph{g2}.
@@ -1774,7 +1779,7 @@ with the DEC model. Table \ref{tab:results_ngc_2682} shows a results summary for
       \hline
       \textbf{Simbad.u-strasbg.fr} & -10.9737 $\pm$ 0.0064 & -2.9396 $\pm$ 0.0063 & 1.1325 $\pm$ 0.0011 & 1194 \\
       Clusterix+TOPCAT & -10.970 $\pm$ 0.322 & -2.958 $\pm$ 0.327 & 1.142 $\pm$ 0.080 & 649 \\
-      KMeans & -8.616 $\pm$ 0.15 & -3.710 $\pm$ 0.16 & 1.196 $\pm$ 0.01 & 1374 \\
+      K-Means & -8.616 $\pm$ 0.15 & -3.710 $\pm$ 0.16 & 1.196 $\pm$ 0.01 & 1374 \\
       DEC & -8.926 $\pm$ 0.15 & -3.550 $\pm$ 0.15 & 1.144 $\pm$ 0.005 & 1238 \\
       \textbf{DEC (filtered)} & -9.619 $\pm$ 0.13 & -3.317 $\pm$ 0.13 & 1.140 $\pm$ 0.003 & 990 \\
     \end{tabular}
@@ -1829,7 +1834,7 @@ with the DEC model. Table \ref{tab:results_ngc_2682} shows a results summary for
       \includegraphics[width=\textwidth]{../figures/melotte_25/kmeans_hr_diagram_melotte_25.png}
     \end{subfigure}
   \end{subfigure}
-  \caption{Melotte 25 KMeans characterization. Identified as cluster \emph{g4}.}
+  \caption{Melotte 25 K-Means characterization. Identified as cluster \emph{g4}.}
   \label{fig:result_melotte_25_kmeans}
   \centering
   \begin{subfigure}{0.9\textwidth}
@@ -1876,8 +1881,8 @@ with the DEC model. Table \ref{tab:results_ngc_2682} shows a results summary for
 \newpage
 
 Figure \ref{fig:result_melotte_25_clusterix} shows Melotte 25 characterized using Clusterix+TOPCAT tools.
-Figure \ref{fig:result_melotte_25_kmeans} shows nine clusters identified by KMeans.
-KMeans labels Melotte 25 as group \emph{g3}.
+Figure \ref{fig:result_melotte_25_kmeans} shows nine clusters identified by K-Means.
+K-Means labels Melotte 25 as group \emph{g3}.
 Figures \ref{fig:result_melotte_25_dec} and \ref{fig:result_melotte_25_dec_filtered}
 show the groups found using the DEC model and the DEC model filtered, respectively.
 Melotte 25 is labeled as group \emph{g5} by DEC model.
@@ -1911,7 +1916,7 @@ with the DEC model. Table \ref{tab:results_melotte_25} shows a results summary f
       \hline
       \textbf{Simbad.u-strasbg.fr} & 104.92 $\pm$ 0.12 & -28.00 $\pm$ 0.09 & 21.052 $\pm$ 0.065 & - \\
       Clusterix+TOPCAT & 106.796 $\pm$ 6.229 & -24.870 $\pm$ 5.417 & 21.210 $\pm$ 1.115 & 109 \\
-      KMeans & 79.936 $\pm$ 3.7 & -45.362 $\pm$ 3.8 & 20.901 $\pm$ 0.31 & 374 \\
+      K-Means & 79.936 $\pm$ 3.7 & -45.362 $\pm$ 3.8 & 20.901 $\pm$ 0.31 & 374 \\
       DEC & 104.051 $\pm$ 3.2 & -33.424 $\pm$ 2.5 & 22.072 $\pm$ 0.13 & 219 \\
       \textbf{DEC (filtered)} & 105.96 $\pm$ 3.5 & -30.00 $\pm$ 2.4 & 21.74 $\pm$ 0.07 & 175 \\
     \end{tabular}
@@ -1926,7 +1931,7 @@ with the DEC model. Table \ref{tab:results_melotte_25} shows a results summary f
 
 \section{Discussion}
 
-We have applied the our proposed method to clusters with different topologies:
+We have applied our proposed method to clusters with different typologies:
 
 \begin{itemize}
   \item NGC 2516 has it proper motion center deviated from the origin but
@@ -1936,10 +1941,10 @@ We have applied the our proposed method to clusters with different topologies:
   \item NGC 2682, on the other hand, has its parallax centered within the region's gaussian,
         which complicates its detection although its proper motion center is deviated from the origin.
   \item Melotte 25 (as well as Melotte 22) is a cluster closer to us than the other.
-        That makes its memebership stars to be more scattered than previous clusters which are more compact.
+        That makes its membership stars to be more scattered than previous clusters which are more compact.
 \end{itemize}
 
-All of these clusters have a wide variety of diameters, from 25 to 330 arcmin,
+All these clusters have a wide variety of diameters, from 25 to 330 arcmin,
 as well as the number of stars that belong to them.
 NGC 2682 has 3,000 stars while Melotte 25 is composed by more than 400,000 stars.
 More information about the studied clusters is available in Table \ref{tab:clusters_summary}.
@@ -1966,13 +1971,13 @@ In all cases, the model has resolved properly the identity of the cluster
 and has characterized the membership stars,
 giving compatible results with the ones obtained with classic procedures and VO tools.
 
-Compared with the mentioned tools, our model can be classified as a non-parameterized model
-since it does not depend on parameters referred to the cluster itself
+Compared with the mentioned tools, our model can be categorized as a non-parameterized
+model since it does not depend on parameters referred to the cluster itself
 but only hyperparameters such as the initial number of clusters to be found,
 or the structure of the Clustering Layer used by DEC model.
 
 Our model is also non-supervised since we do not need to tell the model
-which stars belong to the cluster or assit it while its training stage.
+which stars belong to the cluster or assist it while its training stage.
 
 Only at the end of the characterization, a fine tuning driven by the user,
 can be applied in order to improve the selection by discarding those
@@ -1988,13 +1993,13 @@ This is another evidence that our model is non-parameterized.
 
 From the results shown in Chapter \ref{sec:comparing_and_validating},
 we can say that, in general, our model works fine identifying and characterizing open clusters.
-So we have succedded building a model non-parameterized and non-supervised for open cluster characterization.
+So we have succeeded building a model non-parameterized and non-supervised for open cluster characterization.
 However, some improvements should be done in order to improve its accuracy and precision.
 
 We have built a non-parameterized model since the user does not provide any information
 about the cluster profile or its properties.
-Although some tweaks can be done regarding the cluster,
-like changing the initial number of clusters or modifying the Clustering Layer structure,
+Nevertheless some tweaks can be done regarding the cluster,
+like changing the initial number of clusters or modifying the clustering layer structure
 in order to improve the final characterization.
 
 Another key point in our model is the initializer kernel.
@@ -2004,9 +2009,9 @@ For example, simply varying the kernel seed can make a huge difference on the re
 This is something to avoid, so an improvement to solve this issue is necessary in order
 to have a reliable model which does not depend on the dataset order.
 
-Even so, comparing our method with Clusterix,
+Despite that, comparing our method with Clusterix,
 we can still say that the number of parameters (or hyperparameters) in our model is smaller
-and we do not need previous knowledge about the studied cluster.
+and that we do not need previous knowledge about the studied cluster.
 That makes easier to test different configurations and automate the process.
 
 With all of these points in mind and once the mentioned issues have been solved,
@@ -2018,26 +2023,24 @@ And thus, it could even be included as part of the Virtual Observatory toolset.
 The first aim after finishing this work is testing the model with a wider range of clusters.
 In general we could think of applying it to the whole VizieR catalogue.
 That way we could have a better idea about the current limits of our model and we could make adjustments to improve it.
-We could determine with better accuracy the topologies that our model works well with,
+We could determine with higher accuracy the typologies that our model works well with,
 and which ones the model does not resolve properly.
-Even, we could stablish different sets of hyperparameters regarding the topology of the cluster.
+Furthermore, we could stablish different sets of hyperparameters regarding the typology of the cluster.
 
 With our model, new secondary clusters arise from the data apart of the main ones.
-So, it is also interesting the individual study of these new clusters.
+Hence, it is also interesting the individual study of these new clusters.
 
-Another possible change in our model would be using DBSCAN instead of KMeans as our initial clustering algorithm.
+Another possible change in our model would be using DBSCAN instead of K-Means as our initial clustering algorithm.
 Maybe this algorithm gives us a better starting point for the DEC model which could improve the results.
 
-At last, we have used the Gaia DR2 database as our data source for this work,
+Finally, we have used the Gaia DR2 database as our data source for this work,
 but recently the DR3 dataset has been released.
-So it is evident the interest on testing our model with this new data.
+Therefore it is evident the interest on testing our model with this new data.
 
 \newpage
 
 \bibliography{references}
-\addcontentsline{toc}{chapter}{Bibliography}
 
-\appendix
+\includepdf[pages={-},noautoscale]{../paper/paper.pdf}
 
-%\includepdf[pages=-]{anexo.pdf} # TODO: Descomentar cuando el artículo esté hecho
 \end{document}
