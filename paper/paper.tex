@@ -494,9 +494,9 @@ The developed method is successful since it meets all our established requiremen
   \item Our method gives valid results compatible with current methods as described in Section \ref{sec:results}.
   \item As required from the beginning, it is non-supervised and non-parameterized.
   \item The model shows a great performance compared with current methods.
-  \item It is able to deal with large and dense regions. As an example,
-        it has succeeded characterizing Melotte 25 (Hiades) OC. This cluster is
-        really large and dense, and its relative proximity makes it difficult to
+  \item It is able to deal with large and open regions. As an example,
+        it has succeeded characterizing Melotte 25 (Hiades) OC. Also,
+        the relative proximity of this cluster, 45 parsec, makes it difficult to
         characterize. Clusterix fails characterizing this cluster. In this case,
         our method proposes at least two more non-catalogued clusters. The analysis
         of these new clusters brings out an interesting stellar dynamics in the studied
@@ -510,20 +510,82 @@ our model compatible with other tools of the VO.
 \section{RESULTS}
 \label{sec:results}
 
-\subsection{Evaluación 1}
+We now present the results obtained after having analyzed Melotte 25.
+This is the largest cluster we have studied and one of the most difficult
+to characterize by its distribution and extension.
 
-\subsection{Evaluación 2 }
-En la Tabla \ref{tab_1}
-\begin{table}\label{tab_1}
-\caption{Unidades de las propiedades magnéticas:}
+More results are available at Appendix \ref{sec:appendix}.
 
-\begin{tabular}{ccc}\hline\hline
-Símbolo & Cantidad & Conversión\\
+Melotte 25 is located at 66.725 degrees in right ascension and 15.867 degrees in
+declination with a radius of 165 arcmin and composed by more than 400,000 stars.
+
+Table \ref{tab:results_melotte_25} shows a results summary for Melotte 25.
+
+\begin{table}[htbp]
+  \begin{center}
+    \resizebox{\columnwidth}{!}{
+      \begin{tabular}{l|c|c|c|c}
+        \textbf{Method} & \emph{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas/yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
 \hline
-$\Phi$ & flujo magnético & $1$Mx $\rightarrow 10^{-8}V\cdot s$\\
-... &...&...\\
-\hline\hline
+        \textbf{Simbad}\tablefootnote{Results have been taken from the SIMBAD astronomical database\cite{wenger2000simbad}} & 104.92 $\pm$ 0.12 & -28.00 $\pm$ 0.09 & 21.052 $\pm$ 0.065 & - \\
+        Clusterix & 106.796 $\pm$ 6.229 & -24.870 $\pm$ 5.417 & 21.210 $\pm$ 1.115 & 109 \\
+        K-Means & 79.936 $\pm$ 3.7 & -45.362 $\pm$ 3.8 & 20.901 $\pm$ 0.31 & 374 \\
+        DEC & 104.051 $\pm$ 3.2 & -33.424 $\pm$ 2.5 & 22.072 $\pm$ 0.13 & 219 \\
+        \textbf{DEC (filt.)} & 105.96 $\pm$ 3.5 & -30.00 $\pm$ 2.4 & 21.74 $\pm$ 0.07 & 175 \\
 \end{tabular}
+    }
+    \caption{Melotte 25 results.}
+    \label{tab:results_melotte_25}
+  \end{center}
+\end{table}
+
+Parameters shown are proper motion in right ascension and declination, parallax
+with their respective deviations and number of stars corresponding to the OC.
+
+Figure \ref{fig:result_melotte_25_dec} shows the groups found using the DEC model.
+This model labels Melotte 25 as group \emph{g5}.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_25/dec_pm_melotte_25.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_25/dec_parallax_melotte_25.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_25/dec_hr_diagram_melotte_25.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{Melotte 25 characterization using the DEC model.
+           From the left to the right: proper motion configuration
+           space, parallax histogram and H-R diagram.}
+  \label{fig:result_melotte_25_dec}
+\end{figure}
+
+Table \ref{tab:hyperparameters_melotte_25} shows the hyperparameters
+used for the characterization.
+
+\begin{table}[h]
+  \begin{center}
+    \begin{tabular}{l|c}
+      \textbf{Hyperparameter} & \textbf{Value} \\
+      \hline
+      Number of Clusters & 9 \\
+      Clustering Layer & $\left[ 50, 50, 40 \right]$ \\
+      Kernel Initializer Seed & 11 \\
+      Quantil Threshold & 0.1 \\
+    \end{tabular}
+    \caption{Melotte 25 DEC hyperparameters.}
+    \label{tab:hyperparameters_melotte_25}
+  \end{center}
 \end{table}
 
 \section{RESULTS DISCUSSION}
@@ -568,13 +630,552 @@ hyperparameters regarding the typology of the cluster.
 With our model, new uncatalogued clusters arise from the data apart of the main ones.
 Hence, it is also interesting the individual study of these new clusters.
 
-Another possible change in our model would be using DBSCAN instead of KMeans
+Another possible change in our model would be using DBSCAN instead of K-Means
 as our initial clustering algorithm. Maybe this algorithm gives us a better starting
 point for the DEC model which could improve the results.
 
 Finally, we have used the Gaia DR2 database as our data source for this work,
 but recently the DR3 dataset has been released.
 Therefore, it is evident the interest on testing our model with this new data.
+
+\appendix
+\section{APPENDIX}
+\label{sec:appendix}
+
+\subsection{NGC 2516}
+\label{sec:ngc2516}
+
+\begin{table}[htbp]
+  \begin{center}
+    \resizebox{\columnwidth}{!}{
+      \begin{tabular}{l|c|c|c|c}
+        \textbf{Method} & \emph{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas/yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
+        \hline
+        \textbf{Simbad} & -4.6579 $\pm$ 0.0075 & 11.1517 $\pm$ 0.0075 & 2.4118 $\pm$ 0.0006 & 1727 \\
+        Clusterix & -4.652 $\pm$ 0.523 & 11.203 $\pm$ 0.454 & 2.409 $\pm$ 0.127 & 638 \\
+        K-Means & -4.344 $\pm$ 0.14 & 9.507 $\pm$ 0.19 & 2.268 $\pm$ 0.01 & 1542 \\
+        DEC & -4.426 $\pm$ 0.17 & 9.952 $\pm$ 0.20 & 2.436 $\pm$ 0.01 & 1532 \\
+        \textbf{DEC (filt.)} & -4.502 $\pm$ 0.14 & 10.114 $\pm$ 0.17 & 2.392 $\pm$ 0.004 & 1072 \\
+      \end{tabular}
+    }
+    \caption{NGC 2516 results.}
+    \label{tab:app_results_ngc_2516}
+  \end{center}
+\end{table}
+
+Table \ref{tab:app_results_ngc_2516} shows a results summary for NGC 2516.
+The top row of Figure \ref{fig:app_result_ngc_2516_clusterix_kmeans} shows
+the characterization using Clusterix+TOPCAT tools while the bottom row
+shows eight clusters found by K-Means.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/pm_ngc_2516.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/parallax_ngc_2516.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/hr_diagram_ngc_2516.png}
+    \end{subfigure}
+  \end{subfigure}
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/kmeans_pm_ngc_2516.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/kmeans_parallax_ngc_2516.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/kmeans_hr_diagram_ngc_2516.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2516 characterization.
+           Top: Clusterix+TOPCAT. Bottom: K-Means (\emph{g3}).}
+  \label{fig:app_result_ngc_2516_clusterix_kmeans}
+\end{figure}
+
+Figure \ref{fig:app_result_ngc_2516_dec} shows the groups found using the
+DEC model (top row) and the DEC model filtered (bottom row).
+K-Means and DEC have labeled NGC 2516 as \emph{g3}. Although in general,
+groups between K-Means and DEC models may not match.
+Hyperparameters used in this characterization are listed in Table
+\ref{tab:app_hyperparameters_ngc_2516}.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_pm_ngc_2516.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_parallax_ngc_2516.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_hr_diagram_ngc_2516.png}
+    \end{subfigure}
+  \end{subfigure}
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_pm_filtered_ngc_2516.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_parallax_filtered_ngc_2516.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_hr_diagram_filtered_ngc_2516.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2516 characterization (labeled as \emph{g3}).
+           DEC (top). DEC filtered (bottom).}
+  \label{fig:app_result_ngc_2516_dec}
+\end{figure}
+
+\begin{table}[htbp]
+  \begin{center}
+    \begin{tabular}{l|c}
+      \textbf{Hyperparameter} & \textbf{Value} \\
+      \hline
+      Number of Clusters & 8 \\
+      Clustering Layer & $\left[ 50, 50, 60 \right]$ \\
+      Kernel Initializer Seed & 2 \\
+      Quantil Threshold & 0.15 \\
+    \end{tabular}
+    \caption{NGC 2516 DEC hyperparameters.}
+    \label{tab:app_hyperparameters_ngc_2516}
+  \end{center}
+\end{table}
+
+\subsection{NGC 2632}
+\label{sec:ngc2632}
+
+Figure \ref{fig:app_result_ngc_2632_clusterix_kmeans} shows NGC 2632 characterized
+by the validation method (first row) and the characterization made by K-Means
+showing ten clusters (second row). K-Means labels NGC 2632 as \emph{g1}.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/pm_ngc_2632.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/parallax_ngc_2632.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/hr_diagram_ngc_2632.png}
+    \end{subfigure}
+  \end{subfigure}
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/kmeans_pm_ngc_2632.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/kmeans_parallax_ngc_2632.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/kmeans_hr_diagram_ngc_2632.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2632 characterization using Clusterix+TOPCAT (top) and K-Means (bottom).
+           K-Means identifies NGC 2632 as \emph{g1}.}
+  \label{fig:app_result_ngc_2632_clusterix_kmeans}
+\end{figure}
+
+Figure \ref{fig:app_result_ngc_2632_dec} shows the groups found using
+the DEC model (first row) and the DEC model filtered (second row).
+Open cluster NGC 2632 is labeled as group \emph{g1}.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_pm_ngc_2632.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_parallax_ngc_2632.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_hr_diagram_ngc_2632.png}
+    \end{subfigure}
+  \end{subfigure}
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_pm_filtered_ngc_2632.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_parallax_filtered_ngc_2632.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_hr_diagram_filtered_ngc_2632.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2632 characterization using DEC model (top) and DEC (filtered) (bottom).
+           NGC 2632 is identified as \emph{g1}.}
+  \label{fig:app_result_ngc_2632_dec}
+\end{figure}
+
+\begin{table}[htbp]
+  \begin{center}
+    \resizebox{\columnwidth}{!}{
+      \begin{tabular}{l|c|c|c|c}
+        \textbf{Method} & \emph{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas/yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
+        \hline
+        \textbf{Simbad} & -36.047 $\pm$ 0.110 & -12.917 $\pm$ 0.066 & 5.371 $\pm$ 0.003 & - \\
+        Clusterix & -36.154 $\pm$ 1.001 & -12.909 $\pm$ 0.806 & 5.327 $\pm$ 0.187 & 371 \\
+        K-Means & -26.352 $\pm$ 0.82 & -15.828 $\pm$ 0.76 & 5.394 $\pm$ 0.03 & 629 \\
+        DEC & -20.012 $\pm$ 0.69 & -14.742 $\pm$ 0.58 & 4.686 $\pm$ 0.03 & 894 \\
+        \textbf{DEC (filt.)} & -21.571 $\pm$ 0.74 & -14.234 $\pm$ 0.61 & 4.719 $\pm$ 0.03 & 714 \\
+      \end{tabular}
+    }
+    \caption{NGC 2632 results.}
+    \label{tab:app_results_ngc_2632}
+  \end{center}
+\end{table}
+
+Table \ref{tab:app_results_ngc_2632} shows a results summary for NGC 2632 analysis.
+While Table \ref{tab:app_hyperparameters_ngc_2632} shows the hyperparameters
+used for characterizing NGC 2632 with our model.
+
+\begin{table}[htbp]
+  \begin{center}
+    \begin{tabular}{l|c}
+      \textbf{Hyperparameter} & \textbf{Value} \\
+      \hline
+      Number of Clusters & 10 \\
+      Clustering Layer & $\left[ 50, 50, 40 \right]$ \\
+      Kernel Initializer Seed & 10 \\
+      Quantil Threshold & 0.1 \\
+    \end{tabular}
+    \caption{NGC 2632 DEC hyperparameters.}
+    \label{tab:app_hyperparameters_ngc_2632}
+  \end{center}
+\end{table}
+
+\subsection{NGC 2682}
+\label{sec:ngc2682}
+
+Table \ref{tab:app_results_ngc_2682} shows a results summary for NGC 2682.
+
+\begin{table}[htbp]
+  \begin{center}
+    \resizebox{\columnwidth}{!}{
+      \begin{tabular}{l|c|c|c|c}
+        \textbf{Method} & \emph{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas/yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
+        \hline
+        \textbf{Simbad} & -10.9737 $\pm$ 0.0064 & -2.9396 $\pm$ 0.0063 & 1.1325 $\pm$ 0.0011 & 1194 \\
+        Clusterix+TOPCAT & -10.970 $\pm$ 0.322 & -2.958 $\pm$ 0.327 & 1.142 $\pm$ 0.080 & 649 \\
+        K-Means & -8.616 $\pm$ 0.15 & -3.710 $\pm$ 0.16 & 1.196 $\pm$ 0.01 & 1374 \\
+        DEC & -8.926 $\pm$ 0.15 & -3.550 $\pm$ 0.15 & 1.144 $\pm$ 0.005 & 1238 \\
+        \textbf{DEC (filt.)} & -9.619 $\pm$ 0.13 & -3.317 $\pm$ 0.13 & 1.140 $\pm$ 0.003 & 990 \\
+      \end{tabular}
+    }
+    \caption{NGC 2682 results.}
+    \label{tab:app_results_ngc_2682}
+  \end{center}
+\end{table}
+
+Figure \ref{fig:app_result_ngc_2682_clusterix_kmeans} shows
+NGC 2682 characterized using Clusterix+TOPCAT tools (top row)
+and ten clusters identified by K-Means (bottom row).
+The chacterization made by K-Means labels NGC 2682 as group \emph{g4}.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/pm_ngc_2682.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/parallax_ngc_2682.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/hr_diagram_ngc_2682.png}
+    \end{subfigure}
+  \end{subfigure}
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/kmeans_pm_ngc_2682.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/kmeans_parallax_ngc_2682.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/kmeans_hr_diagram_ngc_2682.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2682 K-Means characterization.
+           Top row corresponds to Clusterix+TOPCAT characterization,
+           while bottom row shows K-Means results identifying
+           NGC 2682 as cluster \emph{g4}.}
+  \label{fig:app_result_ngc_2682_clusterix_kmeans}
+\end{figure}
+
+Figure \ref{fig:app_result_ngc_2682_dec} shows the groups found using
+the DEC model (first row) and the DEC model filtered (second row).
+The cluster of interest is the group \emph{g2}.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_pm_ngc_2682.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_parallax_ngc_2682.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_hr_diagram_ngc_2682.png}
+    \end{subfigure}
+  \end{subfigure}
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_pm_filtered_ngc_2682.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_parallax_filtered_ngc_2682.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_hr_diagram_filtered_ngc_2682.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{NGC 2682 is identified as cluster \emph{g2}.
+           Top row: DEC --- Bottom row: DEC (filtered)}
+  \label{fig:app_result_ngc_2682_dec}
+\end{figure}
+
+Table \ref{tab:app_hyperparameters_ngc_2682} shows the
+hyperparameters used for characterizing NGC 2682 with DEC method.
+
+\begin{table}[htbp]
+  \begin{center}
+    \begin{tabular}{l|c}
+      \textbf{Hyperparameter} & \textbf{Value} \\
+      \hline
+      Number of Clusters & 10 \\
+      Clustering Layer & $\left[ 50, 50, 40 \right]$ \\
+      Kernel Initializer Seed & 0 \\
+      Quantil Threshold & 0.1 \\
+    \end{tabular}
+    \caption{NGC 2682 DEC hyperparameters.}
+    \label{tab:app_hyperparameters_ngc_2682}
+  \end{center}
+\end{table}
+
+\subsection{MELOTTE 22}
+\label{sec:melotte22}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/pm_melotte_22.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/parallax_melotte_22.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/hr_diagram_melotte_22.png}
+    \end{subfigure}
+  \end{subfigure}
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/kmeans_pm_melotte_22.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/kmeans_parallax_melotte_22.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/kmeans_hr_diagram_melotte_22.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{Melotte 22 characterization.
+           Top row: Clusterix+TOPCAT. Bottom row: K-Means.
+           Melotte 22 is labeled as cluster \emph{g1}.}
+  \label{fig:app_result_melotte_22_clusterix_kmeans}
+\end{figure}
+
+Figure \ref{fig:app_result_melotte_22_clusterix_kmeans} shows Melotte 22
+characterized using Clusterix+TOPCAT tools (top row) and the characterization
+made by K-Means (bottom row) showing nine clusters. Melotte 22 is labeled as
+group \emph{g1}.
+
+Figure \ref{fig:app_result_melotte_22_dec} shows the groups found using
+DEC model (first row) and DEC model filtered (second row).
+Melotte 22 is labeled as group \emph{g2} by DEC model.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_pm_melotte_22.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_parallax_melotte_22.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_hr_diagram_melotte_22.png}
+    \end{subfigure}
+  \end{subfigure}
+  \centering
+  \begin{subfigure}{\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_pm_filtered_melotte_22.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_parallax_filtered_melotte_22.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_hr_diagram_filtered_melotte_22.png}
+    \end{subfigure}
+  \end{subfigure}
+  \caption{Melotte 22 is identified as cluster \emph{g2}.
+           Top row: DEC --- Bottom row: DEC (filtered)}
+  \label{fig:app_result_melotte_22_dec}
+\end{figure}
+
+Table \ref{tab:app_results_melotte_22} shows a results summary for Melotte 22.
+
+\begin{table}[htbp]
+  \begin{center}
+    \resizebox{\columnwidth}{!}{
+      \begin{tabular}{l|c|c|c|c}
+        \textbf{Method} & \emph{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas/yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
+        \hline
+        \textbf{Simbad} & 19.997 $\pm$ 0.127 & -45.548 $\pm$ 0.101 & 7.364 $\pm$ 0.005 & 1326 \\
+        Clusterix & 19.98 $\pm$ 1.25 & -45.47 $\pm$ 1.48 & 7.33 $\pm$ 0.21 & 634 \\
+        K-Means & 20.25 $\pm$ 0.95 & -38.01 $\pm$ 1.08 & 7.23 $\pm$ 0.06 & 1378 \\
+        DEC & 23.67 $\pm$ 1.29 & -46.23 $\pm$ 1.50 & 8.04 $\pm$ 0.09 & 878 \\
+        \textbf{DEC (filt.)} & 19.50 $\pm$ 0.41 & -44.23 $\pm$ 0.39 & 7.42 $\pm$ 0.005 & 438 \\
+      \end{tabular}
+    }
+    \caption{Melotte 22 results.}
+    \label{tab:app_results_melotte_22}
+  \end{center}
+\end{table}
+
+While Table \ref{tab:app_hyperparameters_melotte_22} shows the hyperparameters
+used for characterizing Melotte 22 with the DEC model.
+
+\begin{table}[hbtp]
+  \begin{center}
+    \begin{tabular}{l|c}
+      \textbf{Hyperparameter} & \textbf{Value} \\
+      \hline
+      Number of Clusters & 5 \\
+      Clustering Layer & $\left[ 50, 50, 200 \right]$ \\
+      Kernel Initializer Seed & 11 \\
+      Quantil Threshold & 0.1 \\
+    \end{tabular}
+    \caption{Melotte 22 DEC hyperparameters.}
+    \label{tab:app_hyperparameters_melotte_22}
+  \end{center}
+\end{table}
 
 \renewcommand{\refname}{REFERENCES}
 \bibliographystyle{unsrt}
