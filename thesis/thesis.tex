@@ -2041,6 +2041,8 @@ Therefore it is evident the interest on testing our model with this new data.
 
 \bibliography{references}
 
-\includepdf[pages={-},noautoscale]{../paper/paper.pdf}
+\setboolean{@twoside}{false}
+\addtocontents{toc}{\protect\renewcommand{\protect\numberline}[1]{}}
+\includepdf[pages=-, offset=75 -75, addtotoc={1, chapter, 1, Paper, chap:paper}]{../paper/paper.pdf}
 
 \end{document}
