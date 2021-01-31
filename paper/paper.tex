@@ -526,13 +526,13 @@ Table \ref{tab:results_melotte_25} shows a results summary for Melotte 25.
     \resizebox{\columnwidth}{!}{
       \begin{tabular}{l|c|c|c|c}
         \textbf{Method} & \emph{$\mu_{\alpha}$ $(mas/yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas/yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
-\hline
+        \hline
         \textbf{Simbad}\tablefootnote{Results have been taken from the SIMBAD astronomical database\cite{wenger2000simbad}} & 104.92 $\pm$ 0.12 & -28.00 $\pm$ 0.09 & 21.052 $\pm$ 0.065 & - \\
         Clusterix & 106.796 $\pm$ 6.229 & -24.870 $\pm$ 5.417 & 21.210 $\pm$ 1.115 & 109 \\
         K-Means & 79.936 $\pm$ 3.7 & -45.362 $\pm$ 3.8 & 20.901 $\pm$ 0.31 & 374 \\
         DEC & 104.051 $\pm$ 3.2 & -33.424 $\pm$ 2.5 & 22.072 $\pm$ 0.13 & 219 \\
         \textbf{DEC (filt.)} & 105.96 $\pm$ 3.5 & -30.00 $\pm$ 2.4 & 21.74 $\pm$ 0.07 & 175 \\
-\end{tabular}
+      \end{tabular}
     }
     \caption{Melotte 25 results.}
     \label{tab:results_melotte_25}
@@ -590,7 +590,63 @@ used for the characterization.
 
 \section{RESULTS DISCUSSION}
 
-Tras la presentación objetiva de los resultados, querrás aportar una discusión de los mismos.
+We have applied our proposed method to clusters with different typologies:
+
+\begin{itemize}
+  \item NGC 2516 (Ap. \ref{sec:ngc2516}) has it proper motion center deviated from the origin but
+        it is embedded inside a big cloud of stars with similar proper motions.
+  \item NGC 2632 (Ap. \ref{sec:ngc2632}), in addition to Melotte 22, ia s cluster whose proper motion center
+        is not located at the origin and has a well separated parallax center.
+  \item NGC 2682 (Ap. \ref{sec:ngc2682}), on the other hand, has its parallax centered within the region's gaussian,
+        which complicates its detection although its proper motion center is deviated from the origin.
+  \item Melotte 22 (Ap. \ref{sec:melotte22}), as well as Melotte 25, is a cluster closer to us than the other.
+        That makes its membership stars to be more scattered than previous clusters which are more compact.
+\end{itemize}
+
+All these clusters have a wide variety of diameters, from 25 to 330 arcmin,
+as well as the number of stars that belong to them. NGC 2682 has 3,000 stars while
+Melotte 25 is composed by more than 400,000 stars. More information about the
+studied clusters is available in Table \ref{tab:clusters_summary}.
+
+\begin{table}[htbp]
+  \begin{center}
+    \resizebox{\columnwidth}{!}{
+      \begin{tabular}{l|c|c|c|c}
+        \textbf{OC} & \emph{$\alpha$ J2000 $(degrees)$} & \emph{$\delta$ J2000 $(degrees)$} & \emph{Radius $(arcmin)$} & \emph{\# stars} \\
+        \hline
+        NGC 2516 & 119.517 & -60.753 & 15 & 12,869 \\
+        NGC 2632 & 130.1 & 19.667 & 35 & 13,167 \\
+        NGC 2682 & 132.825 & 11.8 & 12.5 & 2,839 \\
+        Melotte 22 & 56.75 & 24.117 & 60 & 61,552 \\
+        Melotte 25 & 66.725 & 15.867 & 165 & 433,996 \\
+      \end{tabular}
+    }
+    \caption{Righ ascension, declination, radius and number of stars of studied clusters.
+             The number of stars corresponds to those stars contained within a cone of center
+             $(\alpha, \delta)$ and raius the cluster's radius multiplied by a factor of 1.5.}
+    \label{tab:clusters_summary}
+  \end{center}
+\end{table}
+
+In all cases, the model has resolved properly the identity of the cluster
+and has characterized the membership stars, giving compatible results
+with the ones obtained with classic procedures and VO tools.
+
+Compared with the mentioned tools, our model can be categorized as a
+non-parameterized model since it does not depend on parameters referred
+to the cluster itself but only hyperparameters such as the initial number
+of clusters to be found, or the structure of the Clustering Layer used by DEC model.
+
+The proposed method is also non-supervised since we do not need to tell the model
+which stars belong to the cluster or assist it while its training stage.
+
+Only at the end of the characterization, a fine tuning driven by the user,
+can be applied in order to improve the selection by discarding those
+stars which fall outside the given quantiles.
+
+In any case, we do not make assumptions about the cluster profile,
+something that we have to take into account when using VO tools.
+This is another evidence that our model is non-parameterized.
 
 \section{CONCLUSIONS}
 
