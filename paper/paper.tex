@@ -72,81 +72,65 @@ becoming even better (in some of the cases) than current techniques.
 %\listoffigures
 %\listoftables
 
-\section{INTRODUCTION}
+\section{Introduction}
 
-Stellar open clusters (OCs) \cite{janes1982open} are groups of stars
-gravitationally bounded originated from a single molecular gas cloud.
-They share the same chemical composition and age. Moreover,
-they have similar relative positions and proper motion.
-Those astronomical objects are relevant to understand the spiral structure,
-the dynamics and the chemical evolution of our galaxy.
+Stellar OCs~\cite{janes1982open} are groups of stars gravitationally
+bounded originated from a single molecular gas cloud.
+They share the same chemical composition and age, and that is the reason
+that their metallicity must be uniform since those stars were born from
+the same gas cloud and at the same time stage. Likewise, they have similar
+relative positions inherited from their original gas cloud, which means that
+their distances to the Earth are the same. Therefore, they have a narrow
+dispersion in their parallax value. Moreover, they share similar values
+of proper motion, both in right ascension and declination. For all these
+properties, we can see why the stellar OCs are relevant to understand the
+spiral structure, dynamics, and chemical evolution of our galaxy.
 
-The study of OCs has been pushed forward thanks to the huge and precise dataset
-from the Gaia mission Gaia DR2 available since 2018
+The study of OCs advanced thanks to the huge and precise dataset
+from the Gaia DR2 mission, available since 2018 from
 \cite{collaboration2016description} and \cite{gaia2018gaia}.
-This dataset has helped to review already known open clusters and to find new ones.
+Although, the Gaia DR2 database misreported the chemical composition
+of some OCs, the database has helped to review already known OCs and
+to find new ones.
 
-Stars that belong to the same OC share relative positions,
-inherited from their original gas cloud.
-This means that their distances to the Earth are similar for all of them and,
-therefore, they have a narrow dispersion in their parallax value.
-They also share similar values of proper motion, both in right ascension and declination.
-Another property they share is their chemical composition.
-Thus, their metallicity must be uniform,
-since these stars were born from the same gas cloud and at the same time stage.
-However, to take this last property into account, we are faced with the drawback
-that this parameter is poorly reported in Gaia DR2 database.
+The characterization of an OC refers to the statistical determination
+of the stars that form it. Therefore, the characterization is based on
+the probability of a star to be a member of the cluster~\cite{sampedro2016caracterizacion}.
 
-Normally, the characterization process takes into account astrometric features
-such as proper motion in right ascension and declination, and parallax.
-Photometric features like $E(b-r) / G_{mag}$ are considered too.
-These last variables are used for generating the H-R diagram of the OC candidate stars.
-This stars should present a sharp profile corresponding to an isochrone curve derived
-from a theoretical model.
-This model does consider metallicity, mass and brightness of the stars involved.
-At the moment, a set of tools have been used for this purpose, as explained later.
-But in general, these tools require supervised and parameterized models.
-Therefore, a previous knowledge of the cluster is necessary or the process must be
-repeated iteratively in order to achieve valid results.
+Normally, the characterization process considers astrometic features such as
+proper motion in right ascension and declination, or parallax.
+In some cases~\cite{oliveira2013fitting}, it also considers photometric features,
+which helps to generate the H-R diagram~\cite{hypki2018gaia} of the OC candidate stars.
+Those OC candidates should present a sharp profile corresponding to an isochrone curve
+derived from a theoretical model. The model considers metallicity, mass and brightness
+of the stars involved. For all this purpose, we used a set of tools that require
+supervised and parameterized models. It means that we need a previous knowledge of the
+cluster, otherwise we must repeat the process iteratively to achieve valid results.
 
-Our aim is to build a machine learning model capable of characterizing an open
-cluster inside a stellar region with knowing nothing about the region.
-This model will take advantage of these features to train an Artificial Neural
-Network (ANN) that will clusterize all stars within the given region.
-One of these groups will be the open cluster that interests us.
-With that purpose we have adapted the Unsupervised Deep Embedding for Clustering
-Analysis \cite{xie2016unsupervised} to our problem.
+In the present paper, we propose a machine learning model capable of characterizing
+OCs inside a stellar region with no previous knowledge about the region.
+Our model takes advantage of some features such as proper motion in right ascension
+and declination, and parallax to train an Artificial Neural Network.
+The ANN clusters all the stars within given region in groups.
+One of those groups will be the open cluster that interests us.
 
-This model fulfills one of our main requirements.
-It has to be \emph{non-supervised} and \emph{non-parameterized} in order to make easier
-the automation process of analyzing a wide range of regions with different typologies.
-Another important requirement for our model is that it must be computationally efficient
-in order to run in common workstations.
-The model has been developed with Python using the Keras framework which takes
-advantage of modern GPUs to make its computations.
-That increases significantly the computational capacity of our model making possible
-to run it on regular workstations with one of those GPUs.
+Our model contributes with several novelties: i) it is \emph{non-supervised} and
+\emph{non-parameterized}, making easier the automation process of analyzing a
+wide range of regions with different typologies, and ii) it is computationally
+efficient to run in common workstations because it has been developed with
+Python using the Keras framework which takes advantage of modern GPUs to perform
+its computations. That increases significantly the computational capacity of
+our model doing it possible to run on regular workstations.
 
-Since the aim of this work is not to find new OCs but to improve the characterization
-of the already known ones, we have taken the approach of analyzing known regions.
-These regions have been taken from the OpenClust catalogue \cite{dias2002new}
-(see Figure \ref{fig:openclust_catalogue}) and downloaded from Gaia DR2 database
-increasing the radius of each region by a factor $1.5$.
+This paper is organized as follows. Section~\ref{sec:related_works} presents
+some related works and Section~\ref{sec:aims_and_method} describes in more detail
+our model. The following Section~\ref{sec:results}, shows the results and compares
+them with a method that involves tools from the Virtual Observatory (VO) such as
+Clusterix~\cite{balaguer2020clusterix}. Finally, the last section concludes and
+outlines future research lines.
 
-\begin{figure}
-    \includegraphics[width=\columnwidth]{../figures/openclust_catalogue.png}
-    \caption{OpenClust Catalogue Distribution}
-    \label{fig:openclust_catalogue}
-\end{figure}
-
-Finally, we have compared the results obtained with the model we purposed with another
-method that involves tools from the Virtual Observatory (VO) such as Clusterix \cite{balaguer2020clusterix}.
-
-As shown in Section \ref{sec:results}, the results obtained are promising.
-This allows us to consider our model as a valid tool that could be part
-of the standard set of tools for open clusters characterization.
-
-\section{STATE OF THE ART}
+\section{Related works}
+\label{sec:related_works}
 
 The initial approach to find open clusters is by searching for overdensities
 in the astrometric space of the galactic disk and a later identification of
@@ -251,7 +235,8 @@ or \emph{DEC} \cite{xie2016unsupervised} takes K-Means as its starting point,
 but then, it trains an autoencoder to reduce the feature space
 and pass this transformed data through a Clustering Layer which refines the previous selection.
 
-\section{AIMS AND METHOD}
+\section{Open Cluster Characterization method}
+\label{sec:aims_and_method}
 
 Our aim is to \emph{build an unsupervised clustering model for open cluster characterization}.
 The model will be \emph{non-supervised and non-parameterized} in order to fit a wide range
