@@ -29,16 +29,20 @@ Advisor: [_Guzmán-Álvarez, César A._][supervisor_profile] ([@cguz](https://gi
 
 ## Abstract
 
-The characterization and knowledge of _Open Clusters_ allows us to better understand properties and mechanisms about the Universe
-such as stellar formation and the regions where those events occur. They also provide information about stellar processes and the
-evolution of the galactic disk.
+The characterization and understanding of _Open Clusters_ (OCs) allow us to
+understand better properties and mechanisms about the Universe such as stellar
+formation and the regions where these events occur. They also provide information
+about stellar processes and the evolution of the galactic disk.
 
-In this work, we develope a method to characterize those clusters by using _artificial intelligence_ tools like clustering
-by _K-Means_, or clustering based on _Artificial Neural Networks_ by implementing the _Deep Embedded Clustering_
-model. We are using _Gaia DR2 database_ as data source for testing our models.
-
-The developed method aims to improve the existing ones both in terms of _computational efficiency_, with lower computational requirements,
-and _ease of use_, by reducing the number of hyperparameters to configure in order to obtain a good characterization of the analyzed clusters.
+In this work, we present a novel method to characterize OCs. Our method employs a
+model built on _Artificial Neural Networks_ (ANNs). More specifically, we adapted
+a state of the art model, the _Deep Embedded Clustering_ (DEC) model for our purpose.
+The developed method aims to improve classical state of the arts techniques. We improved
+not only in terms of computational efficiency (with lower computational requirements),
+but in usability (reducing the number of hyperparameters to get a good characterization
+of the analyzed clusters). For our experiments, we used the _Gaia DR2 database_ as
+the data source, and compared our model with the clustering technique _K-Means_. Our
+method achieves good results, becoming even better (in some of the cases) than current techniques.
 
 ## Data
 
