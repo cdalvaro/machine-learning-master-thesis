@@ -227,16 +227,16 @@ stars that do not belong to the open cluster.
 \subsection{Selection of features}
 \label{sec:feature_selection}
 
-For the selection of features, we studied the Melotte 22 dataset. Table~\ref{tab:
-sample_features_melotte22_region} describes an example of the region Melotte 22. Each
-row represents the features of a star.
+For the selection of features, we studied the Melotte 22 dataset.
+Table~\ref{tab:sample_features_melotte22_region} describes an example of the region Melotte 22.
+Each row represents the features of a star.
 
 \begin{table}[!htbp]
   \begin{center}
     \resizebox{\columnwidth}{!}{
       \begin{tabular}{c|c|c}
         % \textbf{source\_id} &
-        \emph{pmra $(mas \cdot yr^{-1})$} & \emph{pmdec $(mas \cdot yr^{-1})$} & \emph{parallax $(mas)$} \\
+        \emph{pmra \((mas \cdot yr^{-1})\)} & \emph{pmdec \((mas \cdot yr^{-1})\)} & \emph{parallax \((mas)\)} \\
         \hline
         % 64035217900973056 &
         2.848682 & -3.291204 & 0.399680 \\
@@ -384,7 +384,7 @@ belong to the OC. However, the idea is not completely right. This is due to the 
 stars are surrounded by other stars with possibly similar properties. Therefore, setting the
 number of clusters to two is too low to separate them properly.
 
-Figure \ref{fig:kmeans_comparisons_melotte_22} shows an example. It describes the results of
+Figure~\ref{fig:kmeans_comparisons_melotte_22} shows an example. It describes the results of
 applying K-Means with N=2, N=5 and N=8 in Melotte 22. As we can see, large values of the number
 of clusters allow us to isolate more accurately the resonance in parallax at \(\approx 7.3mas\).
 
@@ -457,19 +457,21 @@ Melotte 25 is located at 66.725 degrees in right ascension and 15.867
 degrees in declination with a radius of 165 arcmin.
 This region contains more than 400,000 stars.
 
-Table \ref{tab:results_melotte_25} shows a results summary for Melotte 25.
+Table~\ref{tab:results_melotte_25} shows a results summary for Melotte 25.
 
 \begin{table}[!htbp]
   \begin{center}
     \resizebox{\columnwidth}{!}{
       \begin{tabular}{l|c|c|c|c}
-        \textbf{Method} & \emph{$\mu_{\alpha}$ $(mas \cdot yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas \cdot yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
+        \textbf{Method} & \emph{\(\mu_{\alpha}\) \((mas \cdot yr^{-1})\)} & \emph{\(\mu_{\delta}\) \((mas \cdot yr^{-1})\)}
+        & \emph{\( \varpi \) \((mas)\)} & \emph{\# stars} \\
         \hline
-        \textbf{Simbad}\tablefootnote{Results have been taken from the SIMBAD astronomical database\cite{wenger2000simbad}} & 104.92 $\pm$ 0.12 & -28.00 $\pm$ 0.09 & 21.052 $\pm$ 0.065 & - \\
-        Clusterix & 106.796 $\pm$ 6.229 & -24.870 $\pm$ 5.417 & 21.210 $\pm$ 1.115 & 109 \\
-        K-Means & 79.936 $\pm$ 3.7 & -45.362 $\pm$ 3.8 & 20.901 $\pm$ 0.31 & 374 \\
-        DEC & 104.051 $\pm$ 3.2 & -33.424 $\pm$ 2.5 & 22.072 $\pm$ 0.13 & 219 \\
-        \textbf{DEC (filt.)} & 105.96 $\pm$ 3.5 & -30.00 $\pm$ 2.4 & 21.74 $\pm$ 0.07 & 175 \\
+        \textbf{Simbad}\tablefootnote{Results have been taken from the SIMBAD astronomical database\cite{wenger2000simbad}}
+        & 104.92 \( \pm \) 0.12 & -28.00 \( \pm \) 0.09 & 21.052 \( \pm \) 0.065 & - \\
+        Clusterix & 106.796 \( \pm \) 6.229 & -24.870 \( \pm \) 5.417 & 21.210 \( \pm \) 1.115 & 109 \\
+        K-Means & 79.936 \( \pm \) 3.7 & -45.362 \( \pm \) 3.8 & 20.901 \( \pm \) 0.31 & 374 \\
+        DEC & 104.051 \( \pm \) 3.2 & -33.424 \( \pm \) 2.5 & 22.072 \( \pm \) 0.13 & 219 \\
+        \textbf{DEC (filt.)} & 105.96 \( \pm \) 3.5 & -30.00 \( \pm \) 2.4 & 21.74 \( \pm \) 0.07 & 175 \\
       \end{tabular}
     }
     \caption{Melotte 25 results.}
@@ -480,7 +482,7 @@ Table \ref{tab:results_melotte_25} shows a results summary for Melotte 25.
 Parameters shown are proper motion in right ascension and declination, parallax
 with their respective deviations and number of stars corresponding to the OC.
 
-Figure \ref{fig:result_melotte_25_dec} shows the groups found using the DEC model.
+Figure~\ref{fig:result_melotte_25_dec} shows the groups found using the DEC model.
 This model labels Melotte 25 as group \emph{g5}.
 
 \begin{figure}[htbp]
@@ -508,7 +510,7 @@ This model labels Melotte 25 as group \emph{g5}.
   \label{fig:result_melotte_25_dec}
 \end{figure}
 
-Table \ref{tab:hyperparameters_melotte_25} shows the hyperparameters
+Table~\ref{tab:hyperparameters_melotte_25} shows the hyperparameters
 used for the characterization.
 
 \begin{table}[h]
@@ -517,7 +519,7 @@ used for the characterization.
       \textbf{Hyperparameter} & \textbf{Value} \\
       \hline
       Number of Clusters & 9 \\
-      Clustering Layer & $\left[ 50, 50, 40 \right]$ \\
+      Clustering Layer & \(\left[ 50, 50, 40 \right]\) \\
       Kernel Initializer Seed & 11 \\
       Quantil Threshold & 0.1 \\
     \end{tabular}
@@ -531,26 +533,27 @@ used for the characterization.
 We have applied our proposed method to clusters with different typologies:
 
 \begin{itemize}
-  \item NGC 2516 (Ap. \ref{sec:ngc2516}) has it proper motion center deviated from the origin but
+  \item NGC 2516 (Ap.~\ref{sec:ngc2516}) has it proper motion center deviated from the origin but
         it is embedded inside a big cloud of stars with similar proper motions.
-  \item NGC 2632 (Ap. \ref{sec:ngc2632}), in addition to Melotte 22, ia s cluster whose proper motion center
+  \item NGC 2632 (Ap.~\ref{sec:ngc2632}), in addition to Melotte 22, ia s cluster whose proper motion center
         is not located at the origin and has a well separated parallax center.
-  \item NGC 2682 (Ap. \ref{sec:ngc2682}), on the other hand, has its parallax centered within the region's gaussian,
+  \item NGC 2682 (Ap.~\ref{sec:ngc2682}), on the other hand, has its parallax centered within the region's gaussian,
         which complicates its detection although its proper motion center is deviated from the origin.
-  \item Melotte 22 (Ap. \ref{sec:melotte22}), as well as Melotte 25, is a cluster closer to us than the other.
+  \item Melotte 22 (Ap.~\ref{sec:melotte22}), as well as Melotte 25, is a cluster closer to us than the other.
         That makes its membership stars to be more scattered than previous clusters which are more compact.
 \end{itemize}
 
 All these clusters have a wide variety of diameters, from 25 to 330 arcmin,
 as well as the number of stars that belong to them. NGC 2682 has 3,000 stars
 while Melotte 25 is located inside a region with more than 400,000 stars.
-More information about the studied clusters is available in Table \ref{tab:clusters_summary}.
+More information about the studied clusters is available in Table~\ref{tab:clusters_summary}.
 
 \begin{table}[htbp]
   \begin{center}
     \resizebox{\columnwidth}{!}{
       \begin{tabular}{l|c|c|c|c}
-        \textbf{OC} & \emph{$\alpha$ J2000 $(degrees)$} & \emph{$\delta$ J2000 $(degrees)$} & \emph{Radius $(arcmin)$} & \emph{\# stars} \\
+        \textbf{OC} & \emph{\( \alpha \) J2000 \((degrees)\)} & \emph{\( \delta \) J2000 \((degrees)\)}
+        & \emph{Radius \((arcmin)\)} & \emph{\# stars} \\
         \hline
         NGC 2516 & 119.517 & -60.753 & 15 & 12,869 \\
         NGC 2632 & 130.1 & 19.667 & 35 & 13,167 \\
@@ -559,9 +562,9 @@ More information about the studied clusters is available in Table \ref{tab:clust
         Melotte 25 & 66.725 & 15.867 & 165 & 433,996 \\
       \end{tabular}
     }
-    \caption{Righ ascension, declination, radius and number of stars of studied clusters.
+    \caption{Right ascension, declination, radius and number of stars of studied clusters.
              The number of stars corresponds to those stars contained within a cone of center
-             $(\alpha, \delta)$ and raius the cluster's radius multiplied by a factor of 1.5.}
+             \((\alpha, \delta)\) and radius the cluster's radius multiplied by a factor of 1.5.}
     \label{tab:clusters_summary}
   \end{center}
 \end{table}
@@ -649,7 +652,7 @@ but recently the DR3 dataset has been released.
 Therefore, it is evident the interest on testing our model with this new data.
 
 \appendix
-\section{APPENDIX}
+\section{Appendix}
 \label{sec:appendix}
 
 \subsection{NGC 2516}
@@ -659,13 +662,14 @@ Therefore, it is evident the interest on testing our model with this new data.
   \begin{center}
     \resizebox{\columnwidth}{!}{
       \begin{tabular}{l|c|c|c|c}
-        \textbf{Method} & \emph{$\mu_{\alpha}$ $(mas \cdot yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas \cdot yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
+        \textbf{Method} & \emph{\(\mu_{\alpha}\) \((mas \cdot yr^{-1})\)} & \emph{\(\mu_{\delta}\) \((mas \cdot yr^{-1})\)}
+        & \emph{\( \varpi \) \((mas)\)} & \emph{\# stars} \\
         \hline
-        \textbf{Simbad} & -4.6579 $\pm$ 0.0075 & 11.1517 $\pm$ 0.0075 & 2.4118 $\pm$ 0.0006 & 1727 \\
-        Clusterix & -4.652 $\pm$ 0.523 & 11.203 $\pm$ 0.454 & 2.409 $\pm$ 0.127 & 638 \\
-        K-Means & -4.344 $\pm$ 0.14 & 9.507 $\pm$ 0.19 & 2.268 $\pm$ 0.01 & 1542 \\
-        DEC & -4.426 $\pm$ 0.17 & 9.952 $\pm$ 0.20 & 2.436 $\pm$ 0.01 & 1532 \\
-        \textbf{DEC (filt.)} & -4.502 $\pm$ 0.14 & 10.114 $\pm$ 0.17 & 2.392 $\pm$ 0.004 & 1072 \\
+        \textbf{Simbad} & -4.6579 \( \pm \) 0.0075 & 11.1517 \( \pm \) 0.0075 & 2.4118 \( \pm \) 0.0006 & 1727 \\
+        Clusterix & -4.652 \( \pm \) 0.523 & 11.203 \( \pm \) 0.454 & 2.409 \( \pm \) 0.127 & 638 \\
+        K-Means & -4.344 \( \pm \) 0.14 & 9.507 \( \pm \) 0.19 & 2.268 \( \pm \) 0.01 & 1542 \\
+        DEC & -4.426 \( \pm \) 0.17 & 9.952 \( \pm \) 0.20 & 2.436 \( \pm \) 0.01 & 1532 \\
+        \textbf{DEC (filt.)} & -4.502 \( \pm \) 0.14 & 10.114 \( \pm \) 0.17 & 2.392 \( \pm \) 0.004 & 1072 \\
       \end{tabular}
     }
     \caption{NGC 2516 results.}
@@ -673,8 +677,8 @@ Therefore, it is evident the interest on testing our model with this new data.
   \end{center}
 \end{table}
 
-Table \ref{tab:app_results_ngc_2516} shows a results summary for NGC 2516.
-The top row of Figure \ref{fig:app_result_ngc_2516_clusterix_kmeans} shows
+Table~\ref{tab:app_results_ngc_2516} shows a results summary for NGC 2516.
+The top row of Figure~\ref{fig:app_result_ngc_2516_clusterix_kmeans} shows
 the characterization using Clusterix+TOPCAT tools while the bottom row
 shows eight clusters found by K-Means.
 
@@ -720,12 +724,12 @@ shows eight clusters found by K-Means.
   \label{fig:app_result_ngc_2516_clusterix_kmeans}
 \end{figure}
 
-Figure \ref{fig:app_result_ngc_2516_dec} shows the groups found using the
+Figure~\ref{fig:app_result_ngc_2516_dec} shows the groups found using the
 DEC model (top row) and the DEC model filtered (bottom row).
 K-Means and DEC have labeled NGC 2516 as \emph{g3}. Although in general,
 groups between K-Means and DEC models may not match.
-Hyperparameters used in this characterization are listed in Table
-\ref{tab:app_hyperparameters_ngc_2516}.
+Hyperparameters used in this characterization are listed in
+Table~\ref{tab:app_hyperparameters_ngc_2516}.
 
 \begin{figure}[htbp]
   \centering
@@ -775,7 +779,7 @@ Hyperparameters used in this characterization are listed in Table
       \textbf{Hyperparameter} & \textbf{Value} \\
       \hline
       Number of Clusters & 8 \\
-      Clustering Layer & $\left[ 50, 50, 60 \right]$ \\
+      Clustering Layer & \(\left[ 50, 50, 60 \right]\) \\
       Kernel Initializer Seed & 2 \\
       Quantil Threshold & 0.15 \\
     \end{tabular}
@@ -787,7 +791,7 @@ Hyperparameters used in this characterization are listed in Table
 \subsection{NGC 2632}
 \label{sec:ngc2632}
 
-Figure \ref{fig:app_result_ngc_2632_clusterix_kmeans} shows NGC 2632 characterized
+Figure~\ref{fig:app_result_ngc_2632_clusterix_kmeans} shows NGC 2632 characterized
 by the validation method (first row) and the characterization made by K-Means
 showing ten clusters (second row). K-Means labels NGC 2632 as \emph{g1}.
 
@@ -833,7 +837,7 @@ showing ten clusters (second row). K-Means labels NGC 2632 as \emph{g1}.
   \label{fig:app_result_ngc_2632_clusterix_kmeans}
 \end{figure}
 
-Figure \ref{fig:app_result_ngc_2632_dec} shows the groups found using
+Figure~\ref{fig:app_result_ngc_2632_dec} shows the groups found using
 the DEC model (first row) and the DEC model filtered (second row).
 Open cluster NGC 2632 is labeled as group \emph{g1}.
 
@@ -883,13 +887,14 @@ Open cluster NGC 2632 is labeled as group \emph{g1}.
   \begin{center}
     \resizebox{\columnwidth}{!}{
       \begin{tabular}{l|c|c|c|c}
-        \textbf{Method} & \emph{$\mu_{\alpha}$ $(mas \cdot yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas \cdot yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
+        \textbf{Method} & \emph{\(\mu_{\alpha}\) \((mas \cdot yr^{-1})\)} & \emph{\(\mu_{\delta}\) \((mas \cdot yr^{-1})\)}
+        & \emph{\( \varpi \) \((mas)\)} & \emph{\# stars} \\
         \hline
-        \textbf{Simbad} & -36.047 $\pm$ 0.110 & -12.917 $\pm$ 0.066 & 5.371 $\pm$ 0.003 & - \\
-        Clusterix & -36.154 $\pm$ 1.001 & -12.909 $\pm$ 0.806 & 5.327 $\pm$ 0.187 & 371 \\
-        K-Means & -26.352 $\pm$ 0.82 & -15.828 $\pm$ 0.76 & 5.394 $\pm$ 0.03 & 629 \\
-        DEC & -20.012 $\pm$ 0.69 & -14.742 $\pm$ 0.58 & 4.686 $\pm$ 0.03 & 894 \\
-        \textbf{DEC (filt.)} & -21.571 $\pm$ 0.74 & -14.234 $\pm$ 0.61 & 4.719 $\pm$ 0.03 & 714 \\
+        \textbf{Simbad} & -36.047 \( \pm \) 0.110 & -12.917 \( \pm \) 0.066 & 5.371 \( \pm \) 0.003 & - \\
+        Clusterix & -36.154 \( \pm \) 1.001 & -12.909 \( \pm \) 0.806 & 5.327 \( \pm \) 0.187 & 371 \\
+        K-Means & -26.352 \( \pm \) 0.82 & -15.828 \( \pm \) 0.76 & 5.394 \( \pm \) 0.03 & 629 \\
+        DEC & -20.012 \( \pm \) 0.69 & -14.742 \( \pm \) 0.58 & 4.686 \( \pm \) 0.03 & 894 \\
+        \textbf{DEC (filt.)} & -21.571 \( \pm \) 0.74 & -14.234 \( \pm \) 0.61 & 4.719 \( \pm \) 0.03 & 714 \\
       \end{tabular}
     }
     \caption{NGC 2632 results.}
@@ -897,8 +902,8 @@ Open cluster NGC 2632 is labeled as group \emph{g1}.
   \end{center}
 \end{table}
 
-Table \ref{tab:app_results_ngc_2632} shows a results summary for NGC 2632 analysis.
-While Table \ref{tab:app_hyperparameters_ngc_2632} shows the hyperparameters
+Table~\ref{tab:app_results_ngc_2632} shows a results summary for NGC 2632 analysis.
+While Table~\ref{tab:app_hyperparameters_ngc_2632} shows the hyperparameters
 used for characterizing NGC 2632 with our model.
 
 \begin{table}[htbp]
@@ -907,7 +912,7 @@ used for characterizing NGC 2632 with our model.
       \textbf{Hyperparameter} & \textbf{Value} \\
       \hline
       Number of Clusters & 10 \\
-      Clustering Layer & $\left[ 50, 50, 40 \right]$ \\
+      Clustering Layer & \(\left[ 50, 50, 40 \right]\) \\
       Kernel Initializer Seed & 10 \\
       Quantil Threshold & 0.1 \\
     \end{tabular}
@@ -919,19 +924,20 @@ used for characterizing NGC 2632 with our model.
 \subsection{NGC 2682}
 \label{sec:ngc2682}
 
-Table \ref{tab:app_results_ngc_2682} shows a results summary for NGC 2682.
+Table~\ref{tab:app_results_ngc_2682} shows a results summary for NGC 2682.
 
 \begin{table}[htbp]
   \begin{center}
     \resizebox{\columnwidth}{!}{
       \begin{tabular}{l|c|c|c|c}
-        \textbf{Method} & \emph{$\mu_{\alpha}$ $(mas \cdot yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas \cdot yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
+        \textbf{Method} & \emph{\(\mu_{\alpha}\) \((mas \cdot yr^{-1})\)} & \emph{\(\mu_{\delta}\) \((mas \cdot yr^{-1})\)}
+        & \emph{\( \varpi \) \((mas)\)} & \emph{\# stars} \\
         \hline
-        \textbf{Simbad} & -10.9737 $\pm$ 0.0064 & -2.9396 $\pm$ 0.0063 & 1.1325 $\pm$ 0.0011 & 1194 \\
-        Clusterix+TOPCAT & -10.970 $\pm$ 0.322 & -2.958 $\pm$ 0.327 & 1.142 $\pm$ 0.080 & 649 \\
-        K-Means & -8.616 $\pm$ 0.15 & -3.710 $\pm$ 0.16 & 1.196 $\pm$ 0.01 & 1374 \\
-        DEC & -8.926 $\pm$ 0.15 & -3.550 $\pm$ 0.15 & 1.144 $\pm$ 0.005 & 1238 \\
-        \textbf{DEC (filt.)} & -9.619 $\pm$ 0.13 & -3.317 $\pm$ 0.13 & 1.140 $\pm$ 0.003 & 990 \\
+        \textbf{Simbad} & -10.9737 \( \pm \) 0.0064 & -2.9396 \( \pm \) 0.0063 & 1.1325 \( \pm \) 0.0011 & 1194 \\
+        Clusterix+TOPCAT & -10.970 \( \pm \) 0.322 & -2.958 \( \pm \) 0.327 & 1.142 \( \pm \) 0.080 & 649 \\
+        K-Means & -8.616 \( \pm \) 0.15 & -3.710 \( \pm \) 0.16 & 1.196 \( \pm \) 0.01 & 1374 \\
+        DEC & -8.926 \( \pm \) 0.15 & -3.550 \( \pm \) 0.15 & 1.144 \( \pm \) 0.005 & 1238 \\
+        \textbf{DEC (filt.)} & -9.619 \( \pm \) 0.13 & -3.317 \( \pm \) 0.13 & 1.140 \( \pm \) 0.003 & 990 \\
       \end{tabular}
     }
     \caption{NGC 2682 results.}
@@ -939,10 +945,10 @@ Table \ref{tab:app_results_ngc_2682} shows a results summary for NGC 2682.
   \end{center}
 \end{table}
 
-Figure \ref{fig:app_result_ngc_2682_clusterix_kmeans} shows
+Figure~\ref{fig:app_result_ngc_2682_clusterix_kmeans} shows
 NGC 2682 characterized using Clusterix+TOPCAT tools (top row)
 and ten clusters identified by K-Means (bottom row).
-The chacterization made by K-Means labels NGC 2682 as group \emph{g4}.
+The characterization made by K-Means labels NGC 2682 as group \emph{g4}.
 
 \begin{figure}[htbp]
   \centering
@@ -988,7 +994,7 @@ The chacterization made by K-Means labels NGC 2682 as group \emph{g4}.
   \label{fig:app_result_ngc_2682_clusterix_kmeans}
 \end{figure}
 
-Figure \ref{fig:app_result_ngc_2682_dec} shows the groups found using
+Figure~\ref{fig:app_result_ngc_2682_dec} shows the groups found using
 the DEC model (first row) and the DEC model filtered (second row).
 The cluster of interest is the group \emph{g2}.
 
@@ -1034,7 +1040,7 @@ The cluster of interest is the group \emph{g2}.
   \label{fig:app_result_ngc_2682_dec}
 \end{figure}
 
-Table \ref{tab:app_hyperparameters_ngc_2682} shows the
+Table~\ref{tab:app_hyperparameters_ngc_2682} shows the
 hyperparameters used for characterizing NGC 2682 with DEC method.
 
 \begin{table}[htbp]
@@ -1043,7 +1049,7 @@ hyperparameters used for characterizing NGC 2682 with DEC method.
       \textbf{Hyperparameter} & \textbf{Value} \\
       \hline
       Number of Clusters & 10 \\
-      Clustering Layer & $\left[ 50, 50, 40 \right]$ \\
+      Clustering Layer & \(\left[ 50, 50, 40 \right]\) \\
       Kernel Initializer Seed & 0 \\
       Quantil Threshold & 0.1 \\
     \end{tabular}
@@ -1052,7 +1058,7 @@ hyperparameters used for characterizing NGC 2682 with DEC method.
   \end{center}
 \end{table}
 
-\subsection{MELOTTE 22}
+\subsection{Melotte 22}
 \label{sec:melotte22}
 
 \begin{figure}[htbp]
@@ -1098,12 +1104,12 @@ hyperparameters used for characterizing NGC 2682 with DEC method.
   \label{fig:app_result_melotte_22_clusterix_kmeans}
 \end{figure}
 
-Figure \ref{fig:app_result_melotte_22_clusterix_kmeans} shows Melotte 22
+Figure~\ref{fig:app_result_melotte_22_clusterix_kmeans} shows Melotte 22
 characterized using Clusterix+TOPCAT tools (top row) and the characterization
 made by K-Means (bottom row) showing nine clusters. Melotte 22 is labeled as
 group \emph{g1}.
 
-Figure \ref{fig:app_result_melotte_22_dec} shows the groups found using
+Figure~\ref{fig:app_result_melotte_22_dec} shows the groups found using
 DEC model (first row) and DEC model filtered (second row).
 Melotte 22 is labeled as group \emph{g2} by DEC model.
 
@@ -1149,19 +1155,20 @@ Melotte 22 is labeled as group \emph{g2} by DEC model.
   \label{fig:app_result_melotte_22_dec}
 \end{figure}
 
-Table \ref{tab:app_results_melotte_22} shows a results summary for Melotte 22.
+Table~\ref{tab:app_results_melotte_22} shows a results summary for Melotte 22.
 
 \begin{table}[htbp]
   \begin{center}
     \resizebox{\columnwidth}{!}{
       \begin{tabular}{l|c|c|c|c}
-        \textbf{Method} & \emph{$\mu_{\alpha}$ $(mas \cdot yr^{-1})$} & \emph{$\mu_{\delta}$ $(mas \cdot yr^{-1})$} & \emph{$\varpi$ $(mas)$} & \emph{\# stars} \\
+        \textbf{Method} & \emph{\(\mu_{\alpha}\) \((mas \cdot yr^{-1})\)} & \emph{\(\mu_{\delta}\) \((mas \cdot yr^{-1})\)}
+        & \emph{\( \varpi \) \((mas)\)} & \emph{\# stars} \\
         \hline
-        \textbf{Simbad} & 19.997 $\pm$ 0.127 & -45.548 $\pm$ 0.101 & 7.364 $\pm$ 0.005 & 1326 \\
-        Clusterix & 19.98 $\pm$ 1.25 & -45.47 $\pm$ 1.48 & 7.33 $\pm$ 0.21 & 634 \\
-        K-Means & 20.25 $\pm$ 0.95 & -38.01 $\pm$ 1.08 & 7.23 $\pm$ 0.06 & 1378 \\
-        DEC & 23.67 $\pm$ 1.29 & -46.23 $\pm$ 1.50 & 8.04 $\pm$ 0.09 & 878 \\
-        \textbf{DEC (filt.)} & 19.50 $\pm$ 0.41 & -44.23 $\pm$ 0.39 & 7.42 $\pm$ 0.005 & 438 \\
+        \textbf{Simbad} & 19.997 \( \pm \) 0.127 & -45.548 \( \pm \) 0.101 & 7.364 \( \pm \) 0.005 & 1326 \\
+        Clusterix & 19.98 \( \pm \) 1.25 & -45.47 \( \pm \) 1.48 & 7.33 \( \pm \) 0.21 & 634 \\
+        K-Means & 20.25 \( \pm \) 0.95 & -38.01 \( \pm \) 1.08 & 7.23 \( \pm \) 0.06 & 1378 \\
+        DEC & 23.67 \( \pm \) 1.29 & -46.23 \( \pm \) 1.50 & 8.04 \( \pm \) 0.09 & 878 \\
+        \textbf{DEC (filt.)} & 19.50 \( \pm \) 0.41 & -44.23 \( \pm \) 0.39 & 7.42 \( \pm \) 0.005 & 438 \\
       \end{tabular}
     }
     \caption{Melotte 22 results.}
@@ -1169,7 +1176,7 @@ Table \ref{tab:app_results_melotte_22} shows a results summary for Melotte 22.
   \end{center}
 \end{table}
 
-While Table \ref{tab:app_hyperparameters_melotte_22} shows the hyperparameters
+While Table~\ref{tab:app_hyperparameters_melotte_22} shows the hyperparameters
 used for characterizing Melotte 22 with the DEC model.
 
 \begin{table}[hbtp]
@@ -1178,7 +1185,7 @@ used for characterizing Melotte 22 with the DEC model.
       \textbf{Hyperparameter} & \textbf{Value} \\
       \hline
       Number of Clusters & 5 \\
-      Clustering Layer & $\left[ 50, 50, 200 \right]$ \\
+      Clustering Layer & \(\left[ 50, 50, 200 \right]\) \\
       Kernel Initializer Seed & 11 \\
       Quantil Threshold & 0.1 \\
     \end{tabular}
@@ -1187,7 +1194,7 @@ used for characterizing Melotte 22 with the DEC model.
   \end{center}
 \end{table}
 
-\renewcommand{\refname}{REFERENCES}
+\renewcommand{\refname}{References}
 \bibliographystyle{unsrt}
 \bibliography{references}
 
