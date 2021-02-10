@@ -219,7 +219,7 @@ Although the members of a cluster appear in the observational visual field as an
 as shown in Figure~\ref{fig:pos_ngc_2682},
 these coordinates are not useful to separate those stars that belong to the cluster from the other that do not.
 However, if we look for overdensities in the proper motion configuration spaces, it is possible, at least at first instance,
-to assume a possible membership cut (see Figure~\ref{fig:pm_ngc_2682}.
+to assume a possible membership cut (see Figure~\ref{fig:pm_ngc_2682}).
 
 \begin{figure}[htbp]
   \centering
@@ -444,21 +444,21 @@ Clusterix relies on several assumptions, among other:
 \begin{displayquote}
 The non-field population does not occupy the entire workspace, but is spatially concentrated,
 which makes it possible to distinguish two regions in the workspace:
-the only field region (label `f`), dominated by star fields,
-and the cluster + field region (label `c+f`), which includes both star fields and not star
+the only field region (label `f'), dominated by star fields,
+and the cluster + field region (label `c+f'), which includes both star fields and not star
 fields~\cite{balaguer2020clusterix}.
 \end{displayquote}
 
 This fact implies defining three areas or regions with different radius.
-The first `c+f` corresponds to the one in which the cluster members are
+The first `c+f' corresponds to the one in which the cluster members are
 presumed to be contained together with other star fields that are not part of the cluster.
 The second region is the broadest and assumes that it only contains stars
 in an extended visual field without components of the cluster.
 The third region is the intermediate one and is out of analysis (void area),
 since it would correspond to a possible transition zone between the other two.
 
-The right choice of these radii, even having a previous estimation for the `c+f` region,
-highly affects the execution of the algorithm and, in general, requires a considerable wide field `f`.
+The right choice of these radii, even having a previous estimation for the `c+f' region,
+highly affects the execution of the algorithm and, in general, requires a considerable wide field `f'.
 There is no rule of thumb that defines relative proportions of these areas.
 
 Finally, when an acceptable result is obtained,
@@ -482,7 +482,7 @@ for overdensities in the astrometric space of the galactic disk
 and a later identification of OCs using photometric information, also from Gaia DR2.
 
 The method includes two phases: the first one uses an unsupervised clustering algorithm, DBSCAN,
-to search for overdensities \((l, b \pi, \mu_{\alpha} *, \mu_{\delta})\),
+to search for overdensities \((l, b, \pi, \mu_{\alpha} *, \mu_{\delta})\),
 and then applies a deep learning Artificial Neural Network (ANN),
 previously trained with magnitude diagrams,
 to identify isochrone patterns within the detected overdensities and thus proceed to confirm them as OC.
@@ -564,8 +564,8 @@ although they are contained in the same observation field, so images look clear.
 
 Figure~\ref{fig:raw_pm_melotte_22} shows \emph{proper motion in right ascension and declination}
 for a sample of the downloaded dataset for Melotte 22.
-At first sight, two main clusters can be distinguished, one of them centered nearly at (0, 0)
-and the second one with center at (20, -45). This second cluster is the one we are looking for.
+At first sight, two main clusters can be distinguished, one of them centered nearly at [0, 0]
+and the second one with center at [20, -45]. This second cluster is the one we are looking for.
 
 However, although the second cluster is almost isolated, there are stars that do not belong to the OC.
 Thus, we need more information to properly characterize the open cluster.
@@ -969,7 +969,7 @@ using a non-linear mapping function \(f_{\theta} : X \rightarrow Z\).
 Although, as explained in Section~\ref{sec:feature_selection},
 the number of features we are managing is not too large,
 this latent space helps us reduce the number of features
-and avoids the \emph{``curse of dimensionality``}~\cite{bellman1961curse}.
+and avoids the \emph{``curse of dimensionality''}~\cite{bellman1961curse}.
 
 The autoencoder is pretrained before fitting the model to generate predictions. Then,
 the encoder layers of the autoencoder are used with the aim of transforming input data to
