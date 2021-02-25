@@ -190,7 +190,7 @@ allows the characterization of open clusters without doing a blind search for
 characterization clusters. We advocate the idea of building an unsupervised and
 non-parameterized method. Therefore, it can be suitable for automated processes.
 
-\section{Open Cluster Characterization method}
+\section{Open Cluster Characterization Method}
 \label{sec:aims_and_method}
 
 In the literature, we have several clustering algorithms, such as K-Means, Mean-Shift
@@ -210,7 +210,7 @@ groups based on the dynamic properties of the stars. Thus, we have an unsupervis
 clustering model for open cluster characterization. The model fits a wide range of
 clusters without the need for fine-tuning a high number of hyperparameters.
 
-\subsection{Selection of the catalog}
+\subsection{Selection of the Catalog}
 
 In this work, we make use of Gaia DR2 as DR3 has not been released in time for us to
 include it. Gaia DR2 is a multidimensional dataset obtained by ESA's Gaia mission
@@ -294,10 +294,10 @@ Like the DEC model, we have two main components:
 \begin{itemize}
   \item \textbf{deep autoencoder:} it is a neural network that learns to copy its input
         to its output. It is composed of encoder layers followed by decoder layers.
-        We train it before passing the data through the next component, the
-        \emph{clustering layer}. Recent research~\cite{vincent2010stacked, hinton2006reducing}
-         showed that the autoencoder provides meaningful and well-separated representations
-         on real-world datasets.
+        We trained it before passing the data through the next component, the
+        \emph{clustering layer}. Recent research~\cite{vincent2010stacked,hinton2006reducing}
+        showed that the autoencoder provides meaningful and well-separated representations
+        on real-world datasets.
   \item \textbf{clustering layer:} it receives data transformed by the autoencoder
         and iteratively is trained until a convergence criterion is met.
 \end{itemize}
@@ -400,14 +400,14 @@ of K-Means, we show the proper motion in right ascension and declination (figure
 and the parallax distribution (figures in the down position).
 
 As we can see in the parallax distribution, lower values of the number of clusters (e.g., N=2) assign
-many stars to the group \emph{0} (purple) that should belong to group \emph{g1}. These badly assigned stars
+many stars to the group \emph{g0} (purple) that should belong to group \emph{g1}. These badly assigned stars
 are the ones that have the parallax far from the 7.3mas resonance. In contrast, large values of the
 number of clusters allow us to isolate more accurately the resonance in parallax at \(\approx 7.3mas\).
 For instance, at N=8, more groups are better compartmentalized. Group \emph{g2} would be the one corresponding
 to the OC that we are looking for, and all the other groups are those that we would like to be a single
 group. That is the stars that do not belong to the OC. The disadvantage is that K-Means with N=8 forms more
 groups of stars, which complicates the task of finding the desired OC, since we would like to get just two
-groups. Therefore, with a K-Means we have to find  a way to set the right value for the number of clusters
+groups. Therefore, with a K-Means we have to find a way to set the right value for the number of clusters
 to isolate the searched cluster without creating too many groups. To solve this issue, we can try to
 estimate the best number of clusters by using the \emph{silhouette score}~\cite{rousseeuw1987silhouettes}.
 
@@ -423,33 +423,35 @@ Moreover, we would like to reduce the amount of clusters too.
   \centering
   \begin{subfigure}[b]{0.3\textwidth}
     \centering
-      \includegraphics[width=\textwidth]{../figures/melotte_22/kmeans_pm_melotte_22.png}
-      \includegraphics[width=\textwidth]{../figures/melotte_22/kmeans_hr_diagram_melotte_22.png}
+      \includegraphics[width=\textwidth]{../figures/melotte_25/kmeans_pm_melotte_25.png}
+      \includegraphics[width=\textwidth]{../figures/melotte_25/kmeans_hr_diagram_melotte_25.png}
       \caption{K-Means}
   \end{subfigure}
   \medskip
   \begin{subfigure}[b]{0.3\textwidth}
     \centering
-      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_pm_melotte_22.png}
-      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_hr_diagram_melotte_22.png}
+      \includegraphics[width=\textwidth]{../figures/melotte_25/dec_pm_melotte_25.png}
+      \includegraphics[width=\textwidth]{../figures/melotte_25/dec_hr_diagram_melotte_25.png}
       \caption{DEC}
   \end{subfigure}
   \medskip
   \begin{subfigure}[b]{0.3\textwidth}
     \centering
-      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_pm_filtered_melotte_22.png}
-      \includegraphics[width=\textwidth]{../figures/melotte_22/dec_hr_diagram_filtered_melotte_22.png}
+      \includegraphics[width=\textwidth]{../figures/melotte_25/dec_pm_filtered_melotte_25.png}
+      \includegraphics[width=\textwidth]{../figures/melotte_25/dec_hr_diagram_filtered_melotte_25.png}
       \caption{DEC (filt.)}
   \end{subfigure}
-  \caption{Evolution of Melotte 22 characterization}
-  \label{fig:melotte_22_characterization_evolution}
+  \caption{Evolution of Melotte 25 characterization}
+  \label{fig:melotte_25_characterization_evolution}
 \end{figure*}
 
 We have tested our model with the Melotte 25 dataset, which is one of the most difficult dataset
-to characterize OC by its distribution and extension. In order to support the discussion presented
-in Section~\ref{sec:deep_open_clustering}, we compared our model against a K-Means classification
-algorithm. In addition, we perform a second execution only in our model where we filtered the
-quantiles in the Melotte 22 dataset.
+to characterize OC by its distribution and extension, because it is located in a region with
+400,000 stars.
+
+In order to support the discussion presented in Section~\ref{sec:deep_open_clustering}, we compared
+our model against a K-Means classification algorithm. In addition, we perform a second execution
+only in our model where we filtered the quantiles in the Melotte 25 dataset.
 
 Our model was implemented in Python 3.8 using the Keras 2.2 framework and Jupyter
 Notebooks~\cite{Kluyver2016jupyter}. All tests were run on an Apple Mac Pro Late 2013 with a
@@ -460,21 +462,34 @@ at \href{https://github.com/cdalvaro/machine-learning-master-thesis}
 
 % More results are available at Appendix \ref{sec:appendix}.
 
-Figure~\ref{fig:melotte_22_characterization_evolution} shows the evolution
-of the characterization of Melotte 22. The first column corresponds to the
-characterization obtained by applying K-Means alone to the dataset. The middle
-column is the characterization made by the DEC model. And the column on the right
-shows the characterization made by the DEC and having filtered the quantiles
-lower than 0.10 and higher than 0.90. The top row shows the proper motion
-configuration space while the bottom one shows the Hertzsprung–Russell diagrams.
+Figure~\ref{fig:melotte_25_characterization_evolution} shows the evolution of the characterization
+of Melotte 25. The first column corresponds to the characterization obtained by applying K-Means
+(with N=10) alone to the dataset. The middle column is the characterization made by our model.
+And the column on the right shows the characterization made by our model but filtering the
+quantiles lower than 0.10 and higher than 0.90. The top row shows the proper motion configuration
+space, while the bottom one shows the Hertzsprung–Russell diagrams.
 
 %% Comparación con K-Means, DEC y DEC filter
 
-Melotte 25 is located at 66.725 degrees in right ascension and 15.867
-degrees in declination with a radius of 165 arcmin.
-This region contains more than 400,000 stars.
+The clustering made by K-Means arises 9 groups, but most of them contain stars that do not belong
+to the Melotte 25 OC. However, after applying our model, most of the stars are grouped into a single
+cluster. One of the other groups is the OC we are looking for, and the other seven could be new OCs
+inside the studied region.
 
-Table~\ref{tab:results_melotte_25} shows a results summary for Melotte 25.
+The dataset Melotte 25 is located at 66.725 degrees in right ascension and 15.867 degrees in
+declination with a radius of 165 arcmin. As it was mentioned before, this region contains more than
+400,000 stars making it difficult to group stars of the same region.
+
+Table~\ref{tab:results_melotte_25} summarizes the results for the Melotte 25 dataset. The first column
+shows the name of the method. Second and third columns describe the proper motion in right ascension and
+declination, respectively. The fourth column shows the parallax. And the last column presents the number
+of stars corresponding to the OC. Columns from second to fourth have their respective deviations computed
+as the standard error of the predicted group.
+
+By comparing the results obtained with our model, we can see that they are in range with those extracted
+from SIMBAD astronomical database~\cite{wenger2000simbad}. While the results provided by K-Means model are
+far from the official data. This comparison demonstrates that our model improves the results obtained with
+a raw K-Means.
 
 \begin{table}[!htbp]
   \begin{center}
@@ -483,49 +498,43 @@ Table~\ref{tab:results_melotte_25} shows a results summary for Melotte 25.
         \textbf{Method} & \emph{\(\mu_{\alpha}\) \((mas \cdot yr^{-1})\)} & \emph{\(\mu_{\delta}\) \((mas \cdot yr^{-1})\)}
         & \emph{\( \varpi \) \((mas)\)} & \emph{\# stars} \\
         \hline
-        \textbf{Simbad}\tablefootnote{Results have been taken from the SIMBAD astronomical database\cite{wenger2000simbad}}
+        \textbf{Simbad}\tablefootnote{Results have been taken from the SIMBAD astronomical database~\cite{wenger2000simbad}}
         & 104.92 \( \pm \) 0.12 & -28.00 \( \pm \) 0.09 & 21.052 \( \pm \) 0.065 & - \\
-        Clusterix & 106.796 \( \pm \) 6.229 & -24.870 \( \pm \) 5.417 & 21.210 \( \pm \) 1.115 & 109 \\
+        %Clusterix & 106.796 \( \pm \) 6.229 & -24.870 \( \pm \) 5.417 & 21.210 \( \pm \) 1.115 & 109 \\
         K-Means & 79.936 \( \pm \) 3.7 & -45.362 \( \pm \) 3.8 & 20.901 \( \pm \) 0.31 & 374 \\
-        DEC & 104.051 \( \pm \) 3.2 & -33.424 \( \pm \) 2.5 & 22.072 \( \pm \) 0.13 & 219 \\
-        \textbf{DEC (filt.)} & 105.96 \( \pm \) 3.5 & -30.00 \( \pm \) 2.4 & 21.74 \( \pm \) 0.07 & 175 \\
+        DECOCC & 104.051 \( \pm \) 3.2 & -33.424 \( \pm \) 2.5 & 22.072 \( \pm \) 0.13 & 219 \\
+        \textbf{DECOCC (filt.)} & 105.96 \( \pm \) 3.5 & -30.00 \( \pm \) 2.4 & 21.74 \( \pm \) 0.07 & 175 \\
       \end{tabular}
     }
-    \caption{Melotte 25 results.}
+    \caption{Summary for the Melotte 25 results.}
     \label{tab:results_melotte_25}
   \end{center}
 \end{table}
 
-Parameters shown are proper motion in right ascension and declination, parallax
-with their respective deviations and number of stars corresponding to the OC.
+Figure~\ref{fig:result_melotte_25_dec} shows the groups found using our model.
+Our model labels Melotte 25 as group \emph{g5}.
 
-Figure~\ref{fig:result_melotte_25_dec} shows the groups found using the DEC model.
-This model labels Melotte 25 as group \emph{g5}.
-
-\begin{figure}[htbp]
+\begin{figure*}[!hbt]
   \centering
-  \begin{subfigure}{\columnwidth}
+  \begin{subfigure}[t]{0.30\textwidth}
     \centering
-    \begin{subfigure}[t]{0.30\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{../figures/melotte_25/dec_pm_melotte_25.png}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.30\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{../figures/melotte_25/dec_parallax_melotte_25.png}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.30\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{../figures/melotte_25/dec_hr_diagram_melotte_25.png}
-    \end{subfigure}
+    \includegraphics[width=\textwidth]{../figures/melotte_25/dec_pm_melotte_25.png}
   \end{subfigure}
-  \caption{Melotte 25 characterization using the DEC model.
-           From the left to the right: proper motion configuration
-           space, parallax histogram and H-R diagram.}
+  \hfill
+  \begin{subfigure}[t]{0.30\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{../figures/melotte_25/dec_parallax_melotte_25.png}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.30\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{../figures/melotte_25/dec_hr_diagram_melotte_25.png}
+  \end{subfigure}
+  \caption{Melotte 25 characterization.
+           From left to right: proper motion configuration space,
+           parallax histogram and H-R diagram.}
   \label{fig:result_melotte_25_dec}
-\end{figure}
+\end{figure*}
 
 Table~\ref{tab:hyperparameters_melotte_25} shows the hyperparameters
 used for the characterization.
@@ -540,12 +549,16 @@ used for the characterization.
       Kernel Initializer Seed & 11 \\
       Quantil Threshold & 0.1 \\
     \end{tabular}
-    \caption{Melotte 25 DEC hyperparameters.}
+    \caption{Hyperparameters for Melotte 25.}
     \label{tab:hyperparameters_melotte_25}
   \end{center}
 \end{table}
 
-\section{Result discussions}
+These hyperparameters are used to fine-tuning our model and improve its accuracy. Although they depend on
+the studied region, no one of them is related with physical properties of the cluster. That makes easier
+to automate the selection of hyperparameters.
+
+\paragraph{Final Discussion.}
 
 We have applied our proposed method to clusters with different typologies:
 
