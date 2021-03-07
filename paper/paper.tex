@@ -466,7 +466,7 @@ card AMD FirePro D700 with 6GB~\footnote{All resources developed for this projec
 at \href{https://github.com/cdalvaro/machine-learning-master-thesis}
 {https://github.com/cdalvaro/machine-learning-master-thesis}}.
 
-\subsection{Melotte 25 dataset}
+\subsection{Melotte 25 Dataset}
 
 Figure~\ref{fig:melotte_25_characterization_evolution} shows the evolution of the characterization
 of Melotte 25. The first column corresponds to the characterization obtained by applying only
@@ -540,9 +540,9 @@ of stars corresponding to the OC. Columns from second to fourth have their respe
 as the standard error of the predicted group.
 
 By comparing the results obtained with our DECOCC model, we can see that they are in range with those
-extracted from Simbad astronomical database~\cite{wenger2000simbad}. While the results provided by K-Means
-model are far from the official data. This comparison demonstrates that our model improves the results
-obtained with a raw K-Means.
+extracted from Simbad astronomical database~\cite{wenger2000simbad} (first row in
+Table~\ref{tab:results_melotte_25}). While the results provided by K-Means model are far from the official
+data. This comparison demonstrates that our model improves the results obtained with a raw K-Means.
 
 \begin{table}[!htb]
   \begin{center}
@@ -564,7 +564,7 @@ them to fine-tuning our model and improve its accuracy. Although they depend on 
 them are related with physical properties of the cluster, which makes it easy to automate the selection of
 hyperparameters.
 
-\subsection{Clusters with different typologies}
+\subsection{Clusters With Different Typologies}
 
 We perform now more exhaustive tests of our DECOCC model using open clusters with different typologies (e.g.,
 large, small, more extensive, or more concentrated within the region to be analyzed):
@@ -572,8 +572,8 @@ large, small, more extensive, or more concentrated within the region to be analy
 \begin{itemize}
   \item NGC 2516, which has the proper motion center deviated from the origin but embedded within a large cloud
         of stars with similar proper motions.
-  \item NGC 2632, which, in addition to Melotte 22, is a cluster whose proper motion center is not at the origin
-        and has a well-separated parallax center.
+  \item NGC 2632, which, in addition to Melotte 22 (explained below), is a cluster whose proper motion center is
+        not at the origin and has a well-separated parallax center.
   \item NGC 2682, which has the parallax centered within the region's Gaussian, making it difficult its detection.
         Moreover, same as NGC 2516, the proper motion center is deviated from the origin.
   \item Melotte 22, as well as Melotte 25, is a cluster closer to our galaxy. That causes its membership stars to
@@ -583,8 +583,8 @@ large, small, more extensive, or more concentrated within the region to be analy
 Table~\ref{tab:clusters_summary} describes more specific information about the previous clusters (we also include
 information about the Melotte 25 open cluster, which was previously analyzed). The first column shows the name of
 the cluster. The remaining columns are the right ascension, declination, radius, and the number of stars of studied
-clusters. The column \# stars correspond to those stars contained within a cone of center \((\alpha, \delta)\) and
-radius the cluster's radius multiplied by a factor of 1.5.
+clusters. The last column (\# stars) corresponds to those stars contained within a cone of center \((\alpha, \delta)\)
+and radius the cluster's radius multiplied by a factor of 1.5.
 
 \begin{table}[htbp]
   \begin{center}
@@ -649,11 +649,11 @@ of stars that belong to them. For instance, NGC 2682 has 3,000 stars while Melot
 than 400,000 stars.
 
 Table~\ref{tab:app_results_ngc_2516} describes a summary of the results for the clusters with different typologies.
-Again, our DECOCC model presents similar results from those extracted from the astronomical database Simbad. Except
-for the open cluster NGC 2632. In this cluster, the K-Means presents better results than our model. And this is so
-because the center of the proper motion is not at the origin and generates a more separate center of parallax, which
-makes it difficult to characterize the open cluster in our model. However, our model presents more robust results in
-more difficult open clusters, such as the NGC 2682 that has the parallax centered within the region's Gaussian.
+Again, our DECOCC model presents similar results from those extracted from the astronomical database Simbad. Except for
+the open cluster NGC 2632. This is so because the center of the proper motion is not at the origin and generates a more
+separate center of parallax, which makes it difficult to characterize the open cluster. Compared to K-Means, our model
+presents more robust results in more difficult open clusters, such as the NGC 2682 that has the parallax centered within
+the region's Gaussian.
 
 %% comparativa de las figuras de los open clusters
 \begin{figure*}[!hbt]
@@ -669,7 +669,7 @@ more difficult open clusters, such as the NGC 2682 that has the parallax centere
     \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_parallax_filtered_ngc_2516.png}
   \end{subfigure}
 
-  \rotatebox[origin=c]{90}{{\bfseries NGC 2516} \strut}
+  \rotatebox[origin=c]{90}{{\bfseries} \strut}
   \rotatebox[origin=c]{90}{hr diagram\strut}
   \begin{subfigure}{0.3\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2516/kmeans_hr_diagram_ngc_2516.png}
@@ -693,7 +693,7 @@ more difficult open clusters, such as the NGC 2682 that has the parallax centere
     \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_parallax_filtered_ngc_2632.png}
   \end{subfigure}
 
-  \rotatebox[origin=c]{90}{{\bfseries NGC 2632} \strut}
+  \rotatebox[origin=c]{90}{{\bfseries} \strut}
   \rotatebox[origin=c]{90}{hr diagram\strut}
   \begin{subfigure}{0.3\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2632/kmeans_hr_diagram_ngc_2632.png}
@@ -724,7 +724,7 @@ more difficult open clusters, such as the NGC 2682 that has the parallax centere
     \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_parallax_filtered_ngc_2682.png}
   \end{subfigure}
 
-  \rotatebox[origin=c]{90}{{\bfseries NGC 2682} \strut}
+  \rotatebox[origin=c]{90}{{\bfseries} \strut}
   \rotatebox[origin=c]{90}{hr diagram\strut}
   \begin{subfigure}{0.3\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2682/kmeans_hr_diagram_ngc_2682.png}
@@ -748,7 +748,7 @@ more difficult open clusters, such as the NGC 2682 that has the parallax centere
     \includegraphics[width=\textwidth]{../figures/melotte_22/dec_parallax_filtered_melotte_22.png}
   \end{subfigure}
 
-  \rotatebox[origin=c]{90}{{\bfseries Melotte 22} \strut}
+  \rotatebox[origin=c]{90}{{\bfseries} \strut}
   \rotatebox[origin=c]{90}{hr diagram\strut}
   \begin{subfigure}{0.3\textwidth}
     \includegraphics[width=\textwidth]{../figures/melotte_22/kmeans_hr_diagram_melotte_22.png}
@@ -766,11 +766,39 @@ more difficult open clusters, such as the NGC 2682 that has the parallax centere
   \label{fig:melotte_22_ngc_2682_characterization_evolution}
 \end{figure*}
 
-Figures~\ref{fig:ngc_2516_ngc_2632_characterization_evolution} and~\ref{fig:melotte_22_ngc_2682_characterization_evolution}
-show the groups found for the three models. For each open cluster, we describe the parallax and hr diagram.
+Figures~\ref{fig:ngc_2516_ngc_2632_characterization_evolution} (describes NGC 2516 and NGC 2632)
+and~\ref{fig:melotte_22_ngc_2682_characterization_evolution} (describes NGC 2682 and Melotte 22) show the
+groups found for the three models. For each open cluster, we describe the parallax and hr diagram.
 
-K-Means and DECOCC have labeled NGC 2516 as \emph{g3}. Although in general, groups between K-Means and our
-model may not match.
+In each open cluster, the models K-Means and DECOCC label the open cluster in the following groups:
+
+\begin{itemize}
+  \item NGC 2516: K-Means and our model label as \emph{g3}.
+  \item NGC 2632: K-Means and our model label as \emph{g1}.
+  \item NGC 2682: K-Means labels as \emph{g4}, and our model labels as \emph{g2}.
+  \item Melotte 22: K-Means labels as \emph{g1}, and our model labels as \emph{g2}.
+\end{itemize}
+
+As we can observe, labels between K-Means and DECOCC do not match (except for NGC 2632), since we tested these two
+models independently. Thus, each model can label each group differently from the other. Moreover, running the same model
+twice can label the resulting groups differently between the first and the second run (as long as the same seed is not
+assigned). However, regardless whether the labels are different, the stars within the generated clusters should be very
+similar.
+
+In all cases, the DECOCC model resolved properly the identity of the cluster and characterized the membership stars,
+giving compatible results with the ones obtained with classic procedures and VO tools~\cite{valdivielso2009iphas}.
+
+Table~\ref{tab:app_hyperparameters_ngc_2516} describes the hyperparameters used for characterizing the open clusters
+with our method. Compared with the VO tools, we categorize our model as a non-parameterized model since it does not
+depend on parameters referred to as the cluster itself but only on hyperparameters such as the initial number of
+clusters to be found, or the structure of the Clustering Layer.
+
+The proposed method is also non-supervised since we do not need to tell the model which stars belong to the cluster or
+assist it while its training stage.
+
+Only at the end of the characterization, a fine-tuning driven by the user is applied to improve the selection by
+discarding those stars which fall outside the given quantiles. Nevertheless, we do not conceive assumptions about the
+cluster profile, something that we consider in VO tools. This is another evidence that our model is non-parameterized.
 
 %% tabla comparativa de los hyperparametros
 \begin{table}[htbp]
@@ -806,92 +834,53 @@ model may not match.
 
         \end{tabular}
     % }
-    \caption{Hyperparameters used by DECOCC model for the open clusters with different typologies.}
+    \caption{Hyperparameters of DECOCC model for the open clusters with different typologies.}
     \label{tab:app_hyperparameters_ngc_2516}
   \end{center}
 \end{table}
 
-Table~\ref{tab:app_hyperparameters_ngc_2516} shows the hyperparameters used for characterizing the
-open clusters with our method.
-
-In all cases, the DECOCC model has resolved properly the identity of the cluster and has characterized
-the membership stars, giving compatible results with the ones obtained with classic procedures and VO
-tools.
-
-Compared with the mentioned tools, our model can be categorized as a non-parameterized model since it
-does not depend on parameters referred to the cluster itself but only hyperparameters such as the
-initial number of clusters to be found, or the structure of the Clustering Layer used by DEC model.
-
-The proposed method is also non-supervised since we do not need to tell the model which stars belong
-to the cluster or assist it while its training stage.
-
-Only at the end of the characterization, a fine-tuning driven by the user, can be applied in order to
-improve the selection by discarding those stars which fall outside the given quantiles.
-
-In any case, we do not make assumptions about the cluster profile, something that we have to take into
-account when using VO tools. This is another evidence that our model is non-parameterized.
+In summary, we can say that our results improve K-Means. We based this judgment by comparing right ascension,
+declination, parallax, and the number of stars of the cluster found by the two models with the Simbad database. In other
+words, we statistically analyze the results not individualized by stars belonging to the cluster found. We arrange it
+with Simbad because as far as we are concerned, there is no Gaia dataset with classified open clusters.
 
 \section{Conclusions}
 
-From the results shown in Section~\ref{sec:results}, we can say that, in general,
-our model works fine identifying and characterizing open clusters.
-So we have succeeded building a model non-parameterized and non-supervised
-for open cluster characterization. However, some improvements should be done
-in order to improve its accuracy and precision.
+This paper presents a model to characterize open clusters, comprising an Artificial Neural Network, which is neither
+parameterized nor supervised. The model does not require complex hardware. Instead, it can be run on workstations with a
+common GPU, making it accessible for deployment in many research centers.
 
-Another achievement is that we have developed a model that does not require
-complex hardware. Instead, it can be run on workstations with a common GPU,
-making it accessible to be implemented in many research centers.
+The model works well in identifying and characterizing open clusters. However, some improvements must be made to improve
+its accuracy and precision.
 
-We have built a non-parameterized model since the user is not required to provide
-any information about the cluster profile or its properties.
-Nevertheless some tweaks can be done regarding the cluster, like changing the initial
-number of clusters or modifying the clustering layer structure in order to improve
-the final characterization.
+The number of hyperparameters in our model is small and we do not need previous knowledge about the cluster studied,
+which makes it easier to test different settings and automate the process.
 
-Another key point in our model is the initializer kernel.
-This kernel prepares data before passing it to the ANN
-and the results may vary significantly depending on this kernel.
-This is something to avoid, so an improvement to solve this issue is necessary
-in order to have a reliable model which does not depend on the dataset order.
+Building a non-parameterized model is a difficult and sometimes and unfeasible task due to every machine learning model
+requires initial definitions of the hyperparameters to work properly. However, in our model, the user is not required to
+provide any information about the cluster profile or its properties. Making it a non-parameterized model. Nevertheless,
+some tweaks can be done regarding the cluster and the studied region, like changing the initial number of clusters or
+modifying the clustering layer structure to improve the final characterization.
 
-Despite that, comparing our method with Clusterix, we can still say that the
-number of parameters (or hyperparameters) in our model is smaller and that
-we do not need previous knowledge about the studied cluster.
-That makes easier to test different configurations and automate the process.
+The initializer kernel prepares data before passing them to the ANN. This is one of the reasons because the results may
+vary significantly. In future works, we want to avoid it to have a reliable model which does not depend on the dataset
+order.
 
-Furthermore, our model is able to deal with large and open regions. As an example,
-it has succeeded characterizing Melotte 25 (Hiades) OC. Also, the relative proximity
-of this cluster, 45 parsec, makes it difficult to characterize. Clusterix fails
-characterizing this cluster. In this case, our method proposes at least two more
-non-catalogued clusters. The analysis of these new clusters brings out an interesting
-stellar dynamics in the studied region. It could mean that there was a recent
-interaction among different molecular clouds.
+In future, we also want to test our model with a wider range of clusters. In general, we could think of applying it to
+the entire VizieR catalog. So, we could get a better idea about the current limitations of our model and improve it. For
+instance, we could determine with higher accuracy the typologies that our model works well with. Furthermore, we could
+establish different sets of hyperparameters regarding the typology of the cluster.
 
-For all this, we consider that the presented method is good enough to be included
-in the Virtual Observatory toolset. Only a few tweaks must be done in order to make
-our model compatible with other tools of the VO.
+An important aspect we noticed is that with our model new uncatalogued clusters arise from the data apart of the main
+ones. Making it of special interest to study these individual new clusters.
 
-\subsection{Future Works}
+Another possible improvements are either to use DBSCAN instead of K-Means as our initial clustering algorithm, and
+employ DR3 dataset instead of DR2 dataset of Gaia.
 
-One open point to do from now is testing the model with a wider range of clusters.
-In general we could think of applying it to the whole VizieR catalogue.
-That way we could have a better idea about the current limitations of our model
-and we could make some adjustments to improve it. We could determine with higher
-accuracy the typologies that our model works well with, and which ones the model
-does not resolve properly. Furthermore, we could stablish different sets of
-hyperparameters regarding the typology of the cluster.
-
-With our model, new uncatalogued clusters arise from the data apart of the main ones.
-Hence, it is also interesting the individual study of these new clusters.
-
-Another possible change in our model would be using DBSCAN instead of K-Means
-as our initial clustering algorithm. Maybe this algorithm gives us a better starting
-point for the DEC model which could improve the results.
-
-Finally, we have used the Gaia DR2 database as our data source for this work,
-but recently the DR3 dataset has been released.
-Therefore, it is evident the interest on testing our model with this new data.
+Furthermore, our model can deal with large and open regions. As an example, it has succeeded in characterizing Melotte
+25 (Hiades) OC. Also, the relative proximity of this cluster, 45 parsecs, makes it difficult to characterize. Our method
+proposes at least two more non-catalogued clusters. The analysis of these new clusters brings out interesting stellar
+dynamics in the studied region. It could mean that there was a recent interaction among different molecular clouds.
 
 \renewcommand{\refname}{References}
 \bibliographystyle{unsrt}
