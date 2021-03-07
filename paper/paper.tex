@@ -10,31 +10,10 @@
 \author{CD. Álvaro, C. Guzman, J. Álvaro}
 \date{24th of January, 2021}
 
-
-%---------------------------
-%marges
-%---------------------------
-%\usepackage[margin=1.9cm]{geometry}
-%---------------------------
-%---------------------------
-%---------------------------
-%---------------------------
-
 \resumen{
-Characterize and understand \emph{Open Clusters} (OCs) allow us to
-understand better properties and mechanisms about the Universe such as stellar
-formation and the regions where these events occur. They also provide information
-about stellar processes and the evolution of the galactic disk.
+Characterize and understand \emph{Open Clusters} (OCs) allow us to understand better properties and mechanisms about the Universe such as stellar formation and the regions where these events occur. They also provide information about stellar processes and the evolution of the galactic disk.
 
-In this paper, we present a novel method to characterize OCs. Our method employs a
-model built on \emph{Artificial Neural Networks} (ANNs). More specifically, we adapted
-a state of the art model, the \emph{Deep Embedded Clustering} (DEC) model for our purpose.
-The developed method aims to improve classical state of the arts techniques. We improved
-not only in terms of computational efficiency (with lower computational requirements),
-but in usability (reducing the number of hyperparameters to get a good characterization
-of the analyzed clusters). For our experiments, we used the \emph{Gaia DR2 database} as
-the data source, and compared our model with the clustering technique \emph{K-Means}. Our
-method achieves good results, becoming even better (in some of the cases) than current techniques.
+In this paper, we present a novel method to characterize OCs. Our method employs a model built on \emph{Artificial Neural Networks} (ANNs). More specifically, we adapted a state of the art model, the \emph{Deep Embedded Clustering} (DEC) model for our purpose. The developed method aims to improve classical state of the arts techniques. We improved not only in terms of computational efficiency (with lower computational requirements), but in usability (reducing the number of hyperparameters to get a good characterization of the analyzed clusters). For our experiments, we used the \emph{Gaia DR2 database} as the data source, and compared our model with the clustering technique \emph{K-Means}. Our method achieves good results, becoming even better (in some of the cases) than current techniques.
 }
 
 \palabrasclave{
@@ -53,183 +32,69 @@ method achieves good results, becoming even better (in some of the cases) than c
 \end{@twocolumnfalse}
 ]
 
-%\renewcommand{\listfigurename}{Índice de Ilustraciones}
-%\renewcommand{\listtablename}{Índice de Tablas}
-%\renewcommand{\contentsname}{Índice de Contenidos}
-%\renewcommand{\figurename}{Figura}
-%\renewcommand{\tablename}{Tabla}
-%\twocolumn
-
-
-%\frontmatter
-%\tableofcontents
-%\listoffigures
-%\listoftables
-
 \section{Introduction}
 
-Stellar OCs~\cite{janes1982open} are groups of stars gravitationally
-bounded originated from a single molecular gas cloud.
-They share the same chemical composition and age, and that is the reason
-that their metallicity must be uniform since those stars were born from
-the same gas cloud and at the same time stage. Likewise, they have similar
-relative positions inherited from their original gas cloud, which means that
-their distances to the Earth are the same. Therefore, they have a narrow
-dispersion in their parallax value. Moreover, they share similar values
-of proper motion, both in right ascension and declination. For all these
-properties, we can see why the stellar OCs are relevant to understand the
-spiral structure, dynamics, and chemical evolution of our galaxy.
+Stellar OCs~\cite{janes1982open} are groups of stars gravitationally bounded originated from a single molecular gas cloud. They share the same chemical composition and age, and that is the reason that their metallicity must be uniform since those stars were born from the same gas cloud and at the same time stage. Likewise, they have similar relative positions inherited from their original gas cloud, which means that their distances to the Earth are the same. Therefore, they have a narrow dispersion in their parallax value. Moreover, they share similar values of proper motion, both in right ascension and declination. For all these properties, we can see why the stellar OCs are relevant to understand the spiral structure, dynamics, and chemical evolution of our galaxy.
 
-The study of OCs advanced thanks to the huge and precise dataset
-from the Gaia DR2 mission, available since 2018 from~\cite{collaboration2016description}
-and~\cite{gaia2018gaia}. Although, the Gaia DR2 database misreported the chemical
-composition of some OCs, the database has helped to review already known OCs and
-to find new ones.
+The study of OCs advanced thanks to the huge and precise dataset from the Gaia DR2 mission, available since 2018 from~\cite{collaboration2016description} and~\cite{gaia2018gaia}. Although, the Gaia DR2 database misreported the chemical composition of some OCs, the database has helped to review already known OCs and to find new ones.
 
-Characterize an OC refers to the statistical determination of the stars that
-form it. Therefore, the characterization is based on the probability of a star
-being a member of the cluster~\cite{sampedro2016caracterizacion}.
+Characterize an OC refers to the statistical determination of the stars that form it. Therefore, the characterization is based on the probability of a star being a member of the cluster~\cite{sampedro2016caracterizacion}.
 
-Normally, the characterization process considers astrometric features such as
-proper motion in right ascension and declination, or parallax.
-In some cases~\cite{oliveira2013fitting}, it also considers photometric features,
-which helps to generate the H-R diagram~\cite{hypki2018gaia} of the OC candidate stars.
-Those OC candidates should present a sharp profile corresponding to an isochrone curve
-derived from a theoretical model. The model considers metallicity, mass and brightness
-of the stars involved. For all this purpose, we used a set of tools that require
-supervised and parameterized models. It means that we need a previous knowledge of the
-cluster, otherwise we must repeat the process iteratively to achieve valid results.
+Normally, the characterization process considers astrometric features such as proper motion in right ascension and declination, or parallax. In some cases~\cite{oliveira2013fitting}, it also considers photometric features, which helps to generate the H-R diagram~\cite{hypki2018gaia} of the OC candidate stars. Those OC candidates should present a sharp profile corresponding to an isochrone curve derived from a theoretical model. The model considers metallicity, mass and brightness of the stars involved. For all this purpose, we used a set of tools that require supervised and parameterized models. It means that we need a previous knowledge of the cluster, otherwise we must repeat the process iteratively to achieve valid results.
 
-In the present paper, we propose a machine learning model capable of characterizing
-OCs inside a stellar region with no previous knowledge about the region.
-Our model takes advantage of some features (such as proper motion in right ascension
-and declination, and parallax) to train an ANN.
-The ANN clusters all the stars within a given region in groups.
-One of those groups will be the open cluster that interests us.
+In the present paper, we propose a machine learning model capable of characterizing OCs inside a stellar region with no previous knowledge about the region. Our model takes advantage of some features (such as proper motion in right ascension and declination, and parallax) to train an ANN. The ANN clusters all the stars within a given region in groups. One of those groups will be the open cluster that interests us.
 
-Our model contributes with several novelties: i) it is \emph{non-supervised} and
-\emph{non-parameterized}, making easier the automation process of analyzing a
-wide range of regions with different typologies, and ii) it is computationally
-efficient to run in common workstations because it has been developed with
-Python using the Keras framework which takes advantage of modern GPUs to perform
-its computations. That increases significantly the computational capacity of
-our model doing it possible to run on regular workstations.
+Our model contributes with several novelties: i) it is \emph{non-supervised} and \emph{non-parameterized}, making easier the automation process of analyzing a wide range of regions with different typologies, and ii) it is computationally efficient to run in common workstations because it has been developed with Python using the Keras framework which takes advantage of modern GPUs to perform its computations. That increases significantly the computational capacity of our model doing it possible to run on regular workstations.
 
-This paper is organized as follows. Section~\ref{sec:related_works} presents
-some related works and Section~\ref{sec:aims_and_method} describes in detail
-our model. The following Section~\ref{sec:results}, shows the results and compares
-them with a method that involves tools from the Virtual Observatory (VO) such as
-Clusterix~\cite{balaguer2020clusterix}. Finally, the last section concludes and
-outlines future research lines.
+This paper is organized as follows. Section~\ref{sec:related_works} presents some related works and Section~\ref{sec:aims_and_method} describes in detail our model. The following Section~\ref{sec:results}, shows the results and compares them with a method that involves tools from the Virtual Observatory (VO) such as Clusterix~\cite{balaguer2020clusterix}. Finally, the last section concludes and outlines future research lines.
 
 \section{Related Works}
 \label{sec:related_works}
 
-In~\cite{castro2020hunting}, they present one of the initial approaches to detect OCs.
-They search for overdensities in the astrometric space of the galactic disk. Then,
-they identify with photometric information possible OCs. Although it seems easy,
-it is quite hard to face the problem that the near field around the OC has two kinds of
-populations. The first population belongs to the members of the OC stars (from tens or
-hundreds to a few thousand). The second population has a background of stars that do
-not belong to the OC (from tens to hundreds of thousands). Thus, we summarize our problem
-in finding out which stars belong to the OC.
+In~\cite{castro2020hunting}, they present one of the initial approaches to detect OCs. They search for overdensities in the astrometric space of the galactic disk. Then, they identify with photometric information possible OCs. Although it seems easy, it is quite hard to face the problem that the near field around the OC has two kinds of populations. The first population belongs to the members of the OC stars (from tens or hundreds to a few thousand). The second population has a background of stars that do not belong to the OC (from tens to hundreds of thousands). Thus, we summarize our problem in finding out which stars belong to the OC.
 
-Other works (TOPCAT~\cite{taylor2005topcat}, Clusterix 2.0~\cite{balaguer2020clusterix},
-Aladin~\cite{bonnarel2000aladin}, or VOSA~\cite{bayo2008vosa}), first analyze the proper
-motion configuration space of the region of interest. TOPCAT cannot find an open cluster.
-Instead, it requires parameterizing some of the properties of the cluster. This last
-process requires previous knowledge of the cluster. In other words, they perform a supervised
-and manual selection of groups based on overdensities in the proper motion configuration space.
-Clusterix 2.0 is an interactive web-based tool that can help the choice of groups. Take the
-proper motion diagram without making any previous assumptions about the membership of the
-candidate star. And empirically determine the frequency functions. It employs normal Gaussian
-kernel functions, defined as:
+Other works (TOPCAT~\cite{taylor2005topcat}, Clusterix 2.0~\cite{balaguer2020clusterix}, Aladin~\cite{bonnarel2000aladin}, or VOSA~\cite{bayo2008vosa}), first analyze the proper motion configuration space of the region of interest. TOPCAT cannot find an open cluster. Instead, it requires parameterizing some of the properties of the cluster. This last process requires previous knowledge of the cluster. In other words, they perform a supervised and manual selection of groups based on overdensities in the proper motion configuration space. Clusterix 2.0 is an interactive web-based tool that can help the choice of groups. Take the proper motion diagram without making any previous assumptions about the membership of the candidate star. And empirically determine the frequency functions. It employs normal Gaussian kernel functions, defined as:
 
 \begin{equation*}
   K(a, b) = \frac{1}{2 \pi h^{2}} \exp{ \left[ - \frac{1}{2}\frac{\left( a - a_{i} \right)^{2} + \left( b - b_{j} \right)^{2}}{ h^{2}} \right]}
 \end{equation*}
 
-where \(( a, b )\) are the proper motion configuration space, \(( i, j )\) is a point
-located in the center of that provides the maximum contribution for calculating the
-local density, and \(h\) is the \emph{smoothing} parameter, which it is measured in the
-same units as the proper motion.
+where \(( a, b )\) are the proper motion configuration space, \(( i, j )\) is a point located in the center of that provides the maximum contribution for calculating the local density, and \(h\) is the \emph{smoothing} parameter, which it is measured in the same units as the proper motion.
 
-Clusterix depends fundamentally on the selection of three radii in the studied region.
-The inner radius contains stars that belong or not to the cluster. While the outermost
-radii define a ring that only contains stars that do not belong to the cluster.
-Furthermore, it is also sensitive to other parameters, such as the soften parameter
-\(h\), or other restrictions related to the searched proper motions.
+Clusterix depends fundamentally on the selection of three radii in the studied region. The inner radius contains stars that belong or not to the cluster. While the outermost radii define a ring that only contains stars that do not belong to the cluster. Furthermore, it is also sensitive to other parameters, such as the soften parameter \(h\), or other restrictions related to the searched proper motions.
 
-If the analysis performed by Clusterix is successful, it returns the probability that
-each star belongs to the open cluster. The results can then be imported into TOPCAT
-to continue the refinement process and obtain a valid characterization.
+If the analysis performed by Clusterix is successful, it returns the probability that each star belongs to the open cluster. The results can then be imported into TOPCAT to continue the refinement process and obtain a valid characterization.
 
-Another recent approach~\cite{castro2020hunting} solves the problem using machine
-learning techniques. It searches systematically for overdensities in the astrometric
-space of the galactic disk and subsequent identification of open clusters using
-photometric information. It includes two phases:
+Another recent approach~\cite{castro2020hunting} solves the problem using machine learning techniques. It searches systematically for overdensities in the astrometric space of the galactic disk and subsequent identification of open clusters using photometric information. It includes two phases:
 
 \begin{enumerate}
-  \item it employs DBSCAN, an unsupervised clustering algorithm, to search for
-        overdensities,
-  \item and applies a deep learning ANN to identify isochrone patterns within
-        the detected overdensities and thus proceed to confirm them as OCs. They
-        previously trained the ANN with magnitude diagrams.
+  \item it employs DBSCAN, an unsupervised clustering algorithm, to search for overdensities,
+  \item and applies a deep learning ANN to identify isochrone patterns within the detected overdensities and thus proceed to confirm them as OCs. They previously trained the ANN with magnitude diagrams.
 \end{enumerate}
 
-They carry out their experiments at the Barcelona Supercomputing Center, MareNostrum 42.
-Thereby, the neural network handles the image recognition process with isochrone
-patterns without applying theoretical models derived from values such as metallicity
-or masses, among others. Their work concludes with the identification of 582 new open
-clusters distributed along with the galactic disk for a galactic declination below 20
-degrees, increasing the number of known open clusters by 45\%.
+They carry out their experiments at the Barcelona Supercomputing Center, MareNostrum 42. Thereby, the neural network handles the image recognition process with isochrone patterns without applying theoretical models derived from values such as metallicity or masses, among others. Their work concludes with the identification of 582 new open clusters distributed along with the galactic disk for a galactic declination below 20 degrees, increasing the number of known open clusters by 45\%.
 
-In contrast to~\cite{castro2020hunting}, we lack a supercomputer like MareNostrum
-for our experiments. For this reason, our goal is to obtain a new novel method that
-allows the characterization of open clusters without doing a blind search for
-characterization clusters. We advocate the idea of building an unsupervised and
-non-parameterized method. Therefore, it can be suitable for automated processes.
+In contrast to~\cite{castro2020hunting}, we lack a supercomputer like MareNostrum for our experiments. For this reason, our goal is to obtain a new novel method that allows the characterization of open clusters without doing a blind search for characterization clusters. We advocate the idea of building an unsupervised and non-parameterized method. Therefore, it can be suitable for automated processes.
 
 \section{Open Cluster Characterization Method}
 \label{sec:aims_and_method}
 
-In the literature, we have several clustering algorithms, such as K-Means, Mean-Shift
-Clustering, DBSCAN~\cite{ester1996density} among others, that can help us achieve
-our aim. Each one behaves better according to the distribution of the objects to
-be grouped. However, we need to establish a large number of clusters to find the open cluster
-we are looking for. It complicates the identification of the OC because most of the
-time falls in many outliers.
+In the literature, we have several clustering algorithms, such as K-Means, Mean-Shift Clustering, DBSCAN~\cite{ester1996density} among others, that can help us achieve our aim. Each one behaves better according to the distribution of the objects to be grouped. However, we need to establish a large number of clusters to find the open cluster we are looking for. It complicates the identification of the OC because most of the time falls in many outliers.
 
-The unsupervised \emph{Deep Embedding for Clustering Analysis} (\emph{DEC})
-model~\cite{xie2016unsupervised} is a refinement K-Means based on ANN. It starts with
-K-Means. And then, it trains an autoencoder to reduce the feature space and pass them
-through a Clustering Layer which refines the previous selection.
+The unsupervised \emph{Deep Embedding for Clustering Analysis} (\emph{DEC}) model~\cite{xie2016unsupervised} is a refinement K-Means based on ANN. It starts with K-Means. And then, it trains an autoencoder to reduce the feature space and pass them through a Clustering Layer which refines the previous selection.
 
-With all this in mind, our method is based on the DEC model. We adapted it to manage data
-groups based on the dynamic properties of the stars. Thus, we have an unsupervised
-clustering model for open cluster characterization. The model fits a wide range of
-clusters without the need for fine-tuning a high number of hyperparameters.
+With all this in mind, our method is based on the DEC model. We adapted it to manage data groups based on the dynamic properties of the stars. Thus, we have an unsupervised clustering model for open cluster characterization. The model fits a wide range of clusters without the need for fine-tuning a high number of hyperparameters.
 
 \subsection{Selection of the Catalog}
 
-In this work, we make use of Gaia DR2 as DR3 has not been released in time for us to
-include it. Gaia DR2 is a multidimensional dataset obtained by ESA's Gaia mission
-(located at L2, 1.5 million kilometers from Earth) and operational since 2014. The
-catalog has high precision and accuracy astrometric data for more than 1.7 billion
-stellar sources and magnitudes in three photometric filters (G, BP, and RP) for more
-than 1,300 million sources.
+In this work, we make use of Gaia DR2 as DR3 has not been released in time for us to include it. Gaia DR2 is a multidimensional dataset obtained by ESA's Gaia mission (located at L2, 1.5 million kilometers from Earth) and operational since 2014. The catalog has high precision and accuracy astrometric data for more than 1.7 billion stellar sources and magnitudes in three photometric filters (G, BP, and RP) for more than 1,300 million sources.
 
-We start by selecting a region from the OpenClust~\cite{dias2002new} catalog and
-downloading it from the Gaia DR2 database. The radius of the downloaded region from Gaia
-is 1.5 times greater than that recorded in OpenClust, ensuring that it includes several
-stars that do not belong to the open cluster.
+We start by selecting a region from the OpenClust~\cite{dias2002new} catalog and downloading it from the Gaia DR2 database. The radius of the downloaded region from Gaia is 1.5 times greater than that recorded in OpenClust, ensuring that it includes several stars that do not belong to the open cluster.
 
 \subsection{Selection of Features}
 \label{sec:feature_selection}
 
-For the selection of features, we studied the Melotte 22 dataset.
-Table~\ref{tab:sample_features_melotte22_region} describes an example of the region Melotte 22.
-Each row represents the features of a star.
+For the selection of features, we studied the Melotte 22 dataset. Table~\ref{tab:sample_features_melotte22_region} describes an example of the region Melotte 22. Each row represents the features of a star.
 
 \begin{table}[!htbp]
   \begin{center}
@@ -255,15 +120,9 @@ Each row represents the features of a star.
   \end{center}
 \end{table}
 
-Proper motion in right ascension (column pmra) and declination (column pmdec) seems
-like a natural choice since stars belonging to the same OC share a common motion vector.
-Parallax (column parallax) is another relevant feature. It lets us know how far stars
-are from us. Besides, since all stars within an open cluster were born from the same
-dust cloud, they must all have similar parallax.
+Proper motion in right ascension (column pmra) and declination (column pmdec) seems like a natural choice since stars belonging to the same OC share a common motion vector. Parallax (column parallax) is another relevant feature. It lets us know how far stars are from us. Besides, since all stars within an open cluster were born from the same dust cloud, they must all have similar parallax.
 
-However, we are not going to use these raw features. Instead, we take a combination
-of them. Figure~\ref{fig:features_melotte_22} shows a pairwise relationship of our
-combination of features from Melotte 22.
+However, we are not going to use these raw features. Instead, we take a combination of them. Figure~\ref{fig:features_melotte_22} shows a pairwise relationship of our combination of features from Melotte 22.
 
 \begin{figure*}[!hbt]
   \centering
@@ -272,63 +131,33 @@ combination of features from Melotte 22.
   \label{fig:features_melotte_22}
 \end{figure*}
 
-First, we correct proper motion in right ascension and declination by dividing them by
-the parallax (variables pmra\_corr and pmdec\_corr, respectively). That way, we normalize
-these quantities and help our clustering models to improve their performance. The modulus
-of the proper motion (variable pmmod in Figure~\ref{fig:features_melotte_22}) is another
-computed property that we considered. We use it to relate both features and therefore
-force our model to keep them tight.
+First, we correct proper motion in right ascension and declination by dividing them by the parallax (variables pmra\_corr and pmdec\_corr, respectively). That way, we normalize these quantities and help our clustering models to improve their performance. The modulus of the proper motion (variable pmmod in Figure~\ref{fig:features_melotte_22}) is another computed property that we considered. We use it to relate both features and therefore force our model to keep them tight.
 
 \subsection{Deep Open Clustering of Stars}
 \label{sec:deep_open_clustering}
 
 In this section, we explain our model in more detail.
 
-One of the main problems to define our model is that we do not have a labeled
-dataset to train a supervised model. To solve it, we employ an unsupervised self-trained
-model. Thus, we adapted the Unsupervised \emph{DEC} model~\cite{xie2016unsupervised}
-to our requirements.
+One of the main problems to define our model is that we do not have a labeled dataset to train a supervised model. To solve it, we employ an unsupervised self-trained model. Thus, we adapted the Unsupervised \emph{DEC} model~\cite{xie2016unsupervised} to our requirements.
 
 Like the DEC model, we have two main components:
 
 \begin{itemize}
-  \item \textbf{deep autoencoder:} it is a neural network that learns to copy its input
-        to its output. It is composed of encoder layers followed by decoder layers.
-        We trained it before passing the data through the next component, the
-        \emph{clustering layer}. Recent research~\cite{vincent2010stacked,hinton2006reducing}
-        showed that the autoencoder provides meaningful and well-separated representations
-        on real-world datasets.
-  \item \textbf{clustering layer:} it receives data transformed by the autoencoder
-        and iteratively is trained until a convergence criterion is met.
+  \item \textbf{deep autoencoder:} it is a neural network that learns to copy its input to its output. It is composed of encoder layers followed by decoder layers. We trained it before passing the data through the next component, the \emph{clustering layer}. Recent research~\cite{vincent2010stacked,hinton2006reducing} showed that the autoencoder provides meaningful and well-separated representations on real-world datasets.
+  \item \textbf{clustering layer:} it receives data transformed by the autoencoder and iteratively is trained until a convergence criterion is met.
 \end{itemize}
 
-The deep autoencoder is used to transform the input data into a latent space using a
-non-linear mapping function \(f_{\theta} : X \rightarrow Z\).
+The deep autoencoder is used to transform the input data into a latent space using a non-linear mapping function \(f_{\theta} : X \rightarrow Z\).
 
-We trained the autoencoder before fitting the model to generate predictions.
-Then, we use the encoder layers of the autoencoder with the aim of transforming
-input data to the latent space \(Z\). Once the data has been transformed, a K-Means
-clusterer is used to make an initial clustering. K-Means cluster centers are used
-as the initial weights for the clustering layer.
+We trained the autoencoder before fitting the model to generate predictions. Then, we use the encoder layers of the autoencoder with the aim of transforming input data to the latent space \(Z\). Once the data has been transformed, a K-Means clusterer is used to make an initial clustering. K-Means cluster centers are used as the initial weights for the clustering layer.
 
-With that initial configuration, the model iterates alternating between computing an
-auxiliary target distribution (soft assignment) and minimizing the Kullback-Leiber (KL)
-divergence~\cite{kullback1951information} to it. This unsupervised algorithm allows us
-to improve the clustering.
+With that initial configuration, the model iterates alternating between computing an auxiliary target distribution (soft assignment) and minimizing the Kullback-Leiber (KL) divergence~\cite{kullback1951information} to it. This unsupervised algorithm allows us to improve the clustering.
 
-As it was described in Section~\ref{sec:feature_selection}, the number of features we
-deal is not too large. However, this latent space helps us to start with a reduced number
-of features and avoids the \emph{``curse of dimensionality''}~\cite{bellman1961curse}.
+As it was described in Section~\ref{sec:feature_selection}, the number of features we deal is not too large. However, this latent space helps us to start with a reduced number of features and avoids the \emph{``curse of dimensionality''}~\cite{bellman1961curse}.
 
-In the soft assignment stage, we used \emph{Student's t-distribution} as a kernel to
-measure the similarity between the embedded points and the cluster centroid.
-While in the KL divergence minimization the algorithm iteratively refines clusters by learning
-from their high confidence assignments with the help of an auxiliary target distribution.
-The model is trained by matching the soft assignment to the target distribution.
-The choice of this target distribution is crucial for model's performance.
+In the soft assignment stage, we used \emph{Student's t-distribution} as a kernel to measure the similarity between the embedded points and the cluster centroid. While in the KL divergence minimization the algorithm iteratively refines clusters by learning from their high confidence assignments with the help of an auxiliary target distribution. The model is trained by matching the soft assignment to the target distribution. The choice of this target distribution is crucial for model's performance.
 
-In this work, we took the target distribution~\cite{xie2016unsupervised}
-defined in Equation~\ref{eq:student_tdistribution}.
+In this work, we took the target distribution~\cite{xie2016unsupervised} defined in Equation~\ref{eq:student_tdistribution}.
 
 \begin{equation}
   p_{ij} = \frac{q^{2}_{ij} / f_{j}}{\sum_{j'}q^{2}_{ij'}/f_{j'}}
@@ -340,8 +169,7 @@ This target distribution has the following properties:
 \begin{itemize}
   \item strengthen predictions (i.e., improve cluster purity),
   \item put more emphasis on data points assigned with high confidence,
-  \item normalize loss contribution of each centroid to prevent large clusters
-        from distorting the hidden feature space.
+  \item normalize loss contribution of each centroid to prevent large clusters from distorting the hidden feature space.
 \end{itemize}
 
 \begin{figure*}[!hbt]
@@ -351,10 +179,7 @@ This target distribution has the following properties:
   \label{fig:dec_model_setup}
 \end{figure*}
 
-Figure~\ref{fig:dec_model_setup} shows the layer setup of our model.
-It is simpler than the used in~\cite{xie2016unsupervised} because we selected a smaller
-number of features. Therefore, using the same configuration would result in a model so
-powerful that it would incur overfitting issues that cannot make the correct predictions.
+Figure~\ref{fig:dec_model_setup} shows the layer setup of our model. It is simpler than the used in~\cite{xie2016unsupervised} because we selected a smaller number of features. Therefore, using the same configuration would result in a model so powerful that it would incur overfitting issues that cannot make the correct predictions.
 
 \begin{figure*}[!htbp]
   \centering
@@ -382,9 +207,7 @@ powerful that it would incur overfitting issues that cannot make the correct pre
   \label{fig:kmeans_comparisons_melotte_22}
 \end{figure*}
 
-Finally, we can refine this selection by filtering those stars that are below and above
-the 0.10 and 0.90 quantiles for each group, respectively. That way we remove the most
-doubtful values from the selection.
+Finally, we can refine this selection by filtering those stars that are below and above the 0.10 and 0.90 quantiles for each group, respectively. That way we remove the most doubtful values from the selection.
 
 \paragraph{Discussion.}
 
@@ -415,32 +238,13 @@ doubtful values from the selection.
   \label{fig:melotte_25_characterization_evolution}
 \end{figure*}
 
-Since we are looking for a single cluster, it seems reasonable to use a clustering algorithm
-like K-Means to find two clusters. One for the desired OC and another for stars that do not
-belong to the OC. However, the idea is not completely right. This is due to the fact that OC's
-stars are surrounded by other stars with possibly similar properties. Therefore, setting the
-number of clusters to two is too low to separate them properly.
+Since we are looking for a single cluster, it seems reasonable to use a clustering algorithm like K-Means to find two clusters. One for the desired OC and another for stars that do not belong to the OC. However, the idea is not completely right. This is due to the fact that OC's stars are surrounded by other stars with possibly similar properties. Therefore, setting the number of clusters to two is too low to separate them properly.
 
-Figure~\ref{fig:kmeans_comparisons_melotte_22} shows an example. It describes the results of
-applying different configurations of K-Means in Melotte 22, N=2, N=5 and N=8. For each configuration
-of K-Means, we show the proper motion in right ascension and declination (figures in the top position),
-and the parallax distribution (figures in the down position).
+Figure~\ref{fig:kmeans_comparisons_melotte_22} shows an example. It describes the results of applying different configurations of K-Means in Melotte 22, N=2, N=5 and N=8. For each configuration of K-Means, we show the proper motion in right ascension and declination (figures in the top position), and the parallax distribution (figures in the down position).
 
-As we can see in the parallax distribution, lower values of the number of clusters (e.g., N=2) assign
-many stars to the group \emph{g0} (purple) that should belong to group \emph{g1}. These badly assigned stars
-are the ones that have the parallax far from the 7.3mas resonance. In contrast, large values of the
-number of clusters allow us to isolate more accurately the resonance in parallax at \(\approx 7.3mas\).
-For instance, at N=8, more groups are better compartmentalized. Group \emph{g2} would be the one corresponding
-to the OC that we are looking for, and all the other groups are those that we would like to be a single
-group. That is the stars that do not belong to the OC. The disadvantage is that K-Means with N=8 forms more
-groups of stars, which complicates the task of finding the desired OC, since we would like to get just two
-groups. Therefore, with a K-Means we have to find a way to set the right value for the number of clusters
-to isolate the searched cluster without creating too many groups. To solve this issue, we can try to
-estimate the best number of clusters by using the \emph{silhouette score}~\cite{rousseeuw1987silhouettes}.
+As we can see in the parallax distribution, lower values of the number of clusters (e.g., N=2) assign many stars to the group \emph{g0} (purple) that should belong to group \emph{g1}. These badly assigned stars are the ones that have the parallax far from the 7.3mas resonance. In contrast, large values of the number of clusters allow us to isolate more accurately the resonance in parallax at \(\approx 7.3mas\). For instance, at N=8, more groups are better compartmentalized. Group \emph{g2} would be the one corresponding to the OC that we are looking for, and all the other groups are those that we would like to be a single group. That is the stars that do not belong to the OC. The disadvantage is that K-Means with N=8 forms more groups of stars, which complicates the task of finding the desired OC, since we would like to get just two groups. Therefore, with a K-Means we have to find a way to set the right value for the number of clusters to isolate the searched cluster without creating too many groups. To solve this issue, we can try to estimate the best number of clusters by using the \emph{silhouette score}~\cite{rousseeuw1987silhouettes}.
 
-K-Means does a good job making an initial clustering. However, too many clusters arise
-from this characterization and the OC is still polluted with stars that do not belong to it.
-Moreover, we would like to reduce the amount of clusters too.
+K-Means does a good job making an initial clustering. However, too many clusters arise from this characterization and the OC is still polluted with stars that do not belong to it. Moreover, we would like to reduce the amount of clusters too.
 
 \newpage
 
@@ -450,41 +254,21 @@ Moreover, we would like to reduce the amount of clusters too.
 We performed two tested of our model:
 
 \begin{enumerate}
-  \item with the Melotte 25 dataset, which is one of the most difficult dataset to characterize OC
-        by its distribution and extension, because it is located in a region with 400,000 stars.
+  \item with the Melotte 25 dataset, which is one of the most difficult dataset to characterize OC by its distribution and extension, because it is located in a region with 400,000 stars.
   \item with a variety of clusters of different typologies.
 \end{enumerate}
 
-In order to support the discussion presented in Section~\ref{sec:deep_open_clustering}, in the both
-tests we compared our model against a K-Means classification algorithm. In addition, we perform a
-second execution only in our model where we filtered the quantiles in the Melotte 25 dataset.
+In order to support the discussion presented in Section~\ref{sec:deep_open_clustering}, in the both tests we compared our model against a K-Means classification algorithm. In addition, we perform a second execution only in our model where we filtered the quantiles in the Melotte 25 dataset.
 
-Our DECOCC model was implemented in Python 3.8 using the Keras 2.2 framework and Jupyter
-Notebooks~\cite{Kluyver2016jupyter}. All tests were run on an Apple Mac Pro Late 2013 with a
-2.7GHz 12-Core Intel Xeon E5-2697v2, and 64GB RAM 1866MHz DDR3. For the GPU, we use a graphic
-card AMD FirePro D700 with 6GB~\footnote{All resources developed for this project are available
-at \href{https://github.com/cdalvaro/machine-learning-master-thesis}
-{https://github.com/cdalvaro/machine-learning-master-thesis}}.
+Our DECOCC model was implemented in Python 3.8 using the Keras 2.2 framework and Jupyter Notebooks~\cite{Kluyver2016jupyter}. All tests were run on an Apple Mac Pro Late 2013 with a 2.7GHz 12-Core Intel Xeon E5-2697v2, and 64GB RAM 1866MHz DDR3. For the GPU, we use a graphic card AMD FirePro D700 with 6GB~\footnote{All resources developed for this project are available at \href{https://github.com/cdalvaro/machine-learning-master-thesis}{https://github.com/cdalvaro/machine-learning-master-thesis}}.
 
 \subsection{Melotte 25 Dataset}
 
-Figure~\ref{fig:melotte_25_characterization_evolution} shows the evolution of the characterization
-of Melotte 25. The first column corresponds to the characterization obtained by applying only
-K-Means (with N=10). The middle column shows the result of our model. And the last column describes
-the characterization made by our model but filtering the quantiles lower than 0.10 and higher than
-0.90. The top row shows the proper motion configuration space, while the bottom one shows the
-Hertzsprung–Russell diagrams.
+Figure~\ref{fig:melotte_25_characterization_evolution} shows the evolution of the characterization of Melotte 25. The first column corresponds to the characterization obtained by applying only K-Means (with N=10). The middle column shows the result of our model. And the last column describes the characterization made by our model but filtering the quantiles lower than 0.10 and higher than 0.90. The top row shows the proper motion configuration space, while the bottom one shows the Hertzsprung–Russell diagrams.
 
 %% Comparación con K-Means, DEC y DEC filter
 
-The clustering made by K-Means arises 9 groups, but most of them contain stars that do not belong
-to the Melotte 25 OC. However, in our model, the stars regroup and although we have the same 9
-groups of K-Means, almost all of the stars are assigned to a group that would contain the stars
-that would not belong to the OC. The remaining groups contain either the OC we are looking for or
-other possible new OCs inside the studied region. Moreover, if we exclude those stars that remain
-below 0.10 and above 0.90 percentiles, and execute again this refinement in our model (third column
-in Figure~\ref{fig:melotte_25_characterization_evolution}), we observe an improvement in the
-results of our DECOCC model.
+The clustering made by K-Means arises 9 groups, but most of them contain stars that do not belong to the Melotte 25 OC. However, in our model, the stars regroup and although we have the same 9 groups of K-Means, almost all of the stars are assigned to a group that would contain the stars that would not belong to the OC. The remaining groups contain either the OC we are looking for or other possible new OCs inside the studied region. Moreover, if we exclude those stars that remain below 0.10 and above 0.90 percentiles, and execute again this refinement in our model (third column in Figure~\ref{fig:melotte_25_characterization_evolution}), we observe an improvement in the results of our DECOCC model.
 
 \begin{figure}[!hbt]
   % \centering
@@ -509,10 +293,7 @@ results of our DECOCC model.
   \label{fig:result_melotte_25_dec}
 \end{figure}
 
-The dataset Melotte 25 is located at 66.725 degrees in right ascension and 15.867 degrees in
-declination with a radius of 165 arcmin. As it was mentioned before, this region contains more than
-400,000 stars making it difficult to group stars of the same region. Our model labels Melotte 25 as
-group \emph{g5}. Figure~\ref{fig:result_melotte_25_dec} shows the parallax histogram.
+The dataset Melotte 25 is located at 66.725 degrees in right ascension and 15.867 degrees in declination with a radius of 165 arcmin. As it was mentioned before, this region contains more than 400,000 stars making it difficult to group stars of the same region. Our model labels Melotte 25 as group \emph{g5}. Figure~\ref{fig:result_melotte_25_dec} shows the parallax histogram.
 
 \begin{table}[!htbp]
   \begin{center}
@@ -533,16 +314,9 @@ group \emph{g5}. Figure~\ref{fig:result_melotte_25_dec} shows the parallax histo
   \end{center}
 \end{table}
 
-Table~\ref{tab:results_melotte_25} summarizes the results for the Melotte 25 dataset. The first column
-shows the name of the method. Second and third columns describe the proper motion in right ascension and
-declination, respectively. The fourth column shows the parallax. And the last column presents the number
-of stars corresponding to the OC. Columns from second to fourth have their respective deviations computed
-as the standard error of the predicted group.
+Table~\ref{tab:results_melotte_25} summarizes the results for the Melotte 25 dataset. The first column shows the name of the method. Second and third columns describe the proper motion in right ascension and declination, respectively. The fourth column shows the parallax. And the last column presents the number of stars corresponding to the OC. Columns from second to fourth have their respective deviations computed as the standard error of the predicted group.
 
-By comparing the results obtained with our DECOCC model, we can see that they are in range with those
-extracted from Simbad astronomical database~\cite{wenger2000simbad} (first row in
-Table~\ref{tab:results_melotte_25}). While the results provided by K-Means model are far from the official
-data. This comparison demonstrates that our model improves the results obtained with a raw K-Means.
+By comparing the results obtained with our DECOCC model, we can see that they are in range with those extracted from Simbad astronomical database~\cite{wenger2000simbad} (first row in Table~\ref{tab:results_melotte_25}). While the results provided by K-Means model are far from the official data. This comparison demonstrates that our model improves the results obtained with a raw K-Means.
 
 \begin{table}[!htb]
   \begin{center}
@@ -559,32 +333,20 @@ data. This comparison demonstrates that our model improves the results obtained 
   \end{center}
 \end{table}
 
-Table~\ref{tab:hyperparameters_melotte_25} shows the hyperparameters used for the characterization. We used
-them to fine-tuning our model and improve its accuracy. Although they depend on the studied region, none of
-them are related with physical properties of the cluster, which makes it easy to automate the selection of
-hyperparameters.
+Table~\ref{tab:hyperparameters_melotte_25} shows the hyperparameters used for the characterization. We used them to fine-tuning our model and improve its accuracy. Although they depend on the studied region, none of them are related with physical properties of the cluster, which makes it easy to automate the selection of hyperparameters.
 
 \subsection{Clusters With Different Typologies}
 
-We perform now more exhaustive tests of our DECOCC model using open clusters with different typologies (e.g.,
-large, small, more extensive, or more concentrated within the region to be analyzed):
+We perform now more exhaustive tests of our DECOCC model using open clusters with different typologies (e.g., large, small, more extensive, or more concentrated within the region to be analyzed):
 
 \begin{itemize}
-  \item NGC 2516, which has the proper motion center deviated from the origin but embedded within a large cloud
-        of stars with similar proper motions.
-  \item NGC 2632, which, in addition to Melotte 22 (explained below), is a cluster whose proper motion center is
-        not at the origin and has a well-separated parallax center.
-  \item NGC 2682, which has the parallax centered within the region's Gaussian, making it difficult its detection.
-        Moreover, same as NGC 2516, the proper motion center is deviated from the origin.
-  \item Melotte 22, as well as Melotte 25, is a cluster closer to our galaxy. That causes its membership stars to
-        be more scattered than previous clusters which are more compact.
+  \item NGC 2516, which has the proper motion center deviated from the origin but embedded within a large cloud of stars with similar proper motions.
+  \item NGC 2632, which, in addition to Melotte 22 (explained below), is a cluster whose proper motion center is not at the origin and has a well-separated parallax center.
+  \item NGC 2682, which has the parallax centered within the region's Gaussian, making it difficult its detection. Moreover, same as NGC 2516, the proper motion center is deviated from the origin.
+  \item Melotte 22, as well as Melotte 25, is a cluster closer to our galaxy. That causes its membership stars to be more scattered than previous clusters which are more compact.
 \end{itemize}
 
-Table~\ref{tab:clusters_summary} describes more specific information about the previous clusters (we also include
-information about the Melotte 25 open cluster, which was previously analyzed). The first column shows the name of
-the cluster. The remaining columns are the right ascension, declination, radius, and the number of stars of studied
-clusters. The last column (\# stars) corresponds to those stars contained within a cone of center \((\alpha, \delta)\)
-and radius the cluster's radius multiplied by a factor of 1.5.
+Table~\ref{tab:clusters_summary} describes more specific information about the previous clusters (we also include information about the Melotte 25 open cluster, which was previously analyzed). The first column shows the name of the cluster. The remaining columns are the right ascension, declination, radius, and the number of stars of studied clusters. The last column (\# stars) corresponds to those stars contained within a cone of center \((\alpha, \delta)\) and radius the cluster's radius multiplied by a factor of 1.5.
 
 \begin{table}[htbp]
   \begin{center}
@@ -644,16 +406,9 @@ and radius the cluster's radius multiplied by a factor of 1.5.
   \end{center}
 \end{table*}
 
-As we can see, all those clusters have a wide variety of diameters, from 25 to 330 arcmin, as well as the number
-of stars that belong to them. For instance, NGC 2682 has 3,000 stars while Melotte 25 is inside a region with more
-than 400,000 stars.
+As we can see, all those clusters have a wide variety of diameters, from 25 to 330 arcmin, as well as the number of stars that belong to them. For instance, NGC 2682 has 3,000 stars while Melotte 25 is inside a region with more than 400,000 stars.
 
-Table~\ref{tab:app_results_ngc_2516} describes a summary of the results for the clusters with different typologies.
-Again, our DECOCC model presents similar results from those extracted from the astronomical database Simbad. Except for
-the open cluster NGC 2632. This is so because the center of the proper motion is not at the origin and generates a more
-separate center of parallax, which makes it difficult to characterize the open cluster. Compared to K-Means, our model
-presents more robust results in more difficult open clusters, such as the NGC 2682 that has the parallax centered within
-the region's Gaussian.
+Table~\ref{tab:app_results_ngc_2516} describes a summary of the results for the clusters with different typologies. Again, our DECOCC model presents similar results from those extracted from the astronomical database Simbad. Except for the open cluster NGC 2632. This is so because the center of the proper motion is not at the origin and generates a more separate center of parallax, which makes it difficult to characterize the open cluster. Compared to K-Means, our model presents more robust results in more difficult open clusters, such as the NGC 2682 that has the parallax centered within the region's Gaussian.
 
 %% comparativa de las figuras de los open clusters
 \begin{figure*}[!hbt]
@@ -766,9 +521,7 @@ the region's Gaussian.
   \label{fig:melotte_22_ngc_2682_characterization_evolution}
 \end{figure*}
 
-Figures~\ref{fig:ngc_2516_ngc_2632_characterization_evolution} (describes NGC 2516 and NGC 2632)
-and~\ref{fig:melotte_22_ngc_2682_characterization_evolution} (describes NGC 2682 and Melotte 22) show the
-groups found for the three models. For each open cluster, we describe the parallax and hr diagram.
+Figures~\ref{fig:ngc_2516_ngc_2632_characterization_evolution} (describes NGC 2516 and NGC 2632) and~\ref{fig:melotte_22_ngc_2682_characterization_evolution} (describes NGC 2682 and Melotte 22) show the groups found for the three models. For each open cluster, we describe the parallax and hr diagram.
 
 In each open cluster, the models K-Means and DECOCC label the open cluster in the following groups:
 
@@ -779,26 +532,15 @@ In each open cluster, the models K-Means and DECOCC label the open cluster in th
   \item Melotte 22: K-Means labels as \emph{g1}, and our model labels as \emph{g2}.
 \end{itemize}
 
-As we can observe, labels between K-Means and DECOCC do not match (except for NGC 2632), since we tested these two
-models independently. Thus, each model can label each group differently from the other. Moreover, running the same model
-twice can label the resulting groups differently between the first and the second run (as long as the same seed is not
-assigned). However, regardless whether the labels are different, the stars within the generated clusters should be very
-similar.
+As we can observe, labels between K-Means and DECOCC do not match (except for NGC 2632), since we tested these two models independently. Thus, each model can label each group differently from the other. Moreover, running the same model twice can label the resulting groups differently between the first and the second run (as long as the same seed is not assigned). However, regardless whether the labels are different, the stars within the generated clusters should be very similar.
 
-In all cases, the DECOCC model resolved properly the identity of the cluster and characterized the membership stars,
-giving compatible results with the ones obtained with classic procedures and VO tools~\cite{valdivielso2009iphas}.
+In all cases, the DECOCC model resolved properly the identity of the cluster and characterized the membership stars, giving compatible results with the ones obtained with classic procedures and VO tools~\cite{valdivielso2009iphas}.
 
-Table~\ref{tab:app_hyperparameters_ngc_2516} describes the hyperparameters used for characterizing the open clusters
-with our method. Compared with the VO tools, we categorize our model as a non-parameterized model since it does not
-depend on parameters referred to as the cluster itself but only on hyperparameters such as the initial number of
-clusters to be found, or the structure of the Clustering Layer.
+Table~\ref{tab:app_hyperparameters_ngc_2516} describes the hyperparameters used for characterizing the open clusters with our method. Compared with the VO tools, we categorize our model as a non-parameterized model since it does not depend on parameters referred to as the cluster itself but only on hyperparameters such as the initial number of clusters to be found, or the structure of the Clustering Layer.
 
-The proposed method is also non-supervised since we do not need to tell the model which stars belong to the cluster or
-assist it while its training stage.
+The proposed method is also non-supervised since we do not need to tell the model which stars belong to the cluster or assist it while its training stage.
 
-Only at the end of the characterization, a fine-tuning driven by the user is applied to improve the selection by
-discarding those stars which fall outside the given quantiles. Nevertheless, we do not conceive assumptions about the
-cluster profile, something that we consider in VO tools. This is another evidence that our model is non-parameterized.
+Only at the end of the characterization, a fine-tuning driven by the user is applied to improve the selection by discarding those stars which fall outside the given quantiles. Nevertheless, we do not conceive assumptions about the cluster profile, something that we consider in VO tools. This is another evidence that our model is non-parameterized.
 
 %% tabla comparativa de los hyperparametros
 \begin{table}[htbp]
@@ -839,48 +581,27 @@ cluster profile, something that we consider in VO tools. This is another evidenc
   \end{center}
 \end{table}
 
-In summary, we can say that our results improve K-Means. We based this judgment by comparing right ascension,
-declination, parallax, and the number of stars of the cluster found by the two models with the Simbad database. In other
-words, we statistically analyze the results not individualized by stars belonging to the cluster found. We arrange it
-with Simbad because as far as we are concerned, there is no Gaia dataset with classified open clusters.
+In summary, we can say that our results improve K-Means. We based this judgment by comparing right ascension, declination, parallax, and the number of stars of the cluster found by the two models with the Simbad database. In other words, we statistically analyze the results not individualized by stars belonging to the cluster found. We arrange it with Simbad because as far as we are concerned, there is no Gaia dataset with classified open clusters.
 
 \section{Conclusions}
 
-This paper presents a model to characterize open clusters, comprising an Artificial Neural Network, which is neither
-parameterized nor supervised. The model does not require complex hardware. Instead, it can be run on workstations with a
-common GPU, making it accessible for deployment in many research centers.
+This paper presents a model to characterize open clusters, comprising an Artificial Neural Network, which is neither parameterized nor supervised. The model does not require complex hardware. Instead, it can be run on workstations with a common GPU, making it accessible for deployment in many research centers.
 
-The model works well in identifying and characterizing open clusters. However, some improvements must be made to improve
-its accuracy and precision.
+The model works well in identifying and characterizing open clusters. However, some improvements must be made to improve its accuracy and precision.
 
-The number of hyperparameters in our model is small and we do not need previous knowledge about the cluster studied,
-which makes it easier to test different settings and automate the process.
+The number of hyperparameters in our model is small and we do not need previous knowledge about the cluster studied, which makes it easier to test different settings and automate the process.
 
-Building a non-parameterized model is a difficult and sometimes and unfeasible task due to every machine learning model
-requires initial definitions of the hyperparameters to work properly. However, in our model, the user is not required to
-provide any information about the cluster profile or its properties. Making it a non-parameterized model. Nevertheless,
-some tweaks can be done regarding the cluster and the studied region, like changing the initial number of clusters or
-modifying the clustering layer structure to improve the final characterization.
+Building a non-parameterized model is a difficult and sometimes and unfeasible task due to every machine learning model requires initial definitions of the hyperparameters to work properly. However, in our model, the user is not required to provide any information about the cluster profile or its properties. Making it a non-parameterized model. Nevertheless, some tweaks can be done regarding the cluster and the studied region, like changing the initial number of clusters or modifying the clustering layer structure to improve the final characterization.
 
-The initializer kernel prepares data before passing them to the ANN. This is one of the reasons because the results may
-vary significantly. In future works, we want to avoid it to have a reliable model which does not depend on the dataset
-order.
+The initializer kernel prepares data before passing them to the ANN. This is one of the reasons because the results may vary significantly. In future works, we want to avoid it to have a reliable model which does not depend on the dataset order.
 
-In future, we also want to test our model with a wider range of clusters. In general, we could think of applying it to
-the entire VizieR catalog. So, we could get a better idea about the current limitations of our model and improve it. For
-instance, we could determine with higher accuracy the typologies that our model works well with. Furthermore, we could
-establish different sets of hyperparameters regarding the typology of the cluster.
+In future, we also want to test our model with a wider range of clusters. In general, we could think of applying it to the entire VizieR catalog. So, we could get a better idea about the current limitations of our model and improve it. For instance, we could determine with higher accuracy the typologies that our model works well with. Furthermore, we could establish different sets of hyperparameters regarding the typology of the cluster.
 
-An important aspect we noticed is that with our model new uncatalogued clusters arise from the data apart of the main
-ones. Making it of special interest to study these individual new clusters.
+An important aspect we noticed is that with our model new uncatalogued clusters arise from the data apart of the main ones. Making it of special interest to study these individual new clusters.
 
-Another possible improvements are either to use DBSCAN instead of K-Means as our initial clustering algorithm, and
-employ DR3 dataset instead of DR2 dataset of Gaia.
+Another possible improvements are either to use DBSCAN instead of K-Means as our initial clustering algorithm, and employ DR3 dataset instead of DR2 dataset of Gaia.
 
-Furthermore, our model can deal with large and open regions. As an example, it has succeeded in characterizing Melotte
-25 (Hiades) OC. Also, the relative proximity of this cluster, 45 parsecs, makes it difficult to characterize. Our method
-proposes at least two more non-catalogued clusters. The analysis of these new clusters brings out interesting stellar
-dynamics in the studied region. It could mean that there was a recent interaction among different molecular clouds.
+Furthermore, our model can deal with large and open regions. As an example, it has succeeded in characterizing Melotte 25 (Hiades) OC. Also, the relative proximity of this cluster, 45 parsecs, makes it difficult to characterize. Our method proposes at least two more non-catalogued clusters. The analysis of these new clusters brings out interesting stellar dynamics in the studied region. It could mean that there was a recent interaction among different molecular clouds.
 
 \renewcommand{\refname}{References}
 \bibliographystyle{unsrt}
