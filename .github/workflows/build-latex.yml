@@ -7,7 +7,7 @@ on:
     paths:
     - 'figures/**'
     - 'paper/**'
-    - 'thesis/**'
+    # - 'thesis/**'
   release:
     types:
       - created
@@ -34,19 +34,19 @@ jobs:
           name: Paper.pdf
           path: paper/paper.pdf
 
-      - name: Compile thesis document
-        uses: xu-cheng/latex-action@v2
-        with:
-          root_file: thesis.tex
-          working_directory: thesis
-          latexmk_shell_escape: true
+      # - name: Compile thesis document
+      #   uses: xu-cheng/latex-action@v2
+      #   with:
+      #     root_file: thesis.tex
+      #     working_directory: thesis
+      #     latexmk_shell_escape: true
 
-      - name: Upload thesis PDF
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: Thesis.pdf
-          path: thesis/thesis.pdf
+      # - name: Upload thesis PDF
+      #   if: ${{ github.event_name == 'pull_request' }}
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: Thesis.pdf
+      #     path: thesis/thesis.pdf
 
       - name: Get release
         if: ${{ github.event_name == 'release' }}
@@ -66,13 +66,13 @@ jobs:
           asset_name: Paper.pdf
           asset_content_type: application/pdf
 
-      - name: Publish thesis PDF
-        if: ${{ github.event_name == 'release' }}
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: thesis/thesis.pdf
-          asset_name: Thesis.pdf
-          asset_content_type: application/pdf
+      # - name: Publish thesis PDF
+      #   if: ${{ github.event_name == 'release' }}
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.get_release.outputs.upload_url }}
+      #     asset_path: thesis/thesis.pdf
+      #     asset_name: Thesis.pdf
+      #     asset_content_type: application/pdf
