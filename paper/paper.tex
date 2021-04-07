@@ -1,36 +1,122 @@
-\documentclass[11pt,a4paper,english,twocolumn]{article}
-\usepackage{unir_paper}
+\documentclass[preprint,12pt,authoryear]{elsarticle}
+
 \usepackage{subcaption}
 \usepackage{tablefootnote, multirow}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{hyperref}
 
-%---------------------------
-%título del trabajo y autor
-%---------------------------
+\journal{Astronomy and Computing}
+
+\begin{document}
+\begin{frontmatter}
+
+%% Title, authors and addresses
+
+%% use the tnoteref command within \title for footnotes;
+%% use the tnotetext command for theassociated footnote;
+%% use the fnref command within \author or \address for footnotes;
+%% use the fntext command for theassociated footnote;
+%% use the corref command within \author for corresponding author footnotes;
+%% use the cortext command for theassociated footnote;
+%% use the ead command for the email address,
+%% and the form \ead[url] for the home page:
+%% \title{Title\tnoteref{label1}}
+%% \tnotetext[label1]{}
+%% \author{Name\corref{cor1}\fnref{label2}}
+%% \ead{email address}
+%% \ead[url]{home page}
+%% \fntext[label2]{}
+%% \cortext[cor1]{}
+%% \affiliation{organization={},
+%%             addressline={},
+%%             city={},
+%%             postcode={},
+%%             state={},
+%%             country={}}
+%% \fntext[label3]{}
+
 \title{Deep Embedded Clustering for Open Cluster Characterization with Gaia DR2 Data}
-\author{CD. Álvaro, C. Guzman, J. Álvaro}
-\date{24th of January, 2021}
 
-\resumen{
+%\author[MET]{CD. Álvaro}
+
+%\affiliation[MET]{organization={Meteologica},
+             %addressline={Calle Costa Brava, 10},
+             %city={Madrid},
+             %postcode={28034},
+             %country={Spain}}
+
+
+%\author[UNAD,IAC]{C. Guzman}
+
+%% use optional labels to link authors explicitly to addresses:
+%% \author[label1,label2]{}
+%\affiliation[IAC]{organization={Instituto de Astrofisíca de Canarias},
+%             addressline={Calle Vía Láctea, s/n},
+%             city={ San Cristóbal de La Laguna},
+%             postcode={ 38205},
+%             country={Spain}}
+%\affiliation[UNAD]{organization={Universidad Nacional Abierta y a Distancia},
+%             addressline={Sede JCM Calle 14 Sur \# 14-23},
+%             city={Bogotá},
+%             country={Colombia}}
+
+%\author[NIE,SEA,FAAE]{J. Álvaro}
+
+%\affiliation[SEA]{organization={SEA Astronomia},
+%             country={Spain}}
+
+%\affiliation[NIE]{organization={Nodo Ibérico de Europlanet, Spain \& Portugal},
+%             country={Spain / Portugal}}
+
+%\affiliation[FAAE]{organization={Federación de Asociaciones Astronómicas de España},
+%             addressline={C/ Serrano, n. 117},
+%             city={Madrid},
+%             postcode={28006},
+%             country={Spain}}
+
+
+% https://ascl.net/code/v/2823
+
+% \date{24th of January, 2021}
+
+\begin{abstract}
 Characterize and understand \emph{Open Clusters} (OCs) allow us to understand better properties and mechanisms about the Universe such as stellar formation and the regions where these events occur. They also provide information about stellar processes and the evolution of the galactic disk.
 
 In this paper, we present a novel method to characterize OCs. Our method employs a model built on \emph{Artificial Neural Networks} (ANNs). More specifically, we adapted a state of the art model, the \emph{Deep Embedded Clustering} (DEC) model for our purpose. The developed method aims to improve classical state of the arts techniques. We improved not only in terms of computational efficiency (with lower computational requirements), but in usability (reducing the number of hyperparameters to get a good characterization of the analyzed clusters). For our experiments, we used the \emph{Gaia DR2 database} as the data source, and compared our model with the clustering technique \emph{K-Means}. Our method achieves good results, becoming even better (in some of the cases) than current techniques.
-}
+\end{abstract}
 
-\palabrasclave{
-    characterization,
-    data analysis,
-    deep embedded clustering,
-    gaia,
-    machine learning,
+%%Graphical abstract
+% \begin{graphicalabstract}
+% \includegraphics{grabs}
+% \end{graphicalabstract}
+
+%%Research highlights
+\begin{highlights}
+\item We present a novel method to characterize Open Clusters
+\item The method employs Artificial Neural Networks.
+\item We adapted the Deep Embedded Clustering model.
+\item Compare the results with K-Means using the Gaia DR2 database.
+\item The code is freely available.
+\end{highlights}
+
+\begin{keyword}
+%% keywords here, in the form: keyword \sep keyword
+ characterization \sep
+    data analysis  \sep
+    deep embedded clustering  \sep
+    gaia  \sep
+    machine learning  \sep
     open cluster
-}
+%% PACS codes here, in the form: \PACS code \sep code
+% \PACS 0000 \sep 1111
+%% MSC codes here, in the form: \MSC code \sep code
+%% or \MSC[2008] code \sep code (2000 is the default)
+% \MSC 0000 \sep 1111
+\end{keyword}
 
-\begin{document}
-\twocolumn[
-\begin{@twocolumnfalse}
-\maketitle
-\end{@twocolumnfalse}
-]
+\end{frontmatter}
+
 
 \section{Introduction}
 
@@ -46,7 +132,7 @@ In the present paper, we propose a machine learning model capable of characteriz
 
 Our model contributes with several novelties: i) it is \emph{non-supervised} and \emph{non-parameterized}, making easier the automation process of analyzing a wide range of regions with different typologies, and ii) it is computationally efficient to run in common workstations because it has been developed with Python using the Keras framework which takes advantage of modern GPUs to perform its computations. That increases significantly the computational capacity of our model doing it possible to run on regular workstations.
 
-This paper is organized as follows. Section~\ref{sec:related_works} presents some related works and Section~\ref{sec:aims_and_method} describes in detail our model. The following Section~\ref{sec:results}, shows the results and compares them with a method that involves tools from the Virtual Observatory (VO) such as Clusterix~\cite{balaguer2020clusterix}. Finally, the last section concludes and outlines future research lines.
+This paper is organized as follows. Section~\ref{sec:related_works} presents some related works and Section~\ref{sec:aims_and_method} describes in detail our model. The following Section~\ref{sec:results}, shows the results using either the Melotte 25 dataset and a variety of clusters of different typologies. We also compare our model against a K-Means classification algorithm. Finally, the last section concludes and outlines future research lines.
 
 \section{Related Works}
 \label{sec:related_works}
@@ -212,7 +298,7 @@ Finally, we can refine this selection by filtering those stars that are below an
 \paragraph{Discussion.}
 
 %% Comparación con K-Means, DEC y DEC filter
-\begin{figure*}[!htp]
+\begin{figure*}[!htbp]
   \centering
   \begin{subfigure}[b]{0.3\textwidth}
     \centering
@@ -246,7 +332,6 @@ As we can see in the parallax distribution, lower values of the number of cluste
 
 K-Means does a good job making an initial clustering. However, too many clusters arise from this characterization and the OC is still polluted with stars that do not belong to it. Moreover, we would like to reduce the amount of clusters too.
 
-\newpage
 
 \section{Results}
 \label{sec:results}
@@ -260,7 +345,9 @@ We performed two tested of our model:
 
 In order to support the discussion presented in Section~\ref{sec:deep_open_clustering}, in the both tests we compared our model against a K-Means classification algorithm. In addition, we perform a second execution only in our model where we filtered the quantiles in the Melotte 25 dataset.
 
-Our DECOCC model was implemented in Python 3.8 using the Keras 2.2 framework and Jupyter Notebooks~\cite{Kluyver2016jupyter}. All tests were run on an Apple Mac Pro Late 2013 with a 2.7GHz 12-Core Intel Xeon E5-2697v2, and 64GB RAM 1866MHz DDR3. For the GPU, we use a graphic card AMD FirePro D700 with 6GB~\footnote{All resources developed for this project are available at \href{https://github.com/cdalvaro/machine-learning-master-thesis}{https://github.com/cdalvaro/machine-learning-master-thesis}}.
+Our DECOCC model was implemented in Python 3.8 using the Keras 2.2 framework and Jupyter Notebooks~\cite{Kluyver2016jupyter}. All tests were run on an Apple Mac Pro Late 2013 with a 2.7GHz 12-Core Intel Xeon E5-2697v2, and 64GB RAM 1866MHz DDR3. For the GPU, we use a graphic card AMD FirePro D700 with 6GB~\footnote{All resources developed for this project are available at [LINK]}.
+%\href{https://github.com/cdalvaro/machine-learning-master-thesis}{https://github.com/cdalvaro/machine-learning-master-thesis}}.
+
 
 \subsection{Melotte 25 Dataset}
 
@@ -286,9 +373,7 @@ The clustering made by K-Means arises 9 groups, but most of them contain stars t
   %   \centering
   %   \includegraphics[width=\textwidth]{../figures/melotte_25/dec_hr_diagram_melotte_25.png}
   % \end{subfigure}
-  % \caption{Melotte 25 characterization.
-  %          From left to right: proper motion configuration space,
-  %          parallax histogram and H-R diagram.}
+  % \caption{Melotte 25 characterization. From left to right: proper motion configuration space, parallax histogram and H-R diagram.}
   \caption{Parallax histogram of Melotte 25 characterization.}
   \label{fig:result_melotte_25_dec}
 \end{figure}
@@ -414,51 +499,51 @@ Table~\ref{tab:app_results_ngc_2516} describes a summary of the results for the 
 \begin{figure*}[!hbt]
   \rotatebox[origin=c]{90}{{\bfseries NGC 2516}\strut}
   \rotatebox[origin=c]{90}{parallax \strut}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2516/kmeans_parallax_ngc_2516.png}
   \end{subfigure}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_parallax_ngc_2516.png}
   \end{subfigure}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_parallax_filtered_ngc_2516.png}
   \end{subfigure}
 
-  \rotatebox[origin=c]{90}{{\bfseries} \strut}
+  \rotatebox[origin=c]{90}{{\bfseries } \strut}
   \rotatebox[origin=c]{90}{hr diagram\strut}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2516/kmeans_hr_diagram_ngc_2516.png}
   \end{subfigure}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_hr_diagram_ngc_2516.png}
   \end{subfigure}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2516/dec_hr_diagram_filtered_ngc_2516.png}
   \end{subfigure}
 
   \rotatebox[origin=c]{90}{{\bfseries NGC 2632}\strut}
   \rotatebox[origin=c]{90}{parallax \strut}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2632/kmeans_parallax_ngc_2632.png}
   \end{subfigure}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_parallax_ngc_2632.png}
   \end{subfigure}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_parallax_filtered_ngc_2632.png}
   \end{subfigure}
 
-  \rotatebox[origin=c]{90}{{\bfseries} \strut}
+  \rotatebox[origin=c]{90}{{\bfseries } \strut}
   \rotatebox[origin=c]{90}{hr diagram\strut}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2632/kmeans_hr_diagram_ngc_2632.png}
     \caption{K-Means}
   \end{subfigure}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_hr_diagram_ngc_2632.png}
     \caption{DECOCC}
   \end{subfigure}%
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2632/dec_hr_diagram_filtered_ngc_2632.png}
     \caption{DECOCC (filt.)}
   \end{subfigure}
@@ -469,51 +554,51 @@ Table~\ref{tab:app_results_ngc_2516} describes a summary of the results for the 
 \begin{figure*}[!hbt]
   \rotatebox[origin=c]{90}{{\bfseries NGC 2682}\strut}
   \rotatebox[origin=c]{90}{parallax \strut}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2682/kmeans_parallax_ngc_2682.png}
   \end{subfigure}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_parallax_ngc_2682.png}
   \end{subfigure}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_parallax_filtered_ngc_2682.png}
   \end{subfigure}
 
-  \rotatebox[origin=c]{90}{{\bfseries} \strut}
+  \rotatebox[origin=c]{90}{{\bfseries } \strut}
   \rotatebox[origin=c]{90}{hr diagram\strut}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2682/kmeans_hr_diagram_ngc_2682.png}
   \end{subfigure}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_hr_diagram_ngc_2682.png}
   \end{subfigure}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/ngc_2682/dec_hr_diagram_filtered_ngc_2682.png}
   \end{subfigure}
 
   \rotatebox[origin=c]{90}{{\bfseries Melotte 22}\strut}
   \rotatebox[origin=c]{90}{parallax \strut}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/melotte_22/kmeans_parallax_melotte_22.png}
   \end{subfigure}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/melotte_22/dec_parallax_melotte_22.png}
   \end{subfigure}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/melotte_22/dec_parallax_filtered_melotte_22.png}
   \end{subfigure}
 
-  \rotatebox[origin=c]{90}{{\bfseries} \strut}
+  \rotatebox[origin=c]{90}{{\bfseries } \strut}
   \rotatebox[origin=c]{90}{hr diagram\strut}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/melotte_22/kmeans_hr_diagram_melotte_22.png}
     \caption{K-Means}
   \end{subfigure}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/melotte_22/dec_hr_diagram_melotte_22.png}
     \caption{DECOCC}
   \end{subfigure}
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.29\textwidth}
     \includegraphics[width=\textwidth]{../figures/melotte_22/dec_hr_diagram_filtered_melotte_22.png}
     \caption{DECOCC (filt.)}
   \end{subfigure}
@@ -603,8 +688,15 @@ Another possible improvements are either to use DBSCAN instead of K-Means as our
 
 Furthermore, our model can deal with large and open regions. As an example, it has succeeded in characterizing Melotte 25 (Hiades) OC. Also, the relative proximity of this cluster, 45 parsecs, makes it difficult to characterize. Our method proposes at least two more non-catalogued clusters. The analysis of these new clusters brings out interesting stellar dynamics in the studied region. It could mean that there was a recent interaction among different molecular clouds.
 
-\renewcommand{\refname}{References}
-\bibliographystyle{unsrt}
+\section{Acknowledgements}
+
+This work has made use of data from the European Space Agency (ESA) mission
+ Gaia (\url{https://www.cosmos.esa.int/gaia}), processed by the Gaia
+Data Processing and Analysis Consortium (DPAC\footnote{ \url{https://www.cosmos.esa.int/web/gaia/dpac/consortium}}). Funding for the DPAC
+has been provided by national institutions participating in the {\it Gaia} Multilateral Agreement.
+
+% \renewcommand{\refname}{References}
+\bibliographystyle{elsarticle-harv}
 \bibliography{references}
 
 \end{document}
