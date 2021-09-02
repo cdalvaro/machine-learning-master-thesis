@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v2.3.4
 
       - name: Compile paper document
-        uses: xu-cheng/latex-action@2.2.1
+        uses: xu-cheng/latex-action@2.3.0
         with:
           root_file: paper.tex
           working_directory: paper
@@ -35,7 +35,7 @@ jobs:
           path: paper/paper.pdf
 
       - name: Compile thesis document
-        uses: xu-cheng/latex-action@2.2.1
+        uses: xu-cheng/latex-action@2.3.0
         with:
           root_file: thesis.tex
           working_directory: thesis
