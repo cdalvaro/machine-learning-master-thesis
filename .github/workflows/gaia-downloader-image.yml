@@ -40,7 +40,7 @@ jobs:
             ${{ runner.os }}-buildx-
 
       - name: Build
-        uses: docker/build-push-action@v6.4.1
+        uses: docker/build-push-action@v6.5.0
         with:
           context: src/
           file: src/downloader.Dockerfile
